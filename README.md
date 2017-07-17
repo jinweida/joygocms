@@ -12,7 +12,7 @@
 
 - 增加功能
 
-1.增加了缓存功能 (get_medias,get_ios_home,get_android_home,get_detail)
+1. 增加了缓存功能 (get_medias,get_ios_home,get_android_home,get_detail)
 2. nodejs进程使用多线程
 3. 新增 cms api接口规则，可实现/v1/api/get_home ,/v1.2/api/get_home
 4. 新增菜单类型"全屏网页"
