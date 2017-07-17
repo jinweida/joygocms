@@ -1,0 +1,71 @@
+<% include ../inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/lives/publish/list">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="auth_form" class="form-horizontal" id="auth_form" method="post">
+        	<input type="text" name="live[_id]" value="<%=live._id %>" class="hide" />
+        	<input type="text" name="live[status]" value="1" class="hide" />
+            <div class="row">
+			    <div class="col-xs-11" style="margin-left:15px;padding-top:5px;border: 1px solid #AAAAAA; border-radius: 5px;">
+                    <div class="col-xs-12">
+	                    <div class="form-group">
+	                        <label class="control-label" style="padding-bottom:5px;">申请帐号</label>
+	                        <input type="text" name="live[mpno]" style="width:70%;" disabled="disabled" value="<%=live.mpno %>" placeholder="必填项" class="form-control">
+	                    </div>
+                    </div>
+                    <div class="col-xs-12">
+						<div class="form-group">
+	                        <label class="control-label" style="padding-bottom:5px;">申请姓名</label>
+	                        <input type="text" name="live[name]" style="width:70%;" disabled="disabled" value="<%=live.name %>" placeholder="必填项" class="form-control">
+	                    </div>
+                    </div>
+                    <div class="col-xs-12">
+						<div class="form-group">
+	                        <label class="control-label" style="padding-bottom:5px;">职业</label>
+	                        <input type="text" name="live[occupation]" style="width:70%;" disabled="disabled" value="<%=live.occupation %>" placeholder="必填项" class="form-control">
+	                    </div>
+                    </div>
+                    <div class="col-xs-12">
+						<div class="form-group">
+	                        <label class="control-label" style="padding-bottom:5px;">籍贯</label>
+	                        <input type="text" name="live[place]" style="width:70%;" disabled="disabled" value="<%=live.place %>" placeholder="必填项" class="form-control">
+	                    </div>
+                    </div>
+                    <div class="col-xs-12">
+						<div class="form-group">
+	                        <label class="control-label" style="padding-bottom:5px;">身份证</label>
+	                        <input type="text" name="live[idnumber]" style="width:70%;" disabled="disabled" value="<%=live.idnumber %>" placeholder="必填项" class="form-control">
+	                    </div>
+                    </div>
+                   	<div class="col-xs-12">
+						<div class="form-group">
+	                        <label class="control-label" style="padding-bottom:5px;">手机号</label>
+	                        <input type="text" name="live[phone]" style="width:70%;" disabled="disabled" value="<%=live.phone %>" placeholder="" class="form-control">
+	                    </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<% include ../inc/footer.html%>

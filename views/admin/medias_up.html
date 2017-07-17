@@ -1,0 +1,275 @@
+﻿<% include inc/head.html%>
+<style>
+    .pagination {
+        margin:5px 0;
+    }
+</style>
+<script>
+    $(function () {
+        var ajax = new Ajax();
+        $('#jstree').on('changed.jstree', function (e, data) {
+            var i, j, r = [];
+            for(i = 0, j = data.selected.length; i < j; i++) {
+                r.push(data.instance.get_node(data.selected[i]).id);
+            }
+            $("#cid").val(r.join(', '));
+            var data = {
+                cid: r.join(',')
+            };
+            if($('#localres').attr('data-id')==1){
+                console.log('请求的本地');
+                get_up_count(data);
+                get_up_list(data);
+            }else{
+                console.log('请求的云端');
+                get_cloud_list(data)
+            }
+        }).jstree({
+            'core': {
+                'data': {
+                    "url": "/admin/ajax_get_columns_list",
+                    "data": function (node) {
+                        return { "id": node.id };
+                    }
+                },
+            },
+            "plugins": ["wholerow"]
+        });
+
+
+        //上架本地
+        $(document).on("click","#up", function () {
+            var _ids = $("[name='chk']:checked").serializeArray();
+            if (_ids.length==0) {
+                $("#alertDialog").modal('show');
+                return;
+            }
+            ajax.post('/admin/doup', {
+                _ids: _ids,
+                cid:$("#cid").val()
+            }, function (result) {
+                if (result.code == 0) {
+                    $("#successTip").show();
+                    $("[name='chkall']").prop("checked",false);
+                    $.each(_ids,function(key,val){
+                        $('#'+val.value).prop("checked",false);
+                        $('#'+val.value+'_style').text("已上架");
+                        $('#'+val.value).parent().parent().addClass("text-danger");
+                    });
+                    window.setTimeout(function () { $("#successTip").hide() }, 3000);
+                } else {
+                    //$('#error').text(result.message);
+                }
+            });
+
+        });
+        //上架云端
+        $(document).on("click", "#cloudup",function () {
+            var list=[];
+            var _ids = $("[name='chk']:checked").serializeArray();
+            if (_ids.length==0) {
+                $("#alertDialog").modal('show');
+                return;
+            }
+            console.log(_ids);
+            $("[name='chk']:checked").each(function(i,v) {
+                list[i]={
+                    _id:$(v).val(),
+                    title:$(v).attr('data-title'),
+                    imgextra:($(v).attr('data-imgextra'))?$(v).attr('data-imgextra'):[],
+                    pheight:$(v).attr('data-pheight'),
+                    pwidth:$(v).attr('data-pwidth'),
+                    pics:$(v).attr('data-pics'),
+                    tagtype:$(v).attr('data-tagtype'),
+                    tag:$(v).attr('data-tag'),
+                    type:$(v).attr('data-type'),
+                    assistcount:$(v).attr('data-assistcount'),
+                    clickcount:$(v).attr('data-clickcount'),
+                    commentcount:$(v).attr('data-commentcount'),
+                    createtime:$(v).attr('data-createtime'),
+                    author:$(v).attr('data-author'),
+                    source:$(v).attr('data-source'),
+                    video:$(v).attr('data-video'),
+                    desc:$(v).attr('data-desc'),
+                    subtitle:$(v).attr('data-subtitle'),
+                    url:$(v).attr('data-url'),
+                    shareurl:$(v).attr('data-shareurl'),
+                    mid:$(v).attr('data-mid')
+                }
+            });
+            $.post('/admin/cloudup',{_ids: _ids,cid:$("#cid").val(),list:list},function(result){
+                if(result.code==0){
+                    $("#successTip").show();
+                    $("[name='chkall']").prop("checked",false);
+                    $.each(_ids,function(key,val){
+                        $('#'+val.value).prop("checked",false);
+                        $('#'+val.value+'_style').text("已上架");
+                        $('#'+val.value).parent().parent().addClass("text-danger");
+                    });
+                    window.setTimeout(function () { $("#successTip").hide() }, 3000);
+                }
+            })
+        });
+        $("#find").on("click", function () {
+            var data = { cid: $("#cid").val(), title: $("[name='post_title']").val(),type:$("[name='post_type']").val() };
+            if($('#localres').attr('data-id')==1){
+                console.log('查询的本地');
+                get_up_count(data);
+                get_up_list(data);
+            }else{
+                console.log('查询的云端--不支持');
+                get_cloud_list(data)
+            }
+        })
+        $('#localres').on('click',function(){
+            $('.btn-submit').attr('id','up')
+            $(this).attr('data-id','1')
+            $('#cloudpage').empty()
+            var data={cid:$("#cid").val()}
+            get_up_count(data);
+            get_up_list(data);
+        })
+        $('#cloudres').on('click',function(){
+            $('.btn-submit').attr('id','cloudup')
+            $('#localres').attr('data-id','0')
+            $('#page').empty()
+            get_cloud_list({page:0,cid:$("#cid").val()})
+        })
+        function get_up_count(data) {
+            ajax.get('/admin/ajax_up_count', data, function (result) {
+                console.log(result.message.pagecount);
+                console.log(result.message.pagesize);
+                //分页功能
+                var options = {
+                    currentPage: 1,
+                    totalPages: result.message.pagecount,
+                    numberOfPages: result.message.pagesize,
+                    bootstrapMajorVersion: 1,
+                    onPageClicked: function (e, originalEvent, type, page) {
+                        data.page = page;
+                        get_up_list(data);
+                    }
+                }
+                $('#page').bootstrapPaginator(options);
+            });
+        };
+        function get_up_list(data) {
+            ajax.get('/admin/ajax_up_list', data, function (result) {
+                if (result.code == 0) {
+                    $(":checkbox").prop("checked",false);
+                    $("#datatable tbody tr").remove();
+                    $("#uptmpl").tmpl(result.message).appendTo("#datatable tbody");
+                    $("[data-toggle='tooltip']").tooltip();
+                }
+            });
+        };
+        var options = {
+            currentPage:1,
+            totalPages:1,
+            numberOfPages: 12,
+            bootstrapMajorVersion: 1,
+            onPageClicked: function (e, originalEvent, type, page) {
+                if (page > options.totalPages) {
+                  options.currentPage = options.totalPages;
+                } else {
+                  options.currentPage = page;
+                }
+                get_cloud_list({page:page-1})
+            }
+        }
+        function get_cloud_list(data){
+            $.get('/admin/cloud_list',data,function(result){
+                console.log('1');
+                if(result.code==0){
+                    console.log(result.message);
+                    $(":checkbox").prop("checked",false);
+                    $("#datatable tbody tr").remove();
+                    $("#uptmpl_cloud").tmpl(result.message.list).appendTo("#datatable tbody");
+                    $("[data-toggle='tooltip']").tooltip();
+                    options.totalPages=Math.ceil(result.message.pagecount/12);
+                    $('#cloudpage').bootstrapPaginator(options);
+                }
+            })
+        };
+    })
+</script>
+<script id="uptmpl_cloud" type="text/x-jquery-tmpl">
+    <tr class="${style}"><td><input type="checkbox" value="${_id}" id="${_id}" name="chk" data-title="${title}" data-imgextra="${imgextra}" data-pheight="${pheight}" data-pwidth="${pwidth}" data-pics="${pics}" data-tagtype="${tagtype}" data-tag="${tag}" data-type="${type}" data-assistcount="${assistcount}" data-clickcount="${clickcount}" data-commentcount="${commentcount}" data-createtime="${createtime}" data-author="${author}" data-video="${video}" data-source="${source}" data-desc="${desc}" data-subtitle="${subtitle}" data-url="${url}" data-shareurl="${shareurl}" data-mid="${mid}"/></td><td>${index}</td><td><a data-toggle="tooltip" title="${title}" class="${style}" data-placement="bottom">${title}</a></td><td>${author}</td><td><span class="${typestyle}">${typename}</span></td><td id="${_id}_style">${publish}</td><td>${createtime}</td></tr>
+</script>
+<script id="uptmpl" type="text/x-jquery-tmpl">
+    <tr class="${style}"><td><input type="checkbox" value="${_id}" id="${_id}" name="chk"/></td><td>${index}</td><td><a data-toggle="tooltip" title="${title}" data-placement="bottom" class="${style}" href="/html5/page/news/news_detail.html?mid=${_id}" target="_blank">${shorttitle}</a></td><td>${author}</td><td><span class="${typestyle}">${typename}</span></td><td id="${_id}_style">${publish}</td><td>${createtime}</td></tr>
+</script>
+<input type="hidden" name="cid" id="cid" value=""/>
+<div class="container-fluid">
+    <div id="alertDialog" class="modal" tabindex="-1" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog" style="width: 300px;">
+			<div class="modal-content">
+				<div class="modal-header"><h4>警告</h4></div>
+				<div class="modal-body" style="padding: 20px;">至少选择一项</div>
+				<div class="modal-footer" style="text-align: center;">
+					<button class="btn btn-default btn-sm" data-dismiss="modal">
+						取消</button>
+					<button class="btn btn-danger btn-sm" data-dismiss="modal">
+						确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <table class="table table-bordered table-condensed">
+            <tr><th style="width: 200px; cursor: pointer;">分类</th><th><div class="btn-group btn-group-xs"><button class="btn btn-info" id="localres" data-id="1">本地资源列表</button><button class="btn btn-success" id="cloudres">云端资源列表</button></div></th></tr>
+            <tr>
+                <td>
+                <div id="jstree">
+                </div>
+                </td>
+                <td style="padding:0;text-align:left;">
+                    <div id="successTip" class="alert alert-success fade in" style="display:none;">上架成功</div>
+                    <div class="panel panel-default" style="border-radius: 0;">
+                    <div class="panel-heading" style="height:54px;">
+			    		<button id="up" type="button" class="btn btn-danger btn-sm btn-submit">
+			    			上架</button>
+                        <form class="navbar-form navbar-right">
+                            <div class="form-group">
+                              <select name="post_type" class="form-control input-sm">
+                                  <option value="-1">媒资类型</option>
+                                  <%types.forEach(function(item){%>
+
+                                    <%if(item.id!=100){%>
+                                    <option value="<%=item.id%>"><%=item.name%></option>
+                                    <%}%>
+                                  <%})%>
+                              </select>
+                            </div>
+                            <div class="input-group">
+	                        <input type="text" name="post_title" id="post_title" placeholder="标题" value="" class="form-control input-sm">
+	                        <span class="input-group-btn">
+		                        <button type="button" class="btn btn-danger btn-sm" id="find">
+					            <span class="glyphicon glyphicon-search"></span>
+				                </button>
+                            </span>
+                            </div>
+
+                        </form>
+			    	</div>
+
+                    <table class="table table-bordered table-hover table-striped table-condensed" id="datatable">
+                        <thead>
+                        <tr><th style="width:25px;"><input type="checkbox" name="chkall"/></th><th style="width:30px;">#</th><th>媒资名称</th><th style="width:80px">作者</th><th style="width:80px;">媒资类型</th><th style="width:60px;">状态</th><th style="width:180px;">发布时间</th></tr></thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr><td colspan="8"><div id="page"></div><div id="cloudpage"></div></td></tr>
+                        </tfoot>
+                    </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+  </div>
+</div>
+<% include inc/footer.html%>

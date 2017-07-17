@@ -1,0 +1,26 @@
+﻿<% include ../inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+   <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <div class="pull-left">
+                <ul class="list-inline"><ul class="list-inline">
+                    <li><a href="/admin/ads_add"><span class="glyphicon glyphicon-plus"></span> 添加广告</span></a></li>
+                    <li><a href="#" id="delall"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+
+    </div>
+  </div>
+</div>
+<% include ../inc/footer.html%>

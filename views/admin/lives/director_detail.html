@@ -1,0 +1,410 @@
+<% include ../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../inc/left.html%>
+			</div>
+			<div class="main">
+        <input class="form-control" type="hidden" name="chatroomid" value="<%=model.chatroom.chatroomid%>" />
+        <input class="form-control" type="hidden" name="cid" value="<%=model.cds.cid%>" />
+        <input class="form-control" type="hidden" name="mpno" value="<%=model.user.mpno%>" />
+				<div class="form-group">
+					<div class="pull-left">
+						<ul class="list-inline">
+							<li><a href="javascript:window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span> 返回</a></li>
+							<li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+						</ul>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div id="tipBox" class="alert fade in" style="display:none;"></div><br>
+					<div class="row">
+						<div class="col-md-7">
+              <div style="position: relative;display: table;" class="col-md-12">                
+  							<div class="col-md-12" style="margin-bottom:15px">
+  								<div class="row">
+  									<div class="col-md-12">
+  										<div id="video"></div>
+  									</div>
+  								</div>
+  							</div>
+  							<div class="col-md-12" style="margin-bottom:15px;position: absolute;bottom: -20px;right: 40px;width: 400px;height: 300px">
+  								<div class="row">
+  									<div class="col-md-12">
+  										<div id="subVideo"></div>
+  									</div>
+  								</div>
+  							</div>
+              </div>
+							<div class="col-md-12">
+							<div class="row">
+									<div class="col-md-3 form-group form-group-sm">
+										<label class="control-label">主题</label>
+										<input class="form-control" type="text" id="title" value="<%=model.title%>" disabled />
+									</div>
+									<div class="col-md-3 form-group form-group-sm">
+										<label class="control-label">是否加入聊天室</label>
+										<select class="form-control" name="isjoin">
+											<option value="true" <%if(model.chatroom.isjoin){%>selected<%}%>>是</option>
+											<option value="false" <%if(!model.chatroom.isjoin){%>selected<%}%>>否</option>
+										</select>
+									</div>
+									<div class="col-md-3 form-group form-group-sm">
+										<label class="control-label">聊天室名称</label>
+										<input class="form-control" type="text" name="chatRoomName" value="<%=model.chatroom.chatroomname%>"/>
+									</div>
+									<div class="col-md-3 form-group form-group-sm">
+										<label class="control-label">延时时长(S)</label>
+										<input class="form-control" type="text" id="delayTime" name="delayTime" value="<%=model.cds.delaytime%>" <%=model.disabled%> />
+									</div>
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">商品集</label>
+										<select class="form-control" name="commodity">
+											<option value="">----选择商品集----</option>
+								            <%commoditylist.forEach(function(item){
+								              var select="";
+								              if(item.id==model.ads.commodity)select="selected";
+								              %>
+								            <option value="<%=item.id%>" <%=select%>><%=item.name%></option>
+								            <%})%>
+										</select>
+									</div>
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">商品集结束时间</label>
+										<input type="text" class="input_date form-control" name="commoditytime" value="<%=model.ads.time%>"/>
+									</div>
+									<div class="col-md-12 form-group form-group-sm">
+										<label class="control-label">红包策略</label>
+										<div calss="example">
+										<select class="form-control" name="envelope" multiple="multiple" id="envelope">
+								            <%envelopelist.forEach(function(item){
+								              var select="";
+									              model.ads.envelope.split(',').forEach(function(node){	
+								              	if(item.tvshakeid==node)select="selected";
+								              	})%>
+								            <option value="<%=item.tvshakeid%>" <%=select%>><%=item.begintime%>\<%=item.endtime%>\<%=item.duration%>\<%=item.desc%></option>
+								            <%})%>
+										</select>
+										</div>
+									</div>
+									<div class="col-md-12 form-group form-group-sm">
+										<label class="control-label">主播地址</label>
+										<input class="form-control" type="text" id="url" value="<%=model.cds.url%>" disabled />
+									</div>
+									<div class="col-md-12 form-group form-group-sm">
+										<label class="control-label">导播地址</label>
+										<input class="form-control" type="text" id="sub_url" value="<%=model.suburl%>" disabled />
+									</div>
+									<div class="col-md-12 form-group form-group-sm">
+										<label class="control-label">主播聊天室</label><small class="text-success messages" style="margin-left:20px"></small>
+										<div class="input-group input-group-sm">
+												<input class="form-control" type="text" data-chatroomid="<%=model.chatroom.chatroomid%>" name="information" placeholder="请输入聊天信息" <%if(!model.chatroom.isjoin){%>disabled<%}%>/>
+												<span class="input-group-btn"><button class="btn btn-success chatMessages">点击发送</button></span>
+										</div>
+									</div>
+							</div>
+								<%if(model.status != -1){%>
+								<div class="form-group">
+									<button class="btn btn-danger btn-sm" id="addGuestBtn">
+										<span class="glyphicon glyphicon-plus"></span>添加嘉宾
+									</button>
+								</div>
+								<%}%>
+								<div class="form-group" id="guestList">
+									<%var i=0;model.guest.forEach(function(item) {
+									i++;%>
+									<div class="row" id="row_<%=i%>">
+										<div class="col-md-6 form-group form-group-sm">
+											<div class="input-group input-group-sm">
+												<span class="input-group-btn"><button class="btn btn-danger deleteItem" id="<%=i%>" <%=model.disabled%> >删除选项</button></span>
+												<input class="form-control guest-mpno" type="text" value="<%=item.mpno%>" placeholder="用户ID" <%=model.disabled%> />
+											</div>
+										</div>
+										<div class="col-md-6 form-group form-group-sm">
+											<input class="form-control guest-name" type="text" value="<%=item.nickname%>" placeholder="名称" <%=model.disabled%> />
+										</div>
+									</div>
+								<%});%>
+								</div>
+								<div class="form-group">
+									<button class="btn btn-danger btn-sm" id="saveBtn">保存</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-5" style="padding:5px 0 0 5px">
+              <div id="dataTable"></div>
+              <div class="clearfix"></div>
+              <div id="page"></div>	
+              <div class="panel panel-success">
+                <div class="panel-heading">消息列表</div>
+                <table class="table table-bordered" id="messagetable">
+                	<thead>
+                		<tr>
+                			<td style="width:50px">用户</td>
+                			<td style="width:100px">主题</td>
+                			<td>内容</td>
+                		</tr>
+                	</thead>
+                	<tbody>
+                	</tbody>
+  							</table>
+              </div>
+          	</div>
+					</div>
+			</div>
+		</div>
+	</div>
+	<script src="/javascripts/ckplayer/ckplayer.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/javascripts/prettify.js"></script>
+    <script src="/javascripts/bootstrap-multiselect.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$(".input_date").datetimepicker({
+			step:1,
+			lang:'ch',
+		});
+	    initData();
+	    ckplayerInitial('video',$('#video').width() * 9 / 16,videoUrl,80)
+	    ckplayerInitial('subVideo',$('#subVideo').width() * 9 / 16,subVideoUrl,80)	    	    
+	    $('#envelope').multiselect({
+	    	buttonWidth: '100%',
+            dropRight: true
+	    }); 
+	    //切换主视频
+	    $(document).on('click', '.setUrl', function(event) {
+	    	var url=$(this).attr('data-url')
+	    	$.post('/admin/lives/director/director_update_url',{id:_id,url:url},function(result){
+	    		if (result.code == 0) {
+	    			effect.success('切入成功',function(){
+	    				$('#url').val(result.message.url)
+	    				ckplayerInitial('video',$('#video').width() * 9 / 16,encodeURIComponent(result.message.url),80)
+	    			})
+	    		} else {
+	    			effect.error('切入失败');
+	    		}
+	    	})		
+	    }); 
+	    //切换导视频
+	    $(document).on('click', '.setSuburl', function(event) {
+	    	var url=$(this).attr('data-url')
+	    	$.post('/admin/lives/director/director_update_suburl',{id:_id,url:url},function(result){
+	    		if (result.code == 0) {
+	    			effect.success('切入成功',function(){
+	    				$('#sub_url').val(result.message.url)
+	    				ckplayerInitial('subVideo',$('#subVideo').width() * 9 / 16,encodeURIComponent(result.message.url),80)
+	    			})
+	    		} else {
+	    			effect.error('切入失败');
+	    		}
+	    	})		
+	    }); 
+	    //给主播发送信息
+	    $(document).on('click', '.pupmessage', function(event) {
+	    	event.preventDefault();
+	    	var chatroomid=$(this).attr('data-chatroomid')
+	    	var content=window.prompt('请输入聊天内容', '')
+	    	var data={
+				  		info:content,
+				  		chatroomid:chatroomid
+				  	}
+	    	$.post('/admin/lives/director_message', data, function(result) {
+	    		if(result.code==0){
+	    			effect.success(result.message)
+	    		}  		
+	    	});
+	    });
+	    //轮询私聊消息列表
+	    var private=setTimeout(function(){
+	    	$.get('/admin/lives/director_message_list',{mid:_id},function(result){
+	    		console.log(result)
+	    		if (result.code==0) {
+	    			var html=''
+	    			$.each(result.message,function(index, el) {	
+ 						html+='<tr>\
+                			<td>'+el.nickname+'</td>\
+                			<td>'+el.title+'</td>\
+                			<td>'+el.content+'</td>\
+                		</tr>'
+	    			});
+ 						$('#messagetable tbody').empty();
+ 						$('#messagetable tbody').html(html);
+	    		}
+	    	})	
+	    },500)
+	})
+	var dataList = null;
+	var _id = window.location.search.substring(4);
+	var videoUrl = encodeURIComponent('<%-model.cds.url%>');
+	var subVideoUrl = encodeURIComponent('<%-model.suburl%>');
+	//分页功能
+	var pageSize = 12;
+    var pageOptions = {
+        currentPage: 1,
+        totalPages: 1,
+        numberOfPages: 10,
+        bootstrapMajorVersion: 1,
+        alignment: "center",
+        onPageClicked: function(e, originalEvent, type, page) {
+            if (page > pageOptions.totalPages) {
+                pageOptions.currentPage = pageOptions.totalPages;
+            } else {
+                pageOptions.currentPage = page;
+            }
+            initData();
+        }
+    };
+    //聊天室
+  $('.chatMessages').click(function() {
+  	data={
+  		info:$("input[name='information']").val(),
+  		chatroomid:$("input[name='information']").attr('data-chatroomid')
+  	}
+  	function callback(result){
+  		$('.messages').html(result).show()
+		setTimeout(function(){
+			$('.messages').hide();
+		}, 2000)
+  	}
+  	$.post('/admin/lives/live/chat_messages', data, function(result) {
+  		if(result.code==0){
+  			callback(result.message)
+  			$("input[name='information']").val('')
+  		}else{
+  			callback(result.message)
+  		}  		
+  	});
+  });
+    //加载多路视频
+  function initData() {
+      $.get('/admin/lives/director/director_live_list', $('#searchForm').serialize() + '&page=' + pageOptions.currentPage + '&pagesize=' + pageSize, function(data) {
+          if (data.code == 0) {
+              var result = data.message;
+              dataList = result.list;
+              $("#dataTable").empty();
+              if (result.list.length > 0) {
+                 	writeList(result.list);
+                  $("[data-toggle='popover']").popover();
+              } else if (pageOptions.currentPage > 1) {
+                  pageOptions.currentPage--;
+                  initData();
+              }
+              pageOptions.totalPages = result.pagecount;
+              if (pageOptions.totalPages > 0) {
+                  $('#page').bootstrapPaginator(pageOptions);
+              } else {
+                  $('#page').empty();
+              }
+          }
+      });
+  }
+    //修改信息
+  function setLives(data){
+		$.post('/admin/lives/director/director_update',data,function(result){
+    		if (result.code == 0) {
+    			effect.success('保存成功',function(){
+    				window.location.reload();
+    			})
+    		} else {
+    			effect.error('操作失败');
+    		}
+    	})
+  }
+  	//左侧功能按钮
+	$('#addGuestBtn').click(function() {
+		var rowId = new Date().getTime();
+		var html = '<div class="row" id="row_' + rowId + '"><div class="col-md-6 form-group form-group-sm"><div class="input-group input-group-sm">';
+		html += '<span class="input-group-btn"><button class="btn btn-danger deleteItem" id="' + rowId + '">删除选项</button></span>';
+		html += '<input class="form-control guest-mpno" type="text" placeholder="用户ID" /></div></div>';
+		html += '<div class="col-md-6 form-group form-group-sm"><input class="form-control guest-name" type="text" placeholder="名称" /></div></div>';
+		$('#guestList').append(html);
+	});
+	$('#guestList').on('click','.deleteItem', function() {
+		$('#row_' + $(this).attr('id')).remove();
+	});
+	$('#saveBtn').click(function() {
+		var param = {
+			id: _id,
+			delayTime: $('input[name="delayTime"]').val(),
+			isjoin:$('[name="isjoin"]').val(),
+			chatroomid:$('[name="chatroomid"]').val(),
+			chatRoomName:$('input[name="chatRoomName"]').val(),
+			commodity:$('select[name="commodity"]').val(),
+			commoditytime:$('input[name="commoditytime"]').val(),
+			envelope:envelopeValue()
+		};
+		var guestList = new Array();
+		$('#guestList div.row').each(function() {
+			guestList.push({
+				mpno: $(this).find('.guest-mpno').val(),
+				nickname: $(this).find('.guest-name').val()
+			});
+		});
+		if (guestList.length >= 0) {
+			param.guest = guestList;
+		}
+		if($('select[name="commodity"]').val()!=''){
+			if($('input[name="commoditytime"]').val()==''){
+				effect.error('请选择商品时间');
+			}else{	
+				setLives(param);
+			}
+		}else{
+			setLives(param);
+		}
+	});
+	//视频插件
+	function ckplayerInitial(ckvideo,ckw,videoUrl,videoAudio){
+		var flashvars = {
+			f: '/javascripts/ckplayer/m3u8.swf',
+			a: videoUrl,
+			c: 0,
+			b: 1,
+			p: 1,
+			s: 4,
+			lv: 1,
+			v:videoAudio,
+		};
+		var params = {
+			bgcolor: '#FFF',
+			allowFullScreen: true,
+			allowScriptAccess: 'always',
+			wmode: 'transparent'
+		};
+		CKobject.embedSWF('/javascripts/ckplayer/ckplayer.swf', ckvideo, 'ckplayer_video', '100%', ckw, flashvars, params);
+	}
+	//右侧列表
+	function writeList(data){
+		//写数据
+		var html=''
+		$.each(data,function(i, v) {
+			html+='<div class="col-md-4 videoOut"  style="padding: 0 5px 5px 0;">\
+					    <div data-html="true" data-content="时间：'+v.createtime+'<br/>作者：'+v.user.nickname+'<br/>状态：'+v.statusname+'" data-trigger="hover" data-toggle="popover" data-placement="bottom" title="主题：'+v.title+'">\
+					    	<div  class="thumbnail" style="margin-bottom:0" >\
+					    		<div id="video'+v.index+'"></div>\
+					    		<button class="btn btn-xs btn-block pupmessage" data-chatroomid="'+v.chatroom.chatroomid+'">'+v.title+'</button>\
+					    		<span class="btn-group btn-group-justified">\
+					    		<span class="btn-group"><button class="btn btn-xs btn-default setUrl" data-url="'+v.cds.url+'">切入主屏</button></span>\
+					    		<span class="btn-group"><button class="btn btn-xs btn-default setSuburl" data-url="'+v.cds.url+'">切入导播屏</button></span>\
+					    		</span>\
+					        </div>\
+					    </div>\
+					</div>'	
+		});
+		$("#dataTable").html(html)
+		var videoH=$('.videoOut').eq(0).width()*3/4;
+		//写视频
+		$.each(data,function(i, v) {
+			ckplayerInitial('video'+v.index,videoH,encodeURIComponent(v.cds.url),0)
+		});
+	}
+	//获取下拉复选框的value
+	function envelopeValue(){
+		var envelope=[]
+		var envelopeInput=$('#envelope').find('option:checked')
+		envelopeInput.each(function(i,v) {
+			envelope.push(v.value)
+		});
+		return envelope
+	}
+</script>
+<% include ../inc/footer.html%>

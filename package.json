@@ -1,0 +1,45 @@
+{
+  "name": "joygo",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "description": "fuzhoucms",
+  "author": {
+    "name": "jinweida",
+    "email": "jinweida@joygo.com"
+  },
+  "dependencies": {
+    "async": "^1.4.2",
+    "body-parser": "^1.12.2",
+    "connect-redis": "^2.4.0",
+    "cookie-parser": "~1.3.3",
+    "debug": "^2.0.0",
+    "ejs": "^2.3.1",
+    "eventproxy": "^0.3.2",
+    "excel-export": "^0.4.1",
+    "express": "^4.12.3",
+    "express-session": "^1.11.1",
+    "formidable": "^1.0.17",
+    "images": "^2.1.8",
+    "jquery-file-upload-middleware": "^0.1.7",
+    "lodash": "^3.9.3",
+    "moment": "^2.10.2",
+    "mongoose": "^4.0.6",
+    "morgan": "^1.3.2",
+    "multer": "^0.1.8",
+    "multiparty": "^4.1.1",
+    "mysql": "^2.0.0-alpha9",
+    "node-odata": "^0.3.1",
+    "pm2": "^0.12.10",
+    "redis": "^0.12.1",
+    "request": "^2.55.0",
+    "rongcloud-sdk": "^1.0.3",
+    "serve-favicon": "^2.1.7",
+    "stylus": "^0.42.3",
+    "umeng-node-sdk": "0.0.3",
+    "validator": "^3.39.0",
+    "xml2js": "^0.4.10"
+  }
+}

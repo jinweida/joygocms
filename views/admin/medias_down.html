@@ -1,0 +1,333 @@
+﻿<% include inc/head.html%>
+<script>
+    var ajax = new Ajax();
+    $(function () {
+         $(".input_date").datetimepicker({
+            step:1,
+            lang:'ch',
+        });
+
+        $('#jstree').on('changed.jstree', function (e, data) {
+            var i, j, r = [];
+            for(i = 0, j = data.selected.length; i < j; i++) {
+                r.push(data.instance.get_node(data.selected[i]).id);
+            }
+            $("#cid").val(r.join(', '));
+            var data = {
+                cid: r.join(',')
+            };
+            get_down_count(data);
+            get_down_list(data);
+
+        }).jstree({
+            'core': {
+                'data': {
+                    "url": "/admin/ajax_get_columns_list",
+                    "data": function (node) {
+                        return { "id": node.id };
+                    }
+                }
+            },
+            "plugins": ["wholerow"]
+        });
+        //置顶
+        $(document).on("click",'.setattr', function () {
+            var _ids = "";
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    if (_ids != "") _ids += ",";
+                    _ids += $(this).val();
+                }
+            })
+            if (_ids == "") {
+                $("#alertDialog").modal('show');
+                return;
+            }
+            var data = {
+                _ids: _ids,
+                cid: $("#cid").val(),
+                order: $(this).attr("data-order"),
+                toptime:$("#medias_toptime").val(),
+            };
+
+            var cb = function (result) {
+                if (result.code == 0) {
+                    $("#successTip").show();
+                    window.setTimeout(function () { $("#successTip").hide() }, 2000);
+                    var data = { cid: $("#cid").val(), title: $("[name='post_title']").val(), type: $("[name='post_type']").val() };
+                    get_down_count(data);
+                    get_down_list(data);
+                } else {
+                    //$('#error').text(result.message);
+                }
+            };
+            ajax.post('/admin/dotop', data, cb);
+        });
+        //置顶
+        $(document).on("click", '#settop', function () {
+            var _ids = "";
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    if (_ids != "") _ids += ",";
+                    _ids += $(this).val();
+                }
+            })
+            if (_ids == "") {
+                $("#alertDialog").modal('show');
+                return;
+            }
+            $("#setdate").modal('show');
+
+        });
+        $(document).on("click", "#setdateok", function () {
+            var _ids = "";
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    if (_ids != "") _ids += ",";
+                    _ids += $(this).val();
+                }
+            })
+            if (_ids == "") {
+                $("#alertDialog").modal('show');
+                return;
+            }
+            var data = {
+                _ids: _ids,
+                cid: $("#cid").val(),
+                order: $(this).attr("data-order"),
+                toptime: $("#medias_toptime").val()
+            };
+            var cb = function (result) {
+                if (result.code == 0) {
+                    $("#successTip").show();
+                    window.setTimeout(function () { $("#successTip").hide() }, 2000);
+                    var data = { cid: $("#cid").val(), title: $("[name='post_title']").val(), type: $("[name='post_type']").val() };
+                    get_down_count(data);
+                    get_down_list(data);
+                } else {
+                    //$('#error').text(result.message);
+                }
+            };
+            ajax.post('/admin/dotop', data, cb);
+        })
+        //下架
+
+        //修改时间--只针对已上架修改
+        $(document).on('dblclick','.editorTime',function(){
+            var  td=$(this);
+            var  html='<input type="text" name="createtime" class="form-control input-sm input_date">';
+            var  otime=td.html();
+            var  id=td.attr('data-id');
+            var  mid=td.attr('data-mid');
+            td.html(html)
+            $(".input_date").datetimepicker({
+                step:1,
+                lang:'ch',
+            });
+            td.find('input').blur(function(){
+                var time=$(this).val()
+                var data={
+                    time:time,
+                    id:id,
+                    mid:mid
+                }
+                $.post('/admin/setTime',data,function(result){
+                    if(result.code==0){
+                        effect.success(function(){
+                            td.html(time)
+                        })    
+                    }else{
+                        effect.error(function(){
+                            td.html(otime)
+                        })
+                    }
+                })    
+            });
+        });
+        
+        //
+        $("#down").on("click", function () {
+            var _ids = "";
+            var mid = "";
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    var id = $(this).val().split(",");
+                    if (_ids != "") _ids += ",";
+                    _ids += id[0];
+                    if (mid != "") mid += ",";
+                    mid += id[1];
+                }
+            })
+            if (_ids == "") {
+                $("#alertDialog").modal('show');
+                return;
+            }
+            var data = {
+                _ids: _ids,
+                mid:mid,
+                cid: $("#cid").val(),
+            };
+
+            var cb = function (result) {
+                if (result.code == 0) {
+
+                    var data = { cid: $("#cid").val(), title: $("[name='post_title']").val(), type: $("[name='post_type']").val() };
+                    get_down_count(data);
+                    get_down_list(data);
+                    $("#successTip").show();
+                    window.setTimeout(function () { $("#successTip").hide() }, 2000);
+                } else {
+                    //$('#error').text(result.message);
+                }
+            };
+            ajax.post('/admin/dodown', data, cb);
+
+        });
+        $("#find").on("click", function () {
+            var data = { cid: $("#cid").val(), title: $("[name='post_title']").val(), type: $("[name='post_type']").val() };
+
+            get_down_count(data);
+            get_down_list(data);
+        })
+
+    })
+    function get_down_count(data) {
+        ajax.get('/admin/ajax_down_count', data, function (result) {
+            $('#page').html('');
+            //分页功能
+            var options = {
+                currentPage: 1,
+                totalPages: result.message.pagecount,
+                numberOfPages: result.message.pagesize,
+                bootstrapMajorVersion: 1,
+                onPageClicked: function (e, originalEvent, type, page) {
+
+                    data.page = page;
+                    get_down_list(data);
+                }
+            }
+            $('#page').bootstrapPaginator(options);
+        });
+    }
+    function get_down_list(data) {
+        ajax.get('/admin/ajax_down_list', data, function (result) {
+            $(":checkbox").prop("checked",false);
+            $("#datatable tbody tr").remove();
+            $("#uptmpl").tmpl(result.message).appendTo("#datatable tbody");
+            $("[data-toggle='tooltip']").tooltip();
+        });
+    }
+
+</script>
+<input type="hidden" id="currentpage" value="1"/>
+<script id="uptmpl" type="text/x-jquery-tmpl">
+    <tr class="${style}"><td><input type="checkbox" value="${_id},${mid}" name="chk"/></td><td>${index}</td><td><a data-toggle="tooltip" title="${title}" data-placement="bottom" class="${style}" href="/html5/page/news/news_detail.html?mid=${mid}" target="_blank">${shorttitle}</a></td><td>${author}</td><td><div data-toggle="tooltip" data-placement="left" title="${toptime}">{{html attr}}</div></td><td><span class="${typestyle}">${typename}</span></td><td>${publish}</td><td  class="editorTime" data-id="${_id}" data-mid="${mid}">${createtime}</td></tr>
+</script>
+<input type="hidden" name="cid" id="cid" value=""/>
+<div class="container-fluid">
+    <div id="alertDialog" class="modal" tabindex="-1" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog" style="width: 300px;">
+			<div class="modal-content">
+				<div class="modal-header"><h4>警告</h4></div>
+				<div class="modal-body" style="padding: 20px;">至少选择一项</div>
+				<div class="modal-footer" style="text-align: center;">
+					<button class="btn btn-default btn-sm" data-dismiss="modal">
+						取消</button>
+					<button class="btn btn-danger btn-sm" data-dismiss="modal">
+						确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div id="setdate" class="modal" tabindex="-1" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog" style="width: 300px;">
+			<div class="modal-content">
+				<div class="modal-header"><h4>设置置顶时间</h4></div>
+				<div class="modal-body" style="padding: 20px;">
+                    <div class="form-group">
+		                <label for="medias_toptime">置顶时间</label>
+                        <div id="medias_toptime_input" class="form-group" style="display: block;">
+			                <input type="text" name="medias_toptime" id="medias_toptime" value="" class="form-control input_date" readonly>
+		                </div>
+	                </div>
+				</div>
+                <div class="modal-footer" style="text-align: center;">
+					<button class="btn btn-default btn-sm" data-dismiss="modal">
+						取消</button>
+					<button class="btn btn-danger btn-sm" data-dismiss="modal"  data-order="1" id="setdateok">
+						确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+
+        <table class="table table-bordered table-condensed">
+            <tr><th style="width: 200px; cursor: pointer;">分类</th><th>媒资列表</th></tr>
+            <tr>
+                <td>
+                <div id="jstree">
+                </div>
+                </td>
+                <td style="padding:0;text-align:left;">
+                    <div id="successTip" class="alert alert-success fade in" style="display: none;">操作成功</div>
+                    <div class="panel panel-default" style="border-radius: 0;">
+                    <div class="panel-heading" style="height:54px;">
+			    		<button id="down" type="button" class="btn btn-danger btn-sm" ><span class="glyphicon glyphicon-arrow-down"></span> 下架</button>
+                        <!-- Single button -->
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="glyphicon glyphicon-cog"></span> 设置属性 <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" id="settop" data-order="1"><span class="glyphicon glyphicon-upload"></span> 置顶</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#"  class="setattr" data-order="100"><span class="glyphicon glyphicon-picture"></span> 幻灯</a></li>
+                            <li class="divider"></li>
+
+                            <li><a href="#"  class="setattr" data-order="-1"><span class="glyphicon glyphicon-remove"></span> 清除属性</a></li>
+                          </ul>
+                        </div>
+                        <form class="navbar-form navbar-right">
+
+                            <div class="form-group">
+                              <select name="post_type" class="form-control input-sm">
+                                  <option value="-1">媒资类型</option>
+                                  <%types.forEach(function(item){%>
+                                    <%if(item.id!=100){%>
+                                    <option value="<%=item.id%>"><%=item.name%></option>
+                                    <%}%>
+                                  <%})%>
+                              </select>
+                            </div>
+                            <div class="input-group">
+	                        <input type="text" name="post_title" id="post_title" placeholder="标题" value="" class="form-control input-sm">
+	                        <span class="input-group-btn">
+		                        <button type="button" class="btn btn-danger btn-sm" id="find">
+					            <span class="glyphicon glyphicon-search"></span>
+				                </button>
+                            </span>
+                            </div>
+                        </form>
+			    	</div>
+                    <table class="table table-bordered table-hover table-striped table-condensed" id="datatable">
+                        <thead>
+                        <tr><th style="width:25px;"><input type="checkbox" name="chkall"/></th><th style="width:30px;">#</th><th>媒资名称</th><th style="width:80px;">作者</th><th style="width:80px;">属性</th><th style="width:80px;">媒资类型</th><th style="width:60px;">状态</th><th style="width:180px;">发布时间</th></tr></thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr><td colspan="8">
+                            <div id="page"></div></td></tr>
+                        </tfoot>
+                    </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+  </div>
+</div>
+<% include inc/footer.html%>

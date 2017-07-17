@@ -1,0 +1,299 @@
+﻿<% include ../inc/head.html%>
+<script type="text/javascript">
+    $(function () {
+        $(document).on("click",".select_post_special", function () {
+            $('#modal_post_special').modal("show");
+            $("#" + $(this).attr("data-id")).find('.row_post_special').addClass('active')
+            var data = {};
+            get_special_count(data);
+            get_special_list(data);
+        });
+        $("#post_special_find").on("click", function () {
+            var data = { title: $("#post_special_title_find").val() };
+            get_special_count(data);
+            get_special_list(data);
+        });
+        function get_special_count(data) {
+            $.get('/admin/ajax_getall_count', data, function (result) {
+                //分页功能
+                var options = {
+                    currentPage: 1,
+                    totalPages: result.message.pagecount,
+                    numberOfPages: result.message.pagesize,
+                    bootstrapMajorVersion: 1,
+                    onPageClicked: function (e, originalEvent, type, page) {
+                        data.page = page;
+                        get_special_list(data);
+                    }
+                }
+                if(options.totalPages > 0){
+                    $('#page').show().bootstrapPaginator(options);
+                }else{
+                    $('#page').hide();
+                }
+            })
+        };
+        function get_special_list(data) {
+            $.get('/admin/ajax_getall_list', data, function (result) {
+                if (result.code == 0) {
+                    $("#table_post_special tbody").html('');
+                    $("#posttpl")
+                            .tmpl(result.message)
+                            .appendTo("#table_post_special tbody");
+                }
+            })
+        };
+        $(document).on("click", "[name='chk']", function () {
+            var index=$(".row_post_special.active").prev('.panel-body').find('input').attr('name')
+            var data = {
+                index:index.match(/\[\d*\]/),
+                tid:'row'+new Date().getTime(),
+                id: $(this).val(),
+                type: $(this).attr('data-type'),
+                title: $(this).attr('data-title'),
+                desc: $(this).attr('data-desc'),
+                createtime: $(this).attr('data-createtime'),
+                commentcount: $(this).attr('data-commentcount'),
+                clickcount: $(this).attr('data-clickcount'),
+                pics: $(this).attr('data-pics'),
+                video: $(this).attr('data-video'),
+                source: $(this).attr('data-source'),
+                author: $(this).attr('data-author'),
+            }
+            var bar=$(".row_post_special.active").find('.specials_item');
+            var arr=[]
+            bar.each(function(i, v) {
+                arr.push($(v).attr('id'));
+            });
+            if($.inArray($(this).val(), arr)==-1){
+                if ($(this).is(":checked")) {
+                    $("#post_special_tpl")
+                                .tmpl(data)
+                                .appendTo(".row_post_special.active");
+                }
+            }
+            if (!$(this).is(":checked")){
+                $("#" + $(this).val()).remove();
+            }
+        })
+        $(document).on("click", ".del_post_special", function () {
+            $(".specials_item[data-del="+$(this).attr("data-id")+"]").remove()
+            return false;
+        })
+        var a=$('input[name^="post_special_group"]').size()>0?$('input[name^="post_special_group"]').last().attr('data-index'):0
+        $('#add_group').click(function(event) {
+            var data={id:'row'+new Date().getTime(),index:++a}
+            $("#group_item_tpl")
+                .tmpl(data)
+                .appendTo("#group-item");
+        });
+        $(document).on("click", ".del_group_item", function () {
+            if(confirm("此操作会删除该分组下的所有媒资,确定删除？")){
+                $("#" + $(this).attr("data-id")).remove();
+            }
+            return false;
+        });
+        $(document).on("click", ".close", function () {
+            $('.row_post_special').removeClass('active')
+            return false;
+        })
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="javascript:history.go(-1)">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="article_form" id="article_form" method="post">
+            <input type="hidden" value="<%=model._id%>" id="post_id" name="post_id"/>
+            <!-- <input type="hidden" name="post_content" id="post_content"/> -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#mainInfo" aria-controls="mainInfo" data-toggle="tab">基础信息</a></li>
+                <li><a href="#minorInfo" aria-controls="minorInfo" data-toggle="tab">选填信息</a></li>
+            </ul>
+            <div class="tab-content" style="margin-top:15px;">
+                <div class="tab-pane active" id="mainInfo">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="well">
+                                <% include ../inc/form_left_edit.html%>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="panel panel-danger">
+                                <div class="panel-body">
+                                    <% include ../inc/form_top_edit.html%>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-danger" id="add_group"><i class="glyphicon glyphicon-plus"></i>添加分组</button>
+                                    </div>
+                                    <div class="form-group" id="group-item">
+                                        <%var j=1000;group.forEach(function(item,index){j++%>
+                                            <div class="panel panel-default col-md-6" id="<%=j%>">
+                                                <div class="panel-body">
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-btn">
+                                                            <span class="btn btn-danger select_post_special" data-id="<%=j%>">
+                                                                <i class="glyphicon glyphicon-plus"></i>            
+                                                            </span>
+                                                        </span>
+                                                        <input type="text" class="form-control" value="<%=item%>" name="post_special_group[<%=index%>]" placeholder="请输入组名" data-index="<%=index%>">
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-danger del_group_item" data-id="<%=j%>">删除分组</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row_post_special" style="height:135px;overflow:auto;"> 
+                                                <%if(specials!=null){
+                                                var i=100;specials.forEach(function(node){i++;if(item==node.name){%>
+                                                    <div class="col-md-12 specials_item" id="<%=node.mid%>" data-del="<%=i%>">
+                                                    <div class="form-group  form-group-sm">
+                                                    <div class="input-group input-group-sm">
+                                                    <input type="text" name="post_special_title[<%=index%>]" class="form-control" value="<%=node.title%>" readonly placeholder="<%=node.title%>">
+                                                    <input type="hidden" name="post_special_id[<%=index%>]" value="<%=node.mid%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_type[<%=index%>]" value="<%=node.type%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_createtime[<%=index%>]" value="<%=node.createtime%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_desc[<%=index%>]" value="<%=node.desc%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_commentcount[<%=index%>]" value="<%=node.commentcount%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_clickcount[<%=index%>]" value="<%=node.clickcount%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_pics[<%=index%>]" value="<%=node.pics%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_video[<%=index%>]" value="<%=node.video%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_source[<%=index%>]" value="<%=node.source%>" class="form-control" />
+                                                    <input type="hidden" name="post_special_author[<%=index%>]" value="<%=node.author%>" class="form-control" />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-danger del_post_special" data-id="<%=i%>">删除</button>
+                                                    </span>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                <%}})}%>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        <%})%>          
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group">
+                                        <button type="button" class="go_submit btn btn-danger">保存</button>
+                                        <p class="text-left"><small class="red" id="error"></small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="minorInfo">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-danger">
+                            <div class="panel-body">
+                                <% include ../inc/form_topor_edit.html%>
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-sm">
+                                        <button type="button" class="go_submit btn btn-danger">保存</button>
+                                        <p class="text-danger"><small class="red" id="error"></small></p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="modal fade" id="modal_post_special" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">选择专题媒资</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="input-group">
+						    <input type="text" name="post_special_title_find" id="post_special_title_find" class="form-control" placeholder="标题">
+						    <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary" id="post_special_find">查询</button></span>
+                            </div>
+                        </div>
+                        <table class="table table-hover table-striped table-condensed" id="table_post_special">
+                            <thead>
+                            <tr><th style="width:25px;"></th><th style="width:40px">#</th><th>媒资名称</th><th style="width:70px">媒资类型</th><th style="width:180px">发布时间</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                        <div id="page"></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <script id="posttpl" type="text/x-jquery-tmpl">
+                {{if type!=4}}
+                <tr><td><input type="checkbox" value="${_id}" data-type="${type}" data-title="${title}" data-desc="${desc}" data-createtime="${createtime}" data-commentcount="${commentcount}" data-pics="${pics}" data-clickcount="${clickcount}"  data-video="${video}" data-source="${source}" data-author="${author}"  name="chk"/></td><td>${index}</td><td><span data-toggle="tooltip" title="${title}" data-placement="bottom">${shorttitle}</span></td><td><span class="${typestyle}">${typename}</span></td><td>${createtime}</td></tr>
+                {{/if}}
+            </script>
+            <script id="post_special_tpl" type="text/x-jquery-tmpl">
+                <div class="col-md-12 specials_item" id="${id}" data-del="${tid}">
+                    <div class="form-group">
+                    <div class="input-group input-group-sm">
+					<input type="text" name="post_special_title${index}" class="form-control" value="${title}" readonly>
+                    <input type="hidden" name="post_special_id${index}" value="${id}" class="form-control" />
+                    <input type="hidden" name="post_special_type${index}" value="${type}" class="form-control" />
+                    <input type="hidden" name="post_special_createtime${index}" value="${createtime}" class="form-control" />
+                    <input type="hidden" name="post_special_desc${index}" value="${desc}" class="form-control" />
+                    <input type="hidden" name="post_special_commentcount${index}" value="${commentcount}" class="form-control" />
+                    <input type="hidden" name="post_special_clickcount${index}" value="${clickcount}" class="form-control" />
+                    <input type="hidden" name="post_special_pics${index}" value="${pics}" class="form-control" />
+                    <input type="hidden" name="post_special_video${index}" value="${video}" class="form-control" />
+                    <input type="hidden" name="post_special_source${index}" value="${source}" class="form-control" />
+                    <input type="hidden" name="post_special_author${index}" value="${author}" class="form-control" />
+					<span class="input-group-btn">
+                        <button type="button" class="btn btn-danger del_post_special" data-id="${tid}">删除</button>
+					</span>
+                    </div>
+                    </div>
+                </div>
+            </script>
+            <script id="group_item_tpl" type="text/x-jquery-tmpl">
+                <div class="panel panel-default col-md-6" id="${id}">
+                    <div class="panel-body">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-btn">
+                                <span class="btn btn-danger select_post_special" data-id="${id}">
+                                    <i class="glyphicon glyphicon-plus"></i>            
+                                </span>
+                            </span>
+                            <input type="text" class="form-control" value="" name="post_special_group[${index}]" placeholder="请输入组名">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger del_group_item" data-id="${id}">删除分组</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row_post_special" style="height:135px;overflow:auto;">                  
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </script>
+            <% include ../inc/thumbnail.html%>
+        </form>
+    </div>
+  </div>
+</div>
+
+<% include ../inc/footer.html%>

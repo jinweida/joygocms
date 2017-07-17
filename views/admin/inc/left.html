@@ -1,0 +1,239 @@
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <%if(locals.current_user_roles.permission.indexOf('1000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title"><a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse0" aria-expanded="false" aria-controls="collapseOne"><span class="glyphicon glyphicon-duplicate"></span>  媒资管理 <span class="caret"></span></a></h4>
+      </div>
+      <div id="collapse0" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse0">
+		    <div class="list-group">
+            <%if(locals.current_user_roles.permission.indexOf('1100')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/posts" class="list-group-item"><span class="glyphicon glyphicon-list"></span> 媒体列表</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1600')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/audit" class="list-group-item"><span class="glyphicon glyphicon-file"></span> 发布审核</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1700')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/up" class="list-group-item"><span class="glyphicon glyphicon-open-file"></span> 媒资上架</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1800')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/down" class="list-group-item"><span class="glyphicon glyphicon-save-file"></span> 媒资下架</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1810')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/phone" class="list-group-item"><span class="glyphicon glyphicon-bullhorn"></span> 新闻报料</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1840')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/videos" class="list-group-item"><span class="glyphicon glyphicon-cloud-upload"></span> 上传视频</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1900')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/columns" class="list-group-item"><span class="glyphicon glyphicon-tasks"></span> 栏目分类</a>
+            <%}%>
+        </div>
+	    </div>
+    </div>
+      <%}%>
+    <%if(locals.current_user_roles.permission.indexOf('8000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="heading12">
+        <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse12" aria-expanded="false" aria-controls="collapseeight">
+            <span class="glyphicon glyphicon-stats"></span>  统计查询 <span class="caret"></span>
+        </a>
+        </h4>
+      </div>
+      <div id="collapse12" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse12">
+        <div class="list-group">
+            <%if(locals.current_user_roles.permission.indexOf('8100')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/statistics/columns" class="list-group-item"><span class="glyphicon glyphicon-list"></span> 栏目分类统计</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('8200')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/daily_browsing" class="list-group-item"><span class="glyphicon glyphicon-list"></span> 媒资浏览量统计</a>
+            <%}%>
+        </div>
+      </div>
+    </div>
+    <%}%>
+    <%if(locals.current_user_roles.permission.indexOf('6000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingnight">
+        <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse9" aria-expanded="false" aria-controls="collapseeight">
+            <span class="glyphicon glyphicon-volume-up"></span>  消息管理 <span class="caret"></span>
+        </a>
+        </h4>
+      </div>
+      <div id="collapse9" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse9">
+        <div class="list-group">
+            <%if(locals.current_user_roles.permission.indexOf('6100')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/message/list" class="list-group-item"><span class="glyphicon glyphicon-list"></span> 消息列表</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('7100')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/usergroup/list" class="list-group-item"><span class="glyphicon glyphicon-user"></span> 用户群组</a>
+            <%}%>
+        </div>
+      </div>
+    </div>
+    <%}%>
+    <%if(locals.current_user_roles.permission.indexOf('5000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingeight">
+        <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse8" aria-expanded="false" aria-controls="collapseeight">
+            <span class="glyphicon glyphicon-facetime-video"></span>  微直播管理 <span class="caret"></span>
+        </a>
+        </h4>
+      </div>
+      <div id="collapse8" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse8">
+        <div class="list-group">
+            <%if(locals.current_user_roles.permission.indexOf('5120')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/columns/list" class="list-group-item"><span class="glyphicon glyphicon-th-list"></span> 微栏目</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('5130')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/live" class="list-group-item"><span class="glyphicon glyphicon-facetime-video"></span> 微直播</a>
+            <%}%>
+              <%if(locals.current_user_roles.permission.indexOf('5190')>=0 || locals.current_user_roles.permission===""){%>
+            <a href="/admin/lives/director" class="list-group-item"><span class="glyphicon glyphicon-facetime-video"></span> 微导播</a>
+              <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('5140')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/vod" class="list-group-item"><span class="glyphicon glyphicon-expand"></span> 微点播</a>
+            <%}%>
+           <%if(locals.current_user_roles.permission.indexOf('5180')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/broadcasts" class="list-group-item"><span class="glyphicon glyphicon-volume-up"></span> 微广播</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('5160')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/signs" class="list-group-item"><span class="glyphicon glyphicon-check"></span> 微签到</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('5170')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/statistics" class="list-group-item"><span class="glyphicon glyphicon-signal"></span> 微统计</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('5150')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/trailer" class="list-group-item"><span class="glyphicon glyphicon-pushpin"></span> 预告管理</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('5110')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/lives/users/list" class="list-group-item"><span class="glyphicon glyphicon-user"></span> 实名认证</a>
+            <%}%>
+        </div>
+      </div>
+    </div>
+    <%}%>
+    <%if(locals.current_user_roles.permission.indexOf('4000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingsix">
+        <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse6" aria-expanded="false" aria-controls="collapsesix">
+            <span class="glyphicon glyphicon-home"></span>  二手房管理  <span class="caret"></span>
+        </a>
+        </h4>
+      </div>
+      <div id="collapse6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse6">
+        <div class="list-group">
+            <%if(locals.current_user_roles.permission.indexOf('4100')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/regions" class="list-group-item"><span class="glyphicon glyphicon-map-marker"></span> 区域管理</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('4200')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/houses" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span> 信息发布</a>
+            <%}%>
+        </div>
+      </div>
+    </div>
+      <%}%>
+    <%if(locals.current_user_roles.permission.indexOf('5000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingserven">
+        <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse7" aria-expanded="false" aria-controls="collapsesix">
+            <span class="glyphicon glyphicon-camera"></span>  主播秀管理  <span class="caret"></span>
+        </a>
+        </h4>
+      </div>
+      <div id="collapse7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse7">
+        <div class="list-group">
+            <%if(locals.current_user_roles.permission.indexOf('5100')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/anchors" class="list-group-item"><span class="glyphicon glyphicon-user"></span> 主播管理</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('5200')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/questions" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span> 问答管理</a>
+            <%}%>
+        </div>
+      </div>
+    </div>
+      <%}%>
+     <%if(locals.current_user_roles.permission.indexOf('2000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingfour">
+        <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="false" aria-controls="collapsefour">
+            <span class="glyphicon glyphicon-list"></span>  其他管理  <span class="caret"></span>
+        </a>
+        </h4>
+      </div>
+      <div id="collapse4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse2">
+		    <div class="list-group">
+          <%if(locals.current_user_roles.permission.indexOf('2600')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/medialist" class="list-group-item"><span class="glyphicon glyphicon-random"></span> 媒资推送</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('2700')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/microlist" class="list-group-item"><span class="glyphicon glyphicon-random"></span> 微播推送</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('2100')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/attachs" class="list-group-item"><span class="glyphicon glyphicon-paperclip"></span> 所有附件</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('2200')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/comments" class="list-group-item"><span class="glyphicon glyphicon-comment"></span> 评论内容</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('2400')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/feedbacks" class="list-group-item"><span class="glyphicon glyphicon-pencil"></span> 建议反馈</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('2400')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/ads" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span> 幻灯片管理</a>
+            <%}%>
+
+            <%if(locals.current_user_roles.permission.indexOf('1820')>=0 || locals.current_user_roles.permission===""){%>
+            <a href="/admin/activitys" class="list-group-item"><span class="glyphicon glyphicon-leaf"></span> 活动报名</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1830')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/kpis" class="list-group-item"><span class="glyphicon glyphicon-certificate"></span> 绩效考核</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1850')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/organs" class="list-group-item"><span class="glyphicon glyphicon-tags"></span> 机关黄页</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1860')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/cooper" class="list-group-item"><span class="glyphicon glyphicon-list"></span> 合作商户</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1880')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/awards" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span> 福彩管理</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('1890')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/wenba" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span> 问吧管理</a>
+            <%}%>
+	      </div>
+	    </div>
+    </div>
+      <%}%>
+      <%if(locals.current_user_roles.permission.indexOf('3000')>=0 || locals.current_user_roles.permission===""){%>
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingfive">
+        <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="false" aria-controls="collapsefive">
+            <span class="glyphicon glyphicon-cog"></span>  系统管理 <span class="caret"></span>
+        </a>
+        </h4>
+      </div>
+      <div id="collapse5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse2">
+		    <div class="list-group">
+            <%if(locals.current_user_roles.permission.indexOf('3000')>=0 || locals.current_user_roles.permission===""){%>
+          <a href="/admin/sysconfigs" class="list-group-item"><span class="glyphicon glyphicon-wrench"></span> 参数配置</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('3000')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/roles" class="list-group-item"><span class="glyphicon glyphicon-user"></span> 角色管理</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('3000')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/users" class="list-group-item"><span class="glyphicon glyphicon-lock"></span> 操作员管理</a>
+            <%}%>
+            <%if(locals.current_user_roles.permission.indexOf('3000')>=0 || locals.current_user_roles.permission===""){%>
+		      <a href="/admin/operatorlogs" class="list-group-item"><span class="glyphicon glyphicon-list-alt"></span> 操作日志</a>
+            <%}%>
+		    </div>
+	    </div>
+	  </div>
+    <%}%>
+</div>

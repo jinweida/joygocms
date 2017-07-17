@@ -1,0 +1,218 @@
+﻿.global {
+  max-width:425px !important;
+  margin: 85px auto;
+}
+body {
+    font: 14px/1.5 Microsoft YaHei,Helvitica,Verdana,Arial,san-serif
+}
+label > span {
+  color: #c30;
+  margin-left: 10px;
+}
+.foot_logo > a {
+  display: block;
+  width: 110px;
+  height: 0;
+  margin: 0 auto;
+  padding-top: 20px;
+  overflow: hidden;
+}
+.alert {
+  margin-bottom: 0px;
+}
+.navbar-form {
+  margin-top: 0px;
+}
+.pagination {
+  margin: 5px 0px;
+}
+/*
+ * Global add-ons
+ */
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
+}
+/*
+ * Sidebar
+ */
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    width:180px;
+    top: 62px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 0px;
+    overflow-x: hidden;
+    overflow-y: auto;
+/* Scrollable contents if viewport is shorter than content. */
+    background-color: #f3e9e9;
+    border-right: 1px solid #eee;
+  }
+}
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px;
+/* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+/*
+ * Main content
+ */
+.main {
+    margin-left:180px;
+    margin-top:60px;
+    padding:15px;
+
+}
+@media only screen and (max-width:660px) {
+    .main {
+        margin-left: 0
+    }
+}
+.main .page-header {
+  margin-top: 0;
+}
+/*
+ * Placeholder dashboard ideas
+ */
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+.panel-heading {
+  border-radius: 0px;
+}
+.panel-group .panel {
+  border-radius: 0px;
+}
+.panel-group .panel+.panel {
+  margin-top: 0px;
+}
+.list-group-item {
+    border-top: 0px;
+    border-bottom: 0px;
+    border-left-color: #d9534f;
+}
+.panel-default {
+    border:0px;
+  border-bottom: 1px solid #ddd ;
+}
+.list-group {
+  border:0px;
+}
+.list-group a {
+    padding-left:35px;
+}
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #d9534f;
+    background-color: #ead7da;
+}
+.panel>.list-group:first-child .list-group-item:first-child, .panel>.panel-collapse>.list-group:first-child .list-group-item:first-child {
+  border-top: 0;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+#header {
+  z-index: 200;
+  background: #bc000e;
+  min-height: 62px;
+  -webkit-transition: all .3s ease-in-out;
+  -moz-transition: all .3s ease-in-out;
+  -o-transition: all .3s ease-in-out;
+  -ms-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+  margin-right: 0;
+}
+#header .logo {
+  color: #fff;
+  font-size: 1.7em;
+  text-transform: uppercase;
+  padding: 15px 0 0 0px;
+  display: inline-block;
+}
+#header .nav {
+  margin-right:15px;
+}
+#header .nav a:hover {
+    background:#bc000e;
+}
+#header .nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
+    background:#bc000e;
+}
+#header .nav a{
+    padding-top:20px;
+    font-size:14px;
+	color:#fff;
+	background:#bc000e;
+}
+a:active,a:hover {
+    outline: 0;
+    text-decoration: none;
+    color: #bc000e
+}
+a:link,a:visited {
+    text-decoration: none;
+    outline: 0;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+.jstree-wholerow-clicked {
+  background-color: #ead7da;
+}
+.item .thumbnail {
+  padding: 0;
+  border-width: 1px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+.ellipsis {
+  table-layout: fixed;
+}
+.ellipsis td ,.ellipsis td div.alt{
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

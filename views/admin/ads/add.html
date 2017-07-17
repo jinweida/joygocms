@@ -1,0 +1,281 @@
+﻿<% include ../inc/head.html%>
+<script>
+$(function () {
+    var ajax = new Ajax();
+    $('.go_submit').click(function () {
+        $("#ads_mediatitle").val($("#mediaitem").val());
+        if($("#ads_mediatitle").val()!=''){
+            $("#ads_mediaitem").val($("#mediaitem").attr("real-value"));
+        }else{
+            $("#ads_mediaitem").val('');
+        }
+        var data = $("form").serializeArray();
+        var cb = function (result) {
+            if (result.code == 0) {
+                $("#success").show();
+                    window.setTimeout(function () {
+                        $("#success").hide()
+                        location.href = '/admin/ads';
+                    }, 2000);
+            } else {
+                $('#error').text(result.message);
+            }
+        };
+        // 更新博客
+        ajax.post('/admin/ads_create', data, cb);
+        return false;
+    });
+    $('input[name="ads[timing]"]').click(function(event) {
+        if($(this).val()==1){
+            $("#settiming").tmpl().appendTo(".settiming");
+            $(".input_date").datetimepicker({
+                step:1,
+                lang:'ch',
+            });
+        }
+        if($(this).val()==0){
+            $(".settiming").empty()
+        }
+    });
+    $('#adtype').on('change',function(){
+      var value=$(this).val();
+      switch(value){
+        case '0':
+          itemNone()
+          break;
+        case '1':
+          itemUrl();
+          break;
+        case '2':
+          itemMenuitem();
+          break;
+        case '3':
+          itemUrl();
+          break;
+        case '4':
+          itemMediaitem();
+          break;
+        case '5':
+          itemLiveitem();
+          break;
+      }
+    })
+    $(".input_date").datetimepicker({
+        step:1,
+        lang:'ch',
+    });
+    function itemNone(){
+      $('#group_ads_adurl').hide()
+      $('#group_ads_mediaitem').hide()
+      $('#group_ads_menuitem').hide()
+      $('#group_ads_liveitem').hide()
+    }
+    function itemUrl(){
+      $('#group_ads_adurl').show()
+      $('#group_ads_mediaitem').hide()
+      $('#group_ads_menuitem').hide()
+      $('#group_ads_liveitem').hide()
+    }
+    function itemMediaitem(){
+      $('#group_ads_adurl').hide()
+      $('#group_ads_mediaitem').show()
+      $('#group_ads_menuitem').hide()
+      $('#group_ads_liveitem').hide()
+    }
+    function itemMenuitem(){
+      $('#group_ads_adurl').hide()
+      $('#group_ads_mediaitem').hide()
+      $('#group_ads_menuitem').show()
+      $('#group_ads_liveitem').hide()
+    }
+    function itemLiveitem(){
+      $('#group_ads_adurl').hide()
+      $('#group_ads_mediaitem').hide()
+      $('#group_ads_menuitem').hide()
+      $('#group_ads_liveitem').show()
+    }
+    $("#mediaitem").autocomplete ({
+        source:function(query,process){
+            var parameter = {title: query};
+            ajax.get('/admin/medias/getFullMedias', parameter, function(result){
+                console.log(result.message);
+                return process(result.message);
+            });
+        },
+        formatItem:function(item){
+            var titie=item.cid?item.cid.name:''
+            return item.title+" - "+titie;
+        },
+        setValue:function(item){
+            return {'data-value':item.title,'real-value':item._id};
+        },
+        delay:30,
+        items:20
+    });
+
+})
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/ads">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <div id="success" class="alert alert-success fade in" style="display:none;margin-top:15px;">保存成功！</div><br>
+        <form name="ads_form" id="ads_form" method="post">
+            <div class="row">
+			    <div class="col-md-3">
+                    <div class="well">
+                        <div class="form-group">
+                            <label for="ads[adimg]">图片</label>
+                            <div class="input-group">
+                            <span class="input-group-btn">
+                            <span class="btn btn-danger fileinput-button">
+                                    <span>上传</span>
+                                    <!-- The file input field used as target for the file upload widget -->
+                                    <input id="fileupload" type="file" data-value="ads_adimg" name="files[]" multiple>
+                                </span>
+                            </span>
+                            <input type="text" name="ads[adimg]" id="ads_adimg" class="form-control" value="" placeholder="640*480图片">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger select_pic" data-value="ads_adimg" id="select_pics">选择</button>
+                                </span>
+                            </div>
+                            <p class="help-block" id="files"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="ads[adposition]">位置</label>
+                            <div id="group_ads[adposition]">
+                            <select class="form-control" name="ads[adposition]">
+                                <option value="0">首页</option>
+                                <%columns.forEach(function(item){
+                                var tree="";
+                                if(item.level>1)tree="| --";
+                                %>
+                                <option value="<%=item._id%>"><%=tree%><%=item.name%></option>
+                                <%})%>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="group_ads[order]">
+                                <label for="authors_name" class="control-label">排序<span id="msg_ads[order]">*</span></label>
+                                <input type="text" name="ads[order]" id="ads[order]" value="0" placeholder="" class="validate form-control">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label for="timing">是否定时</label><br />
+                            <label class="radio-inline">
+                                <input type="radio" name="ads[timing]" value="1"/> 定时
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="ads[timing]" value="0" checked/> 不定时
+                            </label>
+                        </div>
+                        <div class="settiming">
+                        </div>
+                    </div>
+                </div>
+			    <div class="col-md-9">
+				    <div class="form-group">
+						<div id="group_ads[title]">
+							<label for="authors_name" class="control-label">标题</label>
+							<input type="text" name="ads[title]" id="ads[title]" placeholder="必填" class="validate form-control">
+						</div>
+					</div>
+                    <div class="form-group">
+                        <label for="ads[adtype]">类型</label>
+                        <div id="group_ads[adtype]">
+                        <select class="form-control" name="ads[adtype]" id="adtype">
+                            <option value="0">无</option>
+                            <option value="1">商城</option>
+                            <option value="2">栏目</option>
+                            <option value="4">新闻</option>
+                            <option value="5">微直播</option>
+                            <option value="3">网页</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+						<div id="group_ads_adurl" style="display:none;">
+						    <label for="ads[adurl]">URL</label>
+							<input type="text" name="ads[adurl]" id="ads[adurl]" value="" placeholder="选填" class="form-control">
+						</div>
+					</div>
+                    <div class="form-group">
+                        <div id="group_ads_mediaitem" style="display:none;">
+                            <label for="ads[mediaitem]">选择媒资</label>
+                            <input type="text" name="mediaitem" data-provide="autocomplete" id="mediaitem" value="" placeholder="选填" class="form-control">
+                            <input type="hidden" name="ads[mediaitem]" id="ads_mediaitem" value="">
+                            <input type="hidden" name="ads[mediatitle]" id="ads_mediatitle" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="group_ads_menuitem" style="display:none;">
+                        <label for="ads[menuitem]">选择菜单</label>
+                        <select name="ads[menuitem]" class="form-control">
+                            <option value="-1">请选择菜单</option>
+                            <%columns.forEach(function(item){
+                            var tree="";
+                            if(item.level>1)tree="| --";
+                            %>
+                            <option value="<%=item._id%>"><%=tree%><%=item.name%></option>
+                            <%})%>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div id="group_ads_liveitem" style="display:none;">
+                            <label for="ads[adlive]">微直播</label>
+                            <input type="text" name="ads[adlive]" id="ads[adlive]" value="" placeholder="微直播id" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ads[desc]">备注</label>
+                        <div id="group_ads[desc]">
+                        <textarea rows="2" cols="40" class="form-control" placeholder="请输入导语" name="ads[desc]" id="ads[desc]"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+						<button type="button" class="go_submit btn btn-primary">保存</button>
+                        <p class="text-danger"><small class="red" id="error"></small></p>
+					</div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!--选择缩略图-->
+<% include ../inc/thumbnail.html%>
+<script id="tpl" type="text/x-jquery-tmpl">
+    <option value="${_id}">${name}</option>
+</script>
+<script id="settiming" type="text/x-jquery-tmpl">
+    <div class="form-group form-group-sm">
+        <label for="ads_author">开始时间</label>
+        <input type="text" name="ads[stime]" placeholder="请选择开始时间" class="form-control input_date">
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="ads_date">结束时间</label>
+        <input type="text" name="ads[etime]" placeholder="请选择结束时间" class="form-control input_date">
+    </div>
+</script>
+<% include ../inc/footer.html%>

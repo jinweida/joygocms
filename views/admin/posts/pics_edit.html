@@ -1,0 +1,257 @@
+﻿<% include ../inc/head.html%>
+<script type="text/javascript">
+    $(function () {
+        $("#select_post_images").on("click", function () {
+            $('#modal_post_images').modal("show");
+            var data = {};
+            get_attachs_images_count(data);
+            get_attachs_images_list(data);
+        });
+        $("#post_images_find").on("click", function () {
+            var data = { title: $("#post_images_title_find").val() };
+            get_attachs_images_count(data);
+            get_attachs_images_list(data);
+        })
+        function get_attachs_images_count(data) {
+            $.get('/admin/attachs_ajax_get_count', data, function (result) {
+                //分页功能
+                var options = {
+                    currentPage: 1,
+                    totalPages: result.message.pagecount,
+                    numberOfPages: result.message.pagesize,
+                    bootstrapMajorVersion: 1,
+                    onPageClicked: function (e, originalEvent, type, page) {
+                        data.page = page;
+                        get_attachs_images_list(data);
+                    }
+                }
+            console.log(options);
+                if(options.totalPages > 0){
+                    $('#page_images').show().bootstrapPaginator(options);
+                }else{
+                    $('#page_images').hide();
+                }
+            });
+        }
+        function get_attachs_images_list(data) {
+            $('#modal_post_images').modal("show");
+            console.log(data);
+            $.get('/admin/attachs_ajax_get_list', data, function (result) {
+                if (result.code == 0) {
+                    $("#modalbody_post_images").html('');
+                    $("#post_images_tpl")
+                            .tmpl(result.message)
+                            .appendTo("#modalbody_post_images");
+                }
+            });
+        }
+
+        $(document).on("click", ".del", function () {
+            var id=$(this).attr("data-id");
+            $("#item_"+id).remove();
+        });
+        $(document).on("click", ".thumbnailselect img", function () {
+            effect.success('添加成功')
+            var tag=new Date().getTime()
+            var data = {
+                url: $(this).attr("src"),
+                name:$(this).attr("alt"),
+                tag:tag
+            }
+            $("#post_images_select_tpl")
+                    .tmpl(data)
+                    .appendTo("#row_post_images");
+        })
+        //图片集本地上传
+        $('#images_upload').fileupload({
+            url: '/upload',
+            dataType: 'json',
+            acceptFileTypes:  /(\.|\/)(gif|jpe?g|png)$/i,
+            add: function (e, data) {
+                var goUpload = true;
+                var file = data.files[0];
+                console.log(file);
+                if (file.size > 1024*1024*700) {
+                    goUpload = false;
+                    console.log(file.name, "上传文件不能超过 700MB");
+                } else {
+                    console.log(file.name, "正在上传");
+                }
+                if (goUpload) {
+                    data.submit();
+                }
+            },
+            submit:function(e,data){},
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    var tag=new Date().getTime()
+                    var data = {
+                        url: file.path,
+                        name:file.name,
+                        tag:tag
+                    }
+                    $("#post_images_select_tpl")
+                            .tmpl(data)
+                            .appendTo("#row_post_images");
+                });
+                $('#modal_post_images').modal("hide");
+
+            }
+        }).prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="javascript:history.go(-1)">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="article_form" id="article_form" method="post">
+            <input type="hidden" value="<%=model._id%>" id="post_id" name="post_id"/>
+            <!-- <input type="hidden" name="post_content" id="post_content" value="" /> -->
+            <input type="hidden" name="post_link" id="post_link" value="" />
+            <input type="hidden" name="post_video" id="post_video" value="" />
+            <input type="hidden" value="" id="post_pic_index"/>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#mainInfo" aria-controls="mainInfo" data-toggle="tab">基础信息</a></li>
+                <li><a href="#minorInfo" aria-controls="minorInfo" data-toggle="tab">选填信息</a></li>
+            </ul>
+            <div class="tab-content" style="margin-top:15px;">
+                <div class="tab-pane active" id="mainInfo">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="well">
+                                <% include ../inc/form_left_edit.html%>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="panel panel-danger">
+                                <div class="panel-body">
+                                    <% include ../inc/form_top_edit.html%>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-danger" id="select_post_images"><i class="glyphicon glyphicon-plus"></i>选择图片集</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row" id="row_post_images">
+                                            <%if(pics!=null){
+                                            pics.forEach(function(node,index){
+                                                var tag = new Date().getTime();%>
+                                            <div class="col-xs-6 col-md-3" id="item_<%=tag%>">
+                                                <div class="thumbnail" style="margin-bottom:5px">
+                                                    <img src="<%=node.imgurl%>" style="height:120px;width:100%;"/>
+                                                    <div class="caption">
+                                                        <div class="btn-group btn-group-justified">
+                                                            <a type="button" href="<%=node.imgurl%>" target="_blank" class="btn btn-primary btn-xs">预览</a>
+                                                            <a type="button" data-id="<%=tag%>" class="btn btn-danger btn-xs del">删除</a>
+                                                        </div>
+                                                    </div>
+                                                    <textarea rows="2" cols="40" class="form-control" placeholder="请输入摘要" name="post_images_desc"><%=node.desc%></textarea>
+                                                    <input type="hidden" value="<%=node.imgurl%>" name="post_images"/>
+                                                </div>
+                                            </div>
+                                            <%})}%>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="go_submit btn btn-danger">保存</button>
+                                        <p class="text-left"><small class="red" id="error"></small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="minorInfo">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-body">
+                                    <% include ../inc/form_topor_edit.html%>
+                                    
+                                    <div class="col-md-12">
+                                        <div class="form-group form-group-sm">
+                                            <button type="button" class="go_submit btn btn-danger">保存</button>
+                                            <p class="text-danger"><small class="red" id="error"></small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="modal fade" id="modal_post_images" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">选择图片集</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group"> 
+                            <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-danger fileinput-button">
+                                    <span>上传</span>
+                                    <input id="images_upload" type="file" name="files[]" multiple="multiple">
+                                </span>
+                            </span>
+		                    <input type="text" name="post_images_title_find" id="post_images_title_find" class="form-control" placeholder="文件名">
+		                    <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger" id="post_images_find">查询</button></span>
+                            </div>
+                        </div>
+                        <div class="row" id="modalbody_post_images"></div>
+                        <div id="page_images"></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <script id="post_images_tpl" type="text/x-jquery-tmpl">
+                <div class="col-xs-6 col-md-3">
+                    <div class="thumbnail thumbnailselect" id="${_id}">
+                        <img src="${pics}" alt="${name}" data-id="${_id}" style="width:100%;height:120px;"/>
+                        </div>
+                    </div>
+                </div>
+            </script>
+            <script id="post_images_select_tpl" type="text/x-jquery-tmpl">
+                <div class="col-xs-6 col-md-3" id="item_${tag}">
+                    <div class="thumbnail" style="margin-bottom:5px">
+                        <img src="${url}" style="height:120px;width:100%;"/>
+                        <div class="caption">
+                            <div class="btn-group btn-group-justified">
+                                <a type="button" href="${url}" target="_blank" class="btn btn-primary btn-xs">预览</a>
+                                <a type="button" data-id="${tag}" class="btn btn-danger btn-xs del">删除</a>
+                            </div>
+                        </div>
+                        <textarea rows="2" cols="40" class="form-control" placeholder="请输入摘要" name="post_images_desc"></textarea>
+                        <input type="hidden" value="${url}" name="post_images"/>
+                    </div>
+                </div>
+            </script>
+        </form>
+        <% include ../inc/thumbnail.html%>
+    </div>
+  </div>
+</div>
+<% include ../inc/footer.html%>

@@ -1,0 +1,185 @@
+﻿<% include ../inc/head.html%>
+<script>
+    $(function () {
+        //分页功能
+        var options = {
+            currentPage: 1,
+            totalPages: 1,
+            numberOfPages: 12,
+            bootstrapMajorVersion: 1,
+            alignment: "center",
+            onPageClicked: function (e, originalEvent, type, page) {
+                if (page > options.totalPages) {
+                  options.currentPage = options.totalPages;
+                } else {
+                  options.currentPage = page;
+                }
+                var data = {
+                    page: page,
+                    status: $("#status").val(),
+                    type: $("#type").val(),
+                    title: $("#title").val(),
+                };
+                writeList(data)
+            }
+        }
+        //默认加载
+        writeList()
+        //搜索功能
+        $('.search').on('click',function(event) {
+            var data = {
+                    status: $("#status").val(),
+                    type: $("#type").val(),
+                    title: $("#title").val(),
+                };
+                writeList(data)
+        });
+        //function
+        function writeList(data){
+            effect.show()
+            $.get('/admin/ajax_posts_audit_list', data, function (result) {
+                if (result.code == 0) {
+                    $("table tbody").html('');
+                    $("#post_comm_tpl")
+                            .tmpl(result.message.list)
+                            .appendTo("table tbody");
+                    $("[data-toggle='tooltip']").tooltip();
+                    options.totalPages = result.message.pagecount;
+                    if (options.totalPages > 0) {
+                        $('#page').bootstrapPaginator(options);
+                    } else {
+                        $('#page').empty();
+                    }
+                    effect.hide()
+                }else{
+                    effect.hide()
+                    effect.error('请求失败')
+                }
+            });
+        }
+        //批量通过
+        $(".pass").on("click", function () {
+            var _ids = "";
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    if (_ids != "") _ids += ",";
+                    _ids += $(this).val();
+                }
+            })
+            if (_ids == "") {
+                effect.error('参数非法')
+                return;
+            }
+            pass({
+                _ids: _ids,
+                order: $(this).attr("data-order")
+            });
+            return;
+        });
+        //单个通过
+        $(document).on("click", ".verify",function () {
+            var order = 1;
+            if ($(this).attr("data-status") == 1) {
+                order = 2;
+            } else if ($(this).attr("data-status") == 2) {
+                order = 0;
+            }
+            pass({
+                _ids: $(this).attr("data-id"),
+                order: order
+            });
+        });
+        //通过function
+        function pass(data) {
+            $.post('/admin/posts_publish', data, function (result) {
+                if (result.code == 0) {
+                    effect.success(function(){
+                        var list=$("table tbody").find('tr')
+                        if($("#page li").size()!=1){
+                          if(list.length===1){
+                            options.currentPage=options.currentPage-1
+                          }
+                        }
+                        var data = {
+                            status: $("#status").val(),
+                            type: $("#type").val(),
+                            title: $("#title").val(),
+                        };
+                        data.page=options.currentPage;
+                        writeList(data)
+                    })
+                } else {
+                    effect.error()
+                }
+            });
+        }
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <div class="pull-left">
+			    <ul class="list-inline">
+				    <li><a href="#" class="pass" data-order="2"><span class="glyphicon glyphicon-ok"></span> 通过</a></li>
+				    <li><a href="#" class="pass" data-order="0"><span class="glyphicon glyphicon-share-alt"></span> 驳回</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+				    </li>
+			    </ul>
+		    </div>
+		    <div class="pull-right">
+                <form name="article_search" id="article_search" action="" method="get" class="form-inline">
+                    <div class="form-group">
+				        <select name="status" id="status" class="form-control input-sm">
+                            <option value="1" <%if(status==1){%>selected<%}%>>未审核</option>
+                            <option value="2" <%if(status==2){%>selected<%}%>>已审核</option>
+				        </select>
+			        </div>
+                    <div class="form-group">
+				        <select name="type" id="type" class="form-control input-sm">
+                            <option value="-1">媒资类型</option>
+                            <%types.forEach(function(item){
+                            var selected="";%>
+                            <%if(item.id!=100){if(type==item.id)selected="selected";%>
+                            <option value="<%=item.id%>" <%=selected%>><%=item.name%></option>
+                            <%}})%>
+				        </select>
+			        </div>
+			        <div class="form-group">
+                        <div class="input-group">
+	                    <input type="text" name="title" id="title" placeholder="标题" value="<%=findtitle%>" class="form-control input-sm">
+	                    <span class="input-group-btn">
+		                    <button type="button" class="btn btn-danger btn-sm">
+					        <span class="glyphicon glyphicon-search search"></span>
+				            </button>
+                        </span>
+                        </div>
+			        </div>
+		        </form>
+            </div>
+		    <div class="clearfix"></div>
+	    </div>
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr><th style="width:20px;"><input type="checkbox" name="chkall"></th><th style="width:40px">#</th><th style="width:120px">操作</th><th>标题</th><th style="width:10em;">作者</th><th style="width:180px">日期</th></tr></thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="6">
+                <div id="page"></div></td></tr>
+            </tfoot>
+        </table>
+    </div>
+  </div>
+</div>
+<script id="post_comm_tpl" type="text/x-jquery-tmpl">
+    <tr><td><input type="checkbox" name="chk" value="${_id}"></td><td>${index}</td>
+        <td><div class="btn-group"><a class="btn ${auditstyle} btn-xs verify" href="#" data-id="${_id}" data-status="${status}">${audit}</a><a class="btn btn-default btn-xs" href="/html5/page/news/news_detail.html?mid=${_id}">查看</a></div>
+                    </td>
+        <td><span class="${typestyle}">${typename}</span> <a data-toggle="tooltip"  href="/admin/posts_edit?mid=${_id}" title="${title}" data-placement="bottom">${shorttitle}</a></td>
+        <td>${author}</td><td>${createtime}</td></tr>
+</script>
+<% include ../inc/footer.html%>

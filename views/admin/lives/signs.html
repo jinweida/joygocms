@@ -1,0 +1,73 @@
+<% include ../inc/head.html%>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="sidebar">
+                <% include ../inc/left.html%>
+            </div>
+            <div class="main">
+                <div class="form-group">
+                    <div class="pull-left">
+                        <ul class="list-inline">
+                            <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <table class="table table-striped table-condensed ellipsis">
+                    <thead>
+                    <tr><th style="width:50px;">#</th><th style="width:180px;">用户</th><th>位置</th><th style="width:180px">签到时间</th></tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="4">
+                        <ul id="page"></ul>
+                        <ul class="pagination pagination-sm count"></ul>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            getAjax({page:1});
+        })
+        function getAjax(data){
+            $.get('/admin/lives/signs/ajax_list',data,function(result){
+                var pagecount=result.pagecount;
+                var currentpage=result.currentpage;
+                var count=result.count;
+                if(result.code==1){
+                    writtenInformation(result.list)
+                    $("[data-toggle='popover']").popover();
+                    if(count>0){
+                      $(".count").empty().append('<li><a>共'+pagecount+'页</a></li><li><a>'+count+'条记录</a></li>')
+                    }
+                    var options = {
+                        currentPage: currentpage,
+                        totalPages : pagecount,
+                        numberOfPages: 12,
+                        bootstrapMajorVersion: 1,
+                        alignment: "center",
+                        onPageClicked: function (e, originalEvent, type, page) {
+                            getAjax({page:page})
+                        }
+                    }
+                    if (options.totalPages > 0) {
+                        $('#page').bootstrapPaginator(options);
+                    }
+                }
+            })
+        };
+        function writtenInformation(data){
+            var html=""
+            $.each(data, function(i, v) {
+                html += '<tr><td>'+v.index+'</td><td>'+v.mpno+'</td><td><div class="alt" data-placement="bottom" data-toggle="popover" data-trigger="hover" data-content="'+v.location.address+'">'+v.location.address+'</div></td><td>'+v.createtime+'</td></tr>'
+            });
+            $('table tbody').empty().append(html)
+        }
+    </script>
+    <% include ../inc/footer.html%>

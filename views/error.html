@@ -1,0 +1,45 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404</title>
+      <style>
+
+      .container {
+        padding-top:45px;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+      }
+      .container img{
+        max-width: 100%;height: auto;
+        vertical-align: middle;
+      }
+      @media (min-width: 1200px)
+      .container {
+        width: 1170px;
+      }
+      @media (min-width: 992px)
+      .container {
+        width: 970px;
+      }
+      @media (min-width: 768px)
+      .container {
+        width: 750px;
+      }
+      </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="/images/system/wifi.png"/>
+      <p>亲,您要找的页面可能不存在</p>
+      <%=error%>
+      <%=message%>
+    </div>
+  </body>
+</html>

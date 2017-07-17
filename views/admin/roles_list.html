@@ -1,0 +1,58 @@
+﻿<% include inc/head.html%>
+<script>
+    $(function () {
+        $(document).on("click", ".del", function () {
+            var ajax = new Ajax();
+            if (confirm("确认删除角色吗？")) {
+                ajax.get($(this).attr("data-url"), {}, function (result) {
+                    if (result.code == 0) {
+                        $("#success").show();
+                        setTimeout("$('.roles').hide();location.reload();", 2000);
+                    }
+                    else {
+                        $("#error").show();
+                    }
+                });
+            }
+        })
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <div class="pull-left">
+			    <ul class="list-inline">
+                    <li><a href="/admin/roles_add" id="delall"><span class="glyphicon glyphicon-plus"></span> 新增</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+				    </li>
+			    </ul>
+		    </div>
+		    <div class="pull-right">
+            </div>
+		    <div class="clearfix"></div>
+	    </div>
+
+        <div id="success" class="alert alert-success fade in roles" style="display:none;">删除成功！</div>
+        <div id="error" class="alert alert-danger fade in roles" style="display:none;">参数非法！</div>
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr><th style="width:40px">#</th><th>操作</th><th>角色名称</th></tr></thead>
+            <tbody>
+                <% roles.forEach(function(item){
+                if(item._id>1){%>
+                <tr>
+                    <td><%=item._id%></td>
+                    <td><a href="#" class="btn btn-danger btn-xs del" data-url="/admin/roles_delete?_id=<%=item._id%>">删除</a></td>
+                    <td><a href="/admin/roles_edit?_id=<%=item._id%>" ><%=item.name%></a></td>
+                    </tr>
+                <%}})%>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+<% include inc/footer.html%>

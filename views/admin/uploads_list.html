@@ -1,0 +1,264 @@
+﻿<% include inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <div class="pull-left">
+			    <ul class="list-inline">
+            <li><a href="#" id="up" data-status="2"><span class="glyphicon glyphicon-ok"></span> 通过</a></li>
+            <li><a href="#" id="reject" data-status="-2"><span class="glyphicon glyphicon-share-alt"></span> 驳回</a></li>
+            <li><a href="#" id="delall"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+            <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+				    </li>
+			    </ul>
+		    </div>
+		    <div class="pull-right">
+          <form name="article_search" id="article_search" action="/admin/phone" method="get" class="form-inline">
+            <div class="form-group">
+              <select name="status" id="status" class="form-control input-sm">
+                <option value="">爆料状态</option>
+                <option value="1">待审核</option>
+                <option value="2">已审核</option>
+                <option value="-2">被驳回</option>
+                <option value="0">转码中</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <input type="text" name="content" id="content" placeholder="内容" value="" class="form-control input-sm">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-danger btn-sm">
+  				        <span class="glyphicon glyphicon-search search"></span>
+  			        </button>
+              </span>
+            </div>
+	        </form>
+          </div>
+		    <div class="clearfix"></div>
+	    </div>
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr><th style="width:30px;"><input type="checkbox" name="chkall"></th><th style="width:40px">#</th><th style="width:120px;">状态</th><th style="width:120px;">用户手机号</th><th>内容</th><th style="width:100px;">所属栏目</th><th style="width:100px;">类型</th><th style="width:180px">日期</th></tr></thead>
+            <tbody>
+
+            </tbody>
+            <tfoot>
+                <tr><td colspan="8">
+                <ul id="page"></ul>
+                <ul class="pagination pagination-sm"><li><a>共<%=pagecount%>页</a></li><li><a><%=count%>条记录</a></li></ul></td></tr>
+            </tfoot>
+        </table>
+    </div>
+  </div>
+</div>
+<script id="post_comments_tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td>
+            {{if !status==0}}
+            <input type="checkbox" name="chk" value="${_id}" data-cid="${columnid}" data-status="${status}">
+            {{/if}}
+        </td>
+        <td>${index}</td>
+        <td><div class="btn-group"><a href="#" class="btn ${statusstyle} btn-xs">${statusname}</a><a href="#" class="btn ${typestyle} btn-xs review" data-title="${columnname}" data-mpno="${mpno}" data-content="${content}" data-pics="${pics}"  data-originalvideo="${originalvideo}" data-files="${files}" data-status="${status}" data-video="${video}" data-address="${location.address}" data-type="${type}">${typename}</a></div></td>
+        <td>${mpno}</td>
+        <td><span data-toggle="tooltip" title="${content}" data-placement="bottom">${shorttitle}</span></td>
+        <td>${columnname}</td>
+        <td>{{if type == 1}}图片{{/if}}
+        {{if type == 2}}视频{{/if}}</td>
+        <td>${createtime}</td></tr>
+</script>
+<div class="modal fade" id="modal_review" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal_title" style="height:25px"></h4>
+        </div>
+        <div class="modal-body" style="overflow-y:auto">
+        <form>
+        <div class="form-group">
+            <label for="mpno" class="control-label">用户手机号：<span id="msg_mpno"></span></label>
+        </div>
+        <div class="form-group">
+            <label for="mpno" class="control-label">上报地址<span id="msg_address"></span></label>
+        </div>
+        <div class="form-group">
+            <label for="mpno" class="control-label">内容：</label>
+            <div id="msg_content"></div>
+        </div>
+        <div class="form-group">
+            <label for="mpno" class="control-label">附件：</label>
+            <div id="msg_attachs" style="width:568px;height:318px;"></div>
+        </div>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+<script src="/javascripts/ckplayer/ckplayer.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var flashvars = {
+        f: '/javascripts/ckplayer/m3u8.swf',
+        a: '',
+        c: 0,
+        b: 1,
+        p: 1,
+        s: 4,
+        lv: 0,
+        my_url: encodeURIComponent(window.location.href)
+    };
+    var params = {
+        bgcolor: '#FFF',
+        allowFullScreen: true,
+        allowScriptAccess: 'always',
+        wmode: 'transparent'
+    };
+    $(function(){
+        $(document).on("click",".review",function(){
+            if($(this).attr("data-status")==1 || $(this).attr("data-status")==2 || $(this).attr("data-status")==-2 ){
+                var filesStr=$(this).attr("data-files")
+                var filesArr=filesStr.split(',')
+                var img='<div class="carousel slide" data-ride="carousel" data-interval="3000" id="shuffling" style="height:318px"><div class="carousel-inner" style="text-align: center;line-height: 318px;"><div class="item  active"><img style="max-height:318px;display: inline-block;" src="'+$(this).attr("data-pics")+'" class="active" /></div>'
+                if(filesArr.length>1){
+                    $.each(filesArr,function(i,v){
+                    img+='<div class="item"><img style="max-height:318px;display: inline-block;" src="'+v+'" class="active"/></div>'
+                    });
+                    img+='</div><a href="#shuffling" class="carousel-control left" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="#shuffling" class="carousel-control right" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a></div>'
+                }
+                img+='</div>';
+                $("#modal_review").modal("show");
+                $("#modal_title").html($(this).attr("data-title"));
+                $("#msg_mpno").html($(this).attr("data-mpno"));
+                $("#msg_address").html($(this).attr("data-address"));
+                $("#msg_content").html($(this).attr("data-content"));
+                if($(this).attr("data-type")==2){
+                    $("#msg_attachs").html('<div id="video"></div>');
+                    var videoUrl=$(this).attr("data-video");
+                    var videoW=$('#msg_attachs').width();
+                    flashvars.a = encodeURIComponent(videoUrl);
+                    CKobject.embedSWF('/javascripts/ckplayer/ckplayer.swf', 'video', 'ckplayer_video', '100%',videoW* 9 / 16, flashvars, params);
+                }else{
+                    $("#msg_attachs").html(img);
+                }
+            }else{
+                effect.error('转码中！');
+            }
+        })
+        $('#modal_review').on('hidden.bs.modal', function (e) {
+            $("#msg_attachs,#msg_content,#msg_mpno,#modal_title").html('');
+        })
+        //分页功能
+        var options = {
+            currentPage: 1,
+            totalPages: 1,
+            numberOfPages: 12,
+            bootstrapMajorVersion: 1,
+            alignment: "center",
+            onPageClicked: function (e, originalEvent, type, page) {
+                if (page > options.totalPages) {
+                  options.currentPage = options.totalPages;
+                } else {
+                  options.currentPage = page;
+                }
+                var data = {
+                    page: page,
+                    content:$("[name='content']").val(),
+                    status:$("[name='status']").val()
+                }
+                writeList(data)
+            }
+        }
+        //默认加载
+        writeList()
+        //search 加载
+        $('.search').on('click', function(event) {
+            var data={
+                content:$("[name='content']").val(),
+                status:$("[name='status']").val()
+            }
+            writeList(data)
+        });
+        //function
+        function writeList(data){
+            effect.show()
+            $.get('/admin/ajax_get_uploads_list', data, function (result) {
+                if (result.code == 0) {
+                    $("table tbody").empty();
+                     $("#post_comments_tpl")
+                                .tmpl(result.message.models)
+                                .appendTo("table tbody");
+                    $("[data-toggle='tooltip']").tooltip();
+                    options.totalPages = result.message.pagecount;
+                    if (options.totalPages > 0) {
+                        $('#page').bootstrapPaginator(options);
+                    } else {
+                        $('#page').empty();
+                    }
+                    effect.hide()
+                }else{
+                    effect.hide()
+                    effect.error('请求失败')
+                }
+            });
+        }
+        $("#delall").on("click", function () {
+            var _ids = $("[name='chk']:checked").serializeArray();
+            if (_ids.length==0) {
+                effect.error('参数无效');
+                return;
+            }
+            if (confirm("确认删除选中项吗？")){
+                $.post('/admin/uploads_delete', {_ids: _ids,}, function (result) {
+                    if (result.code == 0) {
+                        effect.success()
+                    } else {
+                        effect.error();
+                    }
+                    var list=$("table tbody").find('tr')
+                    if($("#page li").size()!=1){
+                      if(list.length===1){
+                        options.currentPage=options.currentPage-1
+                      }
+                    }
+                    var data={
+                        content:$("[name='content']").val(),
+                        status:$("[name='status']").val()
+                    }
+                    data.page=options.currentPage;
+                    writeList(data)
+                });
+            }
+        })
+        //上架
+        $("#up,#reject").on("click", function () {
+            var _ids = $("[name='chk']:checked").serializeArray();
+            var status=$(this).attr('data-status');
+            if (_ids.length==0) {
+                effect.error('参数无效');
+                return;
+            }
+            $.post('/admin/upload_audit',  {_ids: _ids,status:status}, function (result) {
+                if (result.code == 0) {
+                    effect.success()
+                } else {
+                    effect.error();
+                }
+                var list=$("table tbody").find('tr');
+                if($("#page li").size()!=1){
+                    if(list.length===1){
+                        options.currentPage=options.currentPage-1
+                    }
+                }
+                var data={
+                    content:$("[name='content']").val(),
+                    status:$("[name='status']").val()
+                }
+                data.page=options.currentPage;
+                writeList(data)
+            });
+        });
+    })
+</script>
+<% include inc/footer.html%>

@@ -1,0 +1,79 @@
+﻿<% include ../inc/head.html%>
+<script>
+$(function(){
+    $("#delall").on("click", function () {
+        var _ids = "";
+        $("input[name='chk']").each(function () {
+            if ($(this).is(":checked")) {
+                if (_ids != "") _ids += ",";
+                _ids += $(this).val();
+            }
+        })
+        if (_ids == "") {
+            effect.error();;
+            return;
+        }
+        if (confirm("此操作将删除该栏目下的所有子栏目，确认操作吗？")) {
+            var data = {
+                _ids: _ids,
+            };
+            $.post('/admin/organs_remove', data, function (result) {
+                effect.show()
+                if (result.code == 0) {
+                    effect.success(function(){
+                        effect.hide()
+                        location.reload()
+                    })
+                } else {
+                    effect.hide();
+                    effect.error();
+                }
+            });
+        }
+        return;
+    })
+})
+</script>
+<div class="container-fluid">
+   <div class="row">
+   <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <div class="pull-left">
+                <ul class="list-inline"><ul class="list-inline">
+                    <li><a href="/admin/organs_add"><span class="glyphicon glyphicon-plus"></span> 添加黄页</span></a></li>
+                    <li><a href="#" id="delall"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr><th style="width:30px;"><input type="checkbox" name="chkall"></th><th>机关单位</th><th>电话</th><th style="width:180px">日期</th></tr></thead>
+            <tbody>
+                <% models.forEach(function(item){%>
+                <tr>
+                    <td><input type="checkbox" value="<%=item._id%>" name="chk" /></td>
+                    <td>
+                        <a href="/admin/organs_edit?_id=<%=item._id%>">
+                            <%if(item.level>1){%>&nbsp;&nbsp;| --<%}%>
+                            <%if(item.level>1){%><%=item.name%><%}else{%><b style="color:tomato"><%=item.name%></b><%}%>
+                        </a>
+                    </td>
+                    <td><%=item.phone%></td>
+                    <td><%=item.createtime%></td>
+                </tr>
+                <%})%>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+        </div>
+    </div>
+  </div>
+</div>
+<% include ../inc/footer.html%>

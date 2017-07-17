@@ -1,0 +1,70 @@
+﻿module.exports = {
+  permission: [
+    { code: "1000", path: "" , title: "媒体管理" },
+    { code: "1100", path: "/admin/posts" , title: "媒体列表" },
+    { code: "1200", path: "/admin/posts_add" , title: "媒资添加" },
+    { code: "1300", path: "/admin/posts_delete", title: "媒资删除" },
+    { code: "1400", path: "/admin/posts_edit" , title: "媒资修改" },
+    { code: "1500", path: "/admin/posts_publish" , title: "媒资发布" },
+    { code: "1600", path: "/admin/audit", title: "发布审核" },
+    { code: "1700", path: "/admin/up" , title: "媒资上架" },
+    { code: "1800", path: "/admin/down" , title: "媒资下架" },
+    { code: "1810", path: "/admin/phone" , title: "新闻报料" },
+    { code: "1840", path: "/admin/videos" , title: "上传视频" },
+    { code: "1900", path: "/admin/columns" , title: "栏目分类" },
+    { code: "1910", path: "/admin/columns_add" , title: "栏目添加" },
+    { code: "1920", path: "/admin/columns_add" , title: "栏目修改" },
+
+
+    { code: "6000", path: "" , title: "消息管理" },
+    { code: "6100", path: "/admin/lives/message/list" , title: "消息列表" },
+    { code: "7100", path: "/admin/usergroup/list" , title: "用户群组" },
+
+    { code: "5000", path: "" , title: "微直播管理" },
+    { code: "5120", path: "/admin/lives/columns/list" , title: "微栏目" },
+    { code: "5130", path: "/admin/lives/live" , title: "微直播" },
+    { code: "5140", path: "/admin/lives/vod" , title: "微点播" },
+    { code: "5150", path: "/admin/lives/foreshow/list" , title: "预告管理" },
+    { code: "5160", path: "/admin/lives/signs" , title: "微签到" },
+    { code: "5170", path: "/admin/lives/statistics" , title: "微统计" },
+    { code: "5110", path: "/admin/lives/users/list" , title: "实名认证" },
+
+    { code: "4000", path: "" , title: "二手房管理" },
+    { code: "4100", path: "/admin/regions" , title: "区域管理" },
+    { code: "4200", path: "/admin/houses" , title: "信息发布" },
+
+    { code: "5000", path: "" , title: "主播秀管理" },
+    { code: "5100", path: "/admin/anchors" , title: "主播管理" },
+    { code: "5200", path: "/admin/questions" , title: "问答管理" },
+
+    { code: "2000", path: "" , title: "其他管理" },
+    { code: "2600", path: "/admin/medialist" , title: "媒资推送" },
+    { code: "2600", path: "/admin/microlist" , title: "微播推送" },
+    { code: "2100", path: "/admin/attachs" , title: "所有附件" },
+    { code: "2200", path: "/admin/comments" , title: "评论内容" },
+    { code: "2300", path: "/admin/authors" , title: "自媒体作者" },
+    { code: "2400", path: "/admin/ads" , title: "幻灯片管理" },
+    { code: "2500", path: "/admin/feedbacks" , title: "建议反馈" },
+    { code: "1820", path: "/admin/activitys" , title: "活动报名" },
+    { code: "1830", path: "/admin/kpis" , title: "绩效考核" },
+    { code: "1850", path: "/admin/organs" , title: "机关黄页" },
+    { code: "1860", path: "/admin/cooper" , title: "合作商户" },
+    { code: "1880", path: "/admin/awards" , title: "彩票" },
+    { code: "1890", path: "/admin/wenba" , title: "问吧管理" },
+
+
+    { code: "8000", path: "" , title: "统计管理" },
+    { code: "8100", path: "/admin/statistics/columns" , title: "栏目统计" },
+    { code: "8100", path: "/admin/statistics/posts" , title: "栏目统计" },
+
+    { code: "3000", path: "" , title: "系统管理" },
+    { code: "3100", path: "/admin/roles" , title: "角色管理" },
+    { code: "3110", path: "/admin/roles_add" , title: "角色添加" },
+    { code: "3120", path: "/admin/roles_delete" , title: "角色删除" },
+    { code: "3200", path: "/admin/users" , title: "操作员管理" },
+    { code: "3210", path: "/admin/users_add" , title: "添加操作员" },
+    { code: "3220", path: "/admin/users_delete" , title: "删除操作员" },
+    { code: "3300", path: "/admin/operatorlogs" , title: "操作日志" },
+    { code: "3400", path: "/admin/sysconfigs" , title: "参数配置" },
+  ]
+};

@@ -1,0 +1,180 @@
+<% include ../../inc/head.html%>
+	<link rel='stylesheet' href='/stylesheets/bootstrap-switch.min.css' />
+	<script src="/javascripts/bootstrap-switch.min.js"></script>
+	<script>
+		$(function() {
+			var setObj = {
+				live_delay: {
+					value: "<%=setting.live_delay.value %>",
+					_id: "<%=setting.live_delay._id %>"
+				},
+				live_default_status: {
+					value: "<%=setting.live_default_status.value %>",
+					_id: "<%=setting.live_default_status._id %>"
+				},
+				live_concurrent_number: {
+					value: "<%=setting.live_concurrent_number.value %>",
+					_id: "<%=setting.live_concurrent_number._id %>"
+				},
+				live_switch: {
+					value: "<%=setting.live_switch.value %>",
+					_id: "<%=setting.live_switch._id %>"
+				}
+			}
+			var ajax = new Ajax();
+			var live_dalay_boolean = false;
+			var live_switch_boolean = false;
+			if (setObj.live_delay.value == "0") {
+				live_dalay_boolean = false;
+			} else {
+				live_dalay_boolean = true;
+			}
+			if (setObj.live_switch.value == "0") {
+				live_switch_boolean = false;
+			} else {
+				live_switch_boolean = true;
+			}
+			$("[name='my-checkbox1']").bootstrapSwitch({
+				onText: '开',
+				offText: '关',
+				state: live_dalay_boolean
+			});
+			$("[name='my-checkbox2']").bootstrapSwitch({
+				onText: '开',
+				offText: '关',
+				state: live_switch_boolean
+			});
+			$('input[name="my-checkbox1"]').on('switchChange.bootstrapSwitch', function(event, state) {
+				var __val = 0;
+				var params = '';
+				if (state) {
+					__val = 1;
+				} else {
+					__val = 0;
+				}
+				if (setObj.live_delay._id != '') {
+					params += "setting[_id]=" + setObj.live_delay._id + "&setting[key]=live_delay&setting[val]=" + __val;
+				} else {
+					params += "setting[key]=live_delay&setting[val]=" + __val;
+				}
+				updateSetting(ajax, params);
+			});
+			$('input[name="my-checkbox2"]').on('switchChange.bootstrapSwitch', function(event, state) {
+				var __val = 0;
+				var params = '';
+				if (state) {
+					__val = 1;
+				} else {
+					__val = 0;
+				}
+				if (setObj.live_switch._id != '') {
+					params += "setting[_id]=" + setObj.live_switch._id + "&setting[key]=live_switch&setting[val]=" + __val;
+				} else {
+					params += "setting[key]=live_switch&setting[val]=" + __val;
+				}
+				updateSetting(ajax, params);
+			});
+			$("select[name='live_default_status']").bind("change", function() {
+				var params = '';
+				if (setObj.live_default_status._id != '') {
+					params += "setting[_id]=" + setObj.live_default_status._id + "&setting[key]=live_default_status&setting[val]=" + $(this).val();
+				} else {
+					params += "setting[key]=live_default_status&setting[val]=" + $(this).val();
+				}
+				updateSetting(ajax, params);
+			});
+			$("select[name='concurrent_number']").bind("change", function() {
+				var params = '';
+				if (setObj.live_concurrent_number._id != '') {
+					params += "setting[_id]=" + setObj.live_concurrent_number._id + "&setting[key]=live_concurrent_number&setting[val]=" + $(this).val();
+				} else {
+					params += "setting[key]=live_concurrent_number&setting[val]=" + $(this).val();
+				}
+				updateSetting(ajax, params);
+			});
+		});
+
+		function updateSetting(ajax, params) {
+			ajax.post('/admin/lives/setting/update', params, function(res) {
+				console.log(res);
+				if (res.code == '0') {
+					//location.reload();
+				}
+			});
+		}
+	</script>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group">
+					<ul class="list-inline">
+						<li>
+							<a href="#" target="_blank">
+								<span class="glyphicon glyphicon-question-sign"></span> 帮助
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div id="success" class="alert alert-success fade in" style="display:none;">操作成功！</div>
+				<div id="error" class="alert alert-danger fade in" style="display:none;">操作失败！</div>
+				<form name="auth_form" class="form-horizontal" id="auth_form" method="post">
+					<div class="row">
+						<div class="col-xs-6">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="col-xs-3">
+										<h5>直播开关延迟</h5>
+									</div>
+									<div class="col-xs-9">
+										<input type="checkbox" name="my-checkbox1" checked>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="col-xs-3">
+										<h5>是否可发直播</h5>
+									</div>
+									<div class="col-xs-9">
+										<div id="switch-onColor1" class="switch has-switch">
+											<input type="checkbox" name="my-checkbox2" checked>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="col-xs-3">
+										<h5>直播默认状态</h5></div>
+									<div class="col-xs-9">
+										<select class="form-control" name="live_default_status" style="width:50%;">
+											<option value="0" '<% if(setting.live_default_status.value == 0){ %> selected="selected" <% } %>'>需审核</option>
+											<option value="1" '<% if(setting.live_default_status.value == 1){ %> selected="selected" <% } %>'>直接发起直播</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="col-xs-3">
+										<h5>直播并发路数</h5></div>
+									<div class="col-xs-9">
+										<select class="form-control" name="concurrent_number" style="width:50%;">
+											<option value="0" '<% if(setting.live_concurrent_number.value == 0){ %> selected="selected" <% } %>'>0路</option>
+											<option value="4" '<% if(setting.live_concurrent_number.value == 4){ %> selected="selected" <% } %>'>4路</option>
+											<option value="8" '<% if(setting.live_concurrent_number.value == 8){ %> selected="selected" <% } %>'>8路</option>
+											<option value="16" '<% if(setting.live_concurrent_number.value == 16){ %> selected="selected" <% } %>'>16路</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<% include ../../inc/footer.html%>

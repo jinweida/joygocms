@@ -1,0 +1,108 @@
+﻿<% include ../inc/head.html%>
+<script>
+$(function () {
+    var ajax = new Ajax();
+    $('.go_submit').click(function () {
+        var data = $("form").serializeArray();
+        console.log(data);
+        var cb = function (result) {
+            if (result.code == 0) {
+                location.href = '/admin/organs';
+            } else {
+                $('#error').text(result.message);
+            }
+        };
+        // 更新博客
+        ajax.post('/admin/organs_create', data, cb);
+        return false;
+    });
+})
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/organs">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="organs_form" id="organs_form" method="post">
+            <div class="row">
+			    <div class="col-md-3">
+                    <div class="well">
+                        <div class="form-group">
+                            <label for="organs[pics]">机关图片</label>
+                            <div class="input-group">
+                            <span class="input-group-btn">
+                            <span class="btn btn-danger fileinput-button">
+                                    <span>上传</span>
+                                    <!-- The file input field used as target for the file upload widget -->
+                                    <input id="fileupload" type="file" data-value="organs_pics" name="files[]" multiple>
+                                </span>
+                            </span>
+                            <input type="text" name="organs[pics]" id="organs_pics" class="form-control" value="" placeholder="640*480图片">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger select_pic" data-value="organs_pics" id="select_pics">选择</button>
+                                </span>
+                            </div>
+                            <p class="help-block" id="files"></p>
+                        </div>
+                    </div>
+                </div>
+			    <div class="col-md-9">
+				    <div class="form-group">
+						<div id="group_organs[name]">
+							<label for="organs[name]" class="control-label">机关单位<span id="msg_organs[name]">*</span></label>
+							<input type="text" name="organs[name]" id="organs[name]" placeholder="必填" class="form-control">
+						</div>
+					</div>
+                    <div class="form-group">
+                        <div id="group_organs[pid]">
+                            <label for="organs[pid]">类型</label>
+                            <select name="organs[pid]" id="organs[pid]" class="form-control">
+                                <option value=",1">请选择</option>
+                                <%organs.forEach(function(item){ %>
+                                <option value="<%=item._id%>,<%=item.level+1%>"><%=item.name%></option>
+                                <%})%>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+						<div id="group_organs[phone]">
+                            <label for="organs[phone]">电话</label>
+                            <input type="text" name="organs[phone]" id="organs[phone]" value="" placeholder="" class="form-control">
+						</div>
+					</div>
+                    <div class="form-group">
+                        <label for="organs[desc]">备注</label>
+                        <div id="group_organs[desc]">
+                        <textarea rows="2" cols="40" class="form-control" placeholder="请输入备注" name="organs[desc]" id="organs[desc]"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+						<button type="button" class="go_submit btn btn-danger">保存</button>
+                        <p class="text-danger"><small class="red" id="error"></small></p>
+					</div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<!--选择缩略图-->
+<% include ../inc/thumbnail.html%>
+<% include ../inc/footer.html%>

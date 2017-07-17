@@ -1,0 +1,66 @@
+﻿<div class="form-group form-group-sm">
+    <label for="post_columnid">栏目分类</label>
+    <div style="min-height: 42px;max-height: 200px;overflow: auto;padding: 0 .9em;border: 1px solid #dfdfdf;background-color: #fdfdfd;">
+    <%columns.forEach(function(item){
+    var tree="";
+    if(item.level>1)tree="| --";
+    var checked="";
+    model.post_publish_status.forEach(function(m){
+        if(m.cid===item._id){checked="checked";return;}
+    })
+    %>
+    <div class="checkbox">
+    <label><input type="checkbox" name="post_columnid" value="<%=item._id%>" <%=checked%>><small><%=tree%><%=item.name%></small></label>
+    </div>
+    <%})%>
+    </div>
+</div>
+<div class="form-group form-group-sm">
+    <label for="post_picsstate">正文缩略图</label><br />
+    <label class="radio-inline">
+        <input type="radio" name="post_picsstate" value="1" <%if(model.picsstate==1){%>checked<%}%>/> 显示
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="post_picsstate" value="0" <%if(model.picsstate==0){%>checked<%}%>/> 隐藏
+    </label>
+</div>
+<div class="form-group">
+    <label for="post_date">缩略图</label>
+    <div class="input-group input-group-sm">
+    <span class="input-group-btn">
+    <span class="btn btn-danger fileinput-button">
+            <span>上传</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file"  data-value="post_pics" name="files[]" multiple>
+        </span>
+    </span>
+	<input type="text" name="post_pics" id="post_pics" class="form-control" value="<%=model.pics%>" placeholder="640*480图片">
+	<span class="input-group-btn">
+		<button type="button" class="btn btn-danger select_pic" data-value="post_pics" id="select_pics">选择</button>
+        </span>
+    </div>
+    <p class="help-block" id="files"></p>
+</div>
+<div class="form-group form-group-sm">
+	<label for="post_commentstatus">评论状态</label><br />
+    <label class="radio-inline">
+        <input type="radio" name="post_commentstatus" value="1" <%if(model.commentstatus==1){%>checked<%}%>/> 允许免审核
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="post_commentstatus" value="2" <%if(model.commentstatus==2){%>checked<%}%>/> 允许需审核
+    </label><br>
+    <label class="radio-inline">
+        <input type="radio" name="post_commentstatus" value="0" <%if(model.commentstatus==0){%>checked<%}%>/> 禁止评论
+    </label>
+</div>
+<div class="form-group form-group-sm">
+	<label for="post_activityassist">是否可投票</label><br />
+    <label class="radio-inline">
+        <input type="radio" name="post_activityassist" value="1" <%if(model.activityassist==1){%>checked<%}%>/> 允许
+    </label>
+    <label class="radio-inline">
+        <input type="radio" name="post_activityassist" value="0" <%if(model.activityassist==0){%>checked<%}%>/> 禁止
+    </label>
+</div>
+<input type="hidden" value="<%=model.post_publish_status%>" name="post_publish_status"/>
+<input type="hidden" value="<%=model.publish_size%>" name="publish_size"/>

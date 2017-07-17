@@ -1,0 +1,31 @@
+<% include inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+   	 <div class="row">
+       <%  regs.forEach(function(item){
+            %>
+	       <div class="col-md-6">
+	       		<p><%=item.index%></p>
+	       		<table class="table table-bordered" style="table-layout: fixed;">
+	       			<tr>
+	       				<td style="width:80px">编号</td><td><%=item.no%></td>
+	       				<td style="width:80px">姓名</td><td><div style="word-break: keep-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><%=item.user.nickname%></div></td>
+	       				<td rowspan=4 style="width:143px"><img style="width:100%" src="<%=item.pics%>"/></td>
+	       			</tr>	
+	       			<tr>
+	       				<td style="width:80px">赞数</td><td ><%=item.assistcount%></td>
+	       				<td style="width:80px">电话</td><td><%=item.user.mpno%></td>
+	       			</tr>	       		
+				</table>
+			</div>	
+		<%});%>	
+	 </div>
+    </div>
+  </div>
+</div>
+
+<% include inc/footer.html%>

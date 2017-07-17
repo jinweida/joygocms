@@ -1,0 +1,238 @@
+<% include ../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group">
+					<ul class="list-inline">
+						<li>
+							<a href="/admin/lives/users/list">
+								<span class="glyphicon glyphicon-chevron-left"></span> 返回
+							</a>
+						</li>
+						<li>
+							<a href="#" target="_blank">
+								<span class="glyphicon glyphicon-question-sign"></span> 帮助
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div id="success" class="alert alert-success fade in" style="display:none;">操作成功！</div>
+				<div id="error" class="alert alert-danger fade in" style="display:none;">操作失败！</div><br>
+				<div class="row">
+					<form name="auth_form" id="auth_form" method="post">
+						<input type="hidden" name="live[_id]" value="<%=live._id %>"/>
+						<div class=col-md-3>
+							<div class="well">
+								<div class="form-group">
+									<label class="control-label">身份类型</label><br>
+									<label class="checkbox-inline">
+									  <input type="checkbox" name="live[roles]" <%if(live.roles=='记者' || live.roles=='记者,要客'){%>checked<%}%> value="记者">记者
+									</label>
+									<label class="checkbox-inline">
+									  <input type="checkbox" name="live[roles]" <%if(live.roles=='要客' || live.roles=='记者,要客'){%>checked<%}%> value="要客">要客
+									</label>
+								</div>
+								<div class=" form-group">
+									<label class="control-label">状态</label>
+		  								<select class="form-control" name="live[status]">
+											<option value="0" <%if(live.status==0){%>selected<%}%>>正常</option>
+											<option value="1" <%if(live.status==1){%>selected<%}%>>实名认证通过</option>
+											<option value="-2" <%if(live.status==-2){%>selected<%}%>>黑名单</option>
+											<option value="2" <%if(live.status==2){%>selected<%}%>>认证失败</option>
+										</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-9">
+							<div  class="panel panel-danger">
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-6 form-group">
+											<label class="control-label">账号<span>*</span></label>
+											<input type="text" value="<%=live.mpno %>" name="live[mpno]" placeholder="请填写账号" class="form-control">
+										</div>
+										<div class="col-md-6 form-group">
+											<label class="control-label">姓名<span>*</span></label>
+											<input type="text" value="<%=live.name %>" name="live[name]" placeholder="请填写申请人姓名" class="form-control">
+										</div>
+										<div class="col-md-6 form-group">
+											<label class="control-label">职业<span>*</span></label>
+											<input type="text" value="<%=live.occupation %>" name="live[occupation]" placeholder="请填写职业" class="form-control">
+										</div>
+										<div class="col-md-6 form-group">
+											<label class="control-label">籍贯<span>*</span></label>
+											<input type="text" value="<%=live.place %>" name="live[place]" placeholder="请填写籍贯" class="form-control">
+										</div>
+										<div class="col-md-6 form-group">
+											<label class="control-label">身份证<span>*</span></label>
+											<input type="text" value="<%=live.idnumber %>" name="live[idnumber]" placeholder="请填写身份证" class="form-control">
+										</div>
+										<div class="col-md-6 form-group">
+											<label class="control-label">手机号<span>*</span></label>
+											<input type="text" value="<%=live.phone %>" name="live[phone]" placeholder="请填写手机号码" class="form-control">
+										</div>
+										<div class="col-md-12 form-group">
+											<label class="control-label">申请事由<span>*</span></label>
+											<textarea type="text"  name="live[applyreasons]" placeholder="请填写拒绝事由" class="form-control"><%=live.applyreasons %></textarea>
+										</div>
+										<div class="col-md-12 form-group">
+											<label class="control-label">拒绝事由<span>*</span></label>
+											<textarea type="text"  name="live[rejectreasons]" placeholder="请填写拒绝事由" class="form-control"><%=live.rejectreasons %></textarea>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group">
+												<a type="button" class="go_submit btn btn-danger">提交</a>
+												<p class="text-danger"><small class="red" id="errorText">&nbsp;&nbsp;</small></p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			var ajax = new Ajax();
+			$(".go_submit").click(function() {
+				$("#errorText").html("");
+				if ($("input[name='live[mpno]']").val() == "") {
+					$("#errorText").html("帐号不能为空");
+					$("input[name='live[mpno]']").parents(".form-group").addClass("has-error");
+					return;
+				}
+				if ($("input[name='live[name]']").val() == "") {
+					$("#errorText").html("姓名不能为空");
+					$("input[name='live[name]']").parents(".form-group").addClass("has-error");
+					return;
+				}
+				if ($("input[name='live[occupation]']").val() == "") {
+					$("#errorText").html("职业不能为空");
+					$("input[name='live[occupation]']").parents(".form-group").addClass("has-error");
+					return;
+				}
+				if ($("input[name='live[place]']").val() == "") {
+					$("#errorText").html("籍贯不能为空");
+					$("input[name='live[place]']").parents(".form-group").addClass("has-error");
+					return;
+				}
+				if ($("input[name='live[idnumber]']").val() != "") {
+					// if (!IdCardValidate($("input[name='live[idnumber]']").val())) {
+					// 	$("#errorText").html("身份证号格式不正确");
+					// 	$("input[name='live[idnumber]']").parents(".form-group").addClass("has-error");
+					// 	return;
+					// }
+				} else {
+					$("#errorText").html("身份证号码不能为空");
+					$("input[name='live[idnumber]']").parents(".form-group").addClass("has-error");
+					return;
+				}
+				if ($("input[name='live[phone]']").val() == "") {
+					$("#errorText").html("联系方式不能为空");
+					$("input[name='live[phone]']").parents(".form-group").addClass("has-error");
+					return;
+				}
+				var params = $("#auth_form").serializeArray();
+				ajax.post("/admin/lives/users/auth", params, function(result) {
+					if (result.code == 0) {
+						$("#success").show();
+						setTimeout(function() {
+							$("#success").hide()
+							window.location.href = "/admin/lives/users/list/"
+						}, 2000);
+					} else {
+						$("#error").show();
+						setTimeout(function() {
+							$("#error").hide()
+						}, 2000);
+					}
+				});
+			});
+		});
+		var Wi = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1]; // 加权因子
+		var ValideCode = [1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2]; // 身份证验证位值.10代表X
+		function IdCardValidate(idCard) {
+				idCard = trim(idCard.replace(/ /g, "")); //去掉字符串头尾空格
+				if (idCard.length == 15) {
+					return isValidityBrithBy15IdCard(idCard); //进行15位身份证的验证
+				} else if (idCard.length == 18) {
+					var a_idCard = idCard.split(""); // 得到身份证数组
+					if (isValidityBrithBy18IdCard(idCard) && isTrueValidateCodeBy18IdCard(a_idCard)) { //进行18位身份证的基本验证和第18位的验证
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+			/**
+			 * 判断身份证号码为18位时最后的验证位是否正确
+			 * @param a_idCard 身份证号码数组
+			 * @return
+			 */
+
+		function isTrueValidateCodeBy18IdCard(a_idCard) {
+				var sum = 0; // 声明加权求和变量
+				if (a_idCard[17].toLowerCase() == 'x') {
+					a_idCard[17] = 10; // 将最后位为x的验证码替换为10方便后续操作
+				}
+				for (var i = 0; i < 17; i++) {
+					sum += Wi[i] * a_idCard[i]; // 加权求和
+				}
+				valCodePosition = sum % 11; // 得到验证码所位置
+				if (a_idCard[17] == ValideCode[valCodePosition]) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			/**
+			 * 验证18位数身份证号码中的生日是否是有效生日
+			 * @param idCard 18位书身份证字符串
+			 * @return
+			 */
+
+		function isValidityBrithBy18IdCard(idCard18) {
+				var year = idCard18.substring(6, 10);
+				var month = idCard18.substring(10, 12);
+				var day = idCard18.substring(12, 14);
+				var temp_date = new Date(year, parseFloat(month) - 1, parseFloat(day));
+				// 这里用getFullYear()获取年份，避免千年虫问题
+				if (temp_date.getFullYear() != parseFloat(year) || temp_date.getMonth() != parseFloat(month) - 1 || temp_date.getDate() != parseFloat(day)) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+			/**
+			 * 验证15位数身份证号码中的生日是否是有效生日
+			 * @param idCard15 15位书身份证字符串
+			 * @return
+			 */
+
+		function isValidityBrithBy15IdCard(idCard15) {
+				var year = idCard15.substring(6, 8);
+				var month = idCard15.substring(8, 10);
+				var day = idCard15.substring(10, 12);
+				var temp_date = new Date(year, parseFloat(month) - 1, parseFloat(day));
+				// 对于老身份证中的你年龄则不需考虑千年虫问题而使用getYear()方法
+				if (temp_date.getYear() != parseFloat(year) || temp_date.getMonth() != parseFloat(month) - 1 || temp_date.getDate() != parseFloat(day)) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+			//去掉字符串头尾空格
+
+		function trim(str) {
+			return str.replace(/(^\s*)|(\s*$)/g, "");
+		}
+	</script>
+	<% include ../inc/footer.html%>

@@ -1,0 +1,189 @@
+﻿<% include inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <div class="pull-left">
+			    <ul class="list-inline">
+            <li><a href="#" id="delall"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+            <li><a href="#" id="pass"><span class="glyphicon glyphicon-ok"></span> 审核</a></li>
+            <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+			    </ul>
+		    </div>
+		    <div class="pull-right">
+            <form name="article_search" id="article_search" action="/admin/comments" method="get" class="form-inline">
+			         <div class="form-group">
+                  <div class="input-group">
+                      <input type="text" name="title" id="title" placeholder="媒资" class="form-control input-sm">
+                  </div>
+                  <div class="input-group">
+	                    <input type="text" name="content" id="content" placeholder="内容" value="<%=content%>" class="form-control input-sm">
+	                    <span class="input-group-btn">
+		                    <button type="button" class="btn btn-danger btn-sm ">
+    					            <span class="glyphicon glyphicon-search seachBtn"></span>
+    				            </button>
+                      </span>
+                  </div>
+			          </div>
+		        </form>
+            </div>
+		    <div class="clearfix"></div>
+	    </div>
+
+        <div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+        <table class="table table-striped table-condensed ellipsis">
+            <thead>
+            <tr><th style="width:30px;"><input type="checkbox" name="chkall"></th><th style="width:40px">#</th><th style="width:210px">媒资标题</th><th style="width:120px">用户名称</th><th>内容</th><th style="width:60px;">状态</th><th style="width:180px;">日期</th></tr></thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="7"><div id="page"></div></td></tr>
+            </tfoot>
+        </table>
+    </div>
+  </div>
+</div>
+<script id="post_comments_tpl" type="text/x-jquery-tmpl">
+<tr>
+  <td><input type="checkbox" name="chk" value="${_id}" data-mid="${mid}">
+  </td><td>${index}</td>
+  <td><a href="/admin/posts_edit?mid=${mid}" title="${title}">${title}</a></td>
+  <td><span data-toggle="tooltip" title="${mpno}" data-placement="bottom">${nickname}</span></td>
+  <td><span data-toggle="tooltip" title="${content}" data-placement="bottom">${shorttitle}</span></td>
+  <td>
+  {{if status==0}}
+    审核
+  {{/if}}
+  {{if status==-1}}
+    未审核
+  {{/if}}
+  </td>
+  <td>${createtime}</td>
+</tr>
+</script>
+<script>
+$(function () {
+  //默认加载
+  writeList()
+  //分页功能
+  var options = {
+    currentPage: 1,
+    totalPages: 0,
+    numberOfPages: 12,
+    bootstrapMajorVersion: 1,
+    alignment: "center",
+    onPageClicked: function (e, originalEvent, type, page) {
+      if (page > options.totalPages) {
+        options.currentPage = options.totalPages;
+      } else {
+        options.currentPage = page;
+      }
+      var data = {
+        page: page,
+        content:$("[name='content']").val(),
+        title:$("[name='title']").val()
+      }
+      writeList(data)
+    }
+  }
+  if (options.totalPages > 0) {
+      $('#page').bootstrapPaginator(options);
+  }
+  //删除评论
+  $("#delall").on("click", function () {
+    var _ids = "";
+    $("input[name='chk']").each(function () {
+      if ($(this).is(":checked")) {
+        if (_ids != "") _ids += ",";
+        _ids += $(this).val();
+      }
+    })
+    if (_ids == "") {
+      $("#error").show();
+      window.setTimeout(function () { $("#error").hide() }, 2000);
+      return;
+    }
+    if (confirm("确认删除评论内容吗？")){
+      var data = {
+        _ids: _ids,
+      };
+      var cb = function (result) {
+        if (result.code == 0) {
+          $("#success").html('删除成功！').show();
+          setTimeout("$('#success').hide();location.reload();", 2000);
+        } else {
+          $("#error").html(result.message).show();
+          window.setTimeout(function () { $("#error").hide() }, 2000);
+        }
+      };
+      $.post('/admin/comments_delete', data, cb);
+    }
+      return;
+  })
+  //审核通过
+  $("#pass").on("click", function () {
+    var _ids = "";
+    $("input[name='chk']").each(function () {
+      if ($(this).is(":checked")) {
+        if (_ids != "") _ids += ",";
+        _ids += $(this).val();
+      }
+    })
+    if (_ids == "") {
+      $("#error").show();
+      window.setTimeout(function () { $("#error").hide() }, 2000);
+      return;
+    }
+    if (confirm("确认通过审核吗？")){
+      var data = {
+        _ids: _ids,
+      };
+      var cb = function (result) {
+        if (result.code == 0) {
+          $("#success").html('通过审核！').show();
+          setTimeout("$('#success').hide();location.reload();", 2000);
+        } else {
+          $("#error").html(result.message).show();
+          window.setTimeout(function () { $("#error").hide() }, 2000);
+        }
+      };
+      $.post('/admin/comments_pass', data, cb);
+    }
+      return;
+  })
+  //搜索功能
+  $('.seachBtn').on('click',function(){
+    data={
+      content:$("[name='content']").val(),
+      title:$("[name='title']").val()
+    }
+    console.log(data);
+    writeList(data)
+  })
+  //添加title
+  // $.get('/admin/set_comments',function(result){
+  // })
+  function writeList(data){
+    $.get('/admin/ajax_get_comments_list', data, function (result) {
+      if (result.code == 0) {
+        $("table tbody").empty();
+        $("#post_comments_tpl")
+                .tmpl(result.message.list)
+                .appendTo("table tbody");
+        $("[data-toggle='tooltip']").tooltip();
+        options.totalPages=result.message.pagecount;
+          if (options.totalPages > 0) {
+            $('#page').bootstrapPaginator(options);
+          } else {
+            $('#page').empty();
+          }
+      }
+    });
+  }
+})
+</script>
+<% include inc/footer.html%>

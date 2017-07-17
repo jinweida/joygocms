@@ -1,0 +1,85 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%=title%></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <script src="http://libs.baidu.com/zepto/0.8/zepto.min.js"></script>
+    <script src="http://the5fireblog.b0.upaiyun.com/staticfile/swfobject.js"></script>
+    <style>
+         .container img{
+		     max-width: 100%;height: auto;
+              width:100%;
+	    }
+    </style> 
+          
+  </head>
+  <body>    
+    <div class="container" style="padding-top:15px;font-size:20px;color:#333">
+        <h1><%=model.title%></h1>
+        <h4><span class="text-info"><%=datetime%></span> <span class="text-danger">
+            <%
+            var str=model.clickcount
+            if(model.clickcount>10000){
+                str=Math.round((model.clickcount));
+            }%><%=str%> 浏览</span></h4>
+        <div id="player"></div> 
+        <div id="html5player" >
+            <video width="100%" height="50%" preload="auto" controls="controls" ><source src="http://115.159.58.32/755899E329FF966F65748C209A716955.mp4"></video></div> 
+        <%-model.desc%>
+        
+        <p></p>
+    </div>
+  </body>
+</html>
+<script>
+    $(function () {
+        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+
+            $("#html5player").show();
+            $("#player").hide();
+        } else if (/(Android)/i.test(navigator.userAgent)) {
+            //alert(navigator.userAgent); 
+
+            $("#html5player").show();
+            $("#player").hide();
+        } else {
+            var flashvars = {
+                // M3U8 url, or any other url which compatible with SMP player (flv, mp4, f4m)
+                // escaped it for urls with ampersands
+                src: escape("http://115.159.58.32/media/755899E329FF966F65748C209A716955.mp4"),
+                // url to OSMF HLS Plugin
+                plugin_m3u8: "http://www.the5fire.com/static/demos/swf/HLSProviderOSMF.swf",
+            };
+            var params = {
+                // self-explained parameters
+                allowFullScreen: true,
+                allowScriptAccess: "always",
+                bgcolor: "#000000"
+            };
+            var attrs = {
+                name: "player"
+            };
+
+            swfobject.embedSWF(
+                // url to SMP player
+                "http://www.the5fire.com/static/demos/swf/StrobeMediaPlayback.swf",
+                // div id where player will be place
+                "player",
+                // width, height
+                "100%", "300",
+                // minimum flash player version required
+                "10.2",
+                // other parameters
+                null, flashvars, params, attrs
+            );
+            $("#html5player").hide();
+            $("#player").show();
+        };
+    })    
+</script> 

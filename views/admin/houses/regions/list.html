@@ -1,0 +1,68 @@
+﻿<% include ../../inc/head.html%>
+<script>
+$(function(){
+    $(document).on("click",".del", function () {
+        var ajax=new Ajax();
+        if (confirm("确认删除选中项吗？")) {
+            ajax.get($(this).attr("data-url"), {}, function (result) {
+                if (result.code == 0) {
+                    $("#success").show();
+                    setTimeout("location.reload();", 2000);
+                }
+                else {
+                    $("#error").text(result.message).show();
+                    setTimeout("$('#error').hide();", 2000);
+                }
+            });
+        }
+    })
+
+})
+</script>
+<div class="container-fluid">
+   <div class="row">
+   <div class="sidebar">
+        <% include ../../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <div class="pull-left">
+                <ul class="list-inline"><ul class="list-inline">
+                    <li><a href="/admin/regions_add"><span class="glyphicon glyphicon-plus"></span> 添加区域</span></a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+        <div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr><th style="width:30px;"><input type="checkbox" name="chkall"></th><th>名称</th><th style="width:45px">操作</th></tr></thead>
+            <tbody>
+                <% regions.forEach(function(item){
+                    var tree="";
+                    for(var i=1;i<item.level;i++){
+                        tree+="&nbsp;&nbsp;&nbsp;&nbsp;"
+                    }
+                    if(tree!==''){
+                        tree+="| --";
+                    }%>
+                <tr>
+                    <td><input type="checkbox" value="<%=item._id%>" name="chk" /></td>
+                    <td><%- tree%><a href="/admin/regions_edit?_id=<%=item._id%>"><%=item.name%></a></td>
+                    <td><a href="javascript:void(0)" data-url="/admin/regions_remove?_id=<%=item._id%>" class="btn btn-danger btn-xs del"><span class="glyphicon glyphicon-trash"></span></a></td>
+                </tr>
+                <%})%>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="3">
+                <div id="page"></div></td></tr>
+            </tfoot>
+        </table>
+        </div>
+    </div>
+  </div>
+</div>
+<% include ../../inc/footer.html%>

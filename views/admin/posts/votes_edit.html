@@ -1,0 +1,201 @@
+﻿<% include ../inc/head.html%>
+<script charset="utf-8" src="/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="/kindeditor/lang/zh_CN.js"></script>
+<script charset="utf-8" src="/kindeditor/index.js"></script>
+<% include ../inc/editor_mode.html%>
+<script type="text/javascript">
+  $(function () {
+    $("#select_post_votes").on("click", function () {
+      var data = {
+        id:Math.round(Math.random() * 1000),
+        count: 0,
+        pics: ""
+      }
+      $("#post_votes_tpl").tmpl(data).appendTo("#row_post_votes");
+    });
+    $(document).on("click", ".del_post_votes", function () {
+      $("#row_"+$(this).attr("id")).remove();
+      return false;
+    })
+  })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <ul class="list-inline">
+                <li>
+                    <a href="javascript:history.go(-1)">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        返回
+                    </a>
+                </li>
+                <li>
+                    <a href="#" target="_blank">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                        帮助
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <form name="article_form" id="article_form" method="post">
+            <input type="hidden" value="<%=model._id%>" id="post_id" name="post_id"/>
+            <input type="hidden" value="<%=model.votes%>" id="post_votes_id" name="post_votes_id"/>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#mainInfo" aria-controls="mainInfo" data-toggle="tab">基础信息</a></li>
+            <li><a href="#minorInfo" aria-controls="minorInfo" data-toggle="tab">选填信息</a></li>
+        </ul>
+        <div class="tab-content" style="margin-top:15px;">
+            <div class="tab-pane active" id="mainInfo">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="well">
+                            <% include ../inc/form_left_edit.html%>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="panel panel-danger">
+                            <div class="panel-body">
+                                <% include ../inc/form_top_edit.html%>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-sm">
+                                            <div id="group_post_votesendtime">
+                                                <label for="post_votes_endtime">投票截止时间</label>
+                                                <input type="text" name="post_votes_endtime" id="post_votes_endtime" placeholder="必填" class="validate form-control input_date" value="<%if(votes!=null){%><%=votes.endtime%><%}%>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group form-group-sm">
+                                            <label for="post_votes_type">投票类型</label><br />
+                                            <select name="post_votes_type" class="form-control">
+                                                <option value="0" <%if(votes!=null){%><%if(votes.type=='0'){%>selected<%}%><%}%>>单选条形图</option>
+                                                <option value="2" <%if(votes!=null){%><%if(votes.type=='2'){%>selected<%}%><%}%>>单选PK图</option>
+                                                <option value="1" <%if(votes!=null){%><%if(votes.type=='1'){%>selected<%}%><%}%>>多选</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <button type="button" class="btn btn-danger" id="select_post_votes"><i class="glyphicon glyphicon-plus"></i>添加投票选项</button>
+                                </div>
+                                <div class="form-group" id="row_post_votes">
+                                <%if(votes!=null){
+                                    votes.list.forEach(function(node,index){
+                                        %>
+                                    <div class="row" id="row_100_<%=index%>">
+                                        <div class="col-xs-4">
+                                            <div class="form-group form-group-sm">
+                                                <div class="input-group input-group-sm">
+                                                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger del_post_votes" id="100_<%=index%>">删除选项</button>
+                                                </span>
+                                                <input type="text" name="post_votes_title" maxlength="100"  class="form-control" value="<%=node.title%>" placeholder="选项标题">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="form-group form-group-sm">
+                                            <div class="input-group input-group-sm">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger" id="${id}">初始票数</button>
+                                            </span>
+                                            <input type="text" name="post_votes_count" value="<%=node.count%>" placeholder="初始票数" class="form-control" />
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4">
+                                            <div class="form-group form-group-sm">
+                                                <div class="input-group input-group-sm">
+                                                <input type="text" name="post_votes_pics" id="post_votes_pics_100_<%=index%>" value="<%=node.pics%>"  placeholder="建议300*300像素图片"  class="form-control">
+                                                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger select_pic" data-value="post_votes_pics_100_<%=index%>" id="select_pics">选择</button>
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <%})}%>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <div id="group_editor">
+                                        <label for="editor" class="control-label">内容<span id="Span1">*</span></label>
+                                        <textarea id="post_content" name="post_content" style="width:100%;height:660px;"><%=model.content%></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <button type="button" class="go_submit btn btn-danger">保存</button>
+                                    <p class="text-danger"><small class="red" id="error"></small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="minorInfo">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-danger">
+                            <div class="panel-body">
+                                <% include ../inc/form_topor_edit.html%>
+                                
+                                <div class="col-md-12">
+                                    <div class="form-group form-group-sm">
+                                        <button type="button" class="go_submit btn btn-danger">保存</button>
+                                        <p class="text-danger"><small class="red" id="error"></small></p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </form>
+        <script id="post_votes_tpl" type="text/x-jquery-tmpl">
+        <div class="row" id="row_${id}">
+            <div class="col-xs-4">
+                <div class="form-group form-group-sm">
+                <div class="input-group input-group-sm">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-danger del_post_votes" id="${id}">删除选项</button>
+                </span>
+                <input type="text" name="post_votes_title" maxlength="100" class="form-control" value="" placeholder="选项标题"/>
+                </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group form-group-sm">
+                <div class="input-group input-group-sm">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-danger" id="${id}">初始票数</button>
+                </span>
+                <input type="text" name="post_votes_count" value="0" placeholder="初始票数" class="form-control" />
+                </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="form-group form-group-sm">
+                <div class="input-group input-group-sm">
+                <input type="text" name="post_votes_pics" id="post_votes_pics_${id}" value="" placeholder="建议300*300像素图片" class="form-control" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-danger select_pic" data-value="post_votes_pics_${id}" id="select_pics">选择</button>
+                </span>
+                </div>
+                </div>
+            </div>
+        </div>
+        </script>
+        <!--选择缩略图-->
+        <% include ../inc/thumbnail.html%>
+    </div>
+  </div>
+</div>
+<% include ../inc/footer.html%>

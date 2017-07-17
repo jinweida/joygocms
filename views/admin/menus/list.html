@@ -1,0 +1,49 @@
+﻿<% include ../inc/head.html%>
+
+<div class="container-fluid">
+   <div class="row">
+   <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <div class="pull-left">
+                <ul class="list-inline"><ul class="list-inline">
+                    <li><a href="/admin/ads_add"><span class="glyphicon glyphicon-plus"></span> 添加菜单</span></a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <table class="table table-striped">
+            <tr><th style="width:25px;"><input type="checkbox" value="" name="chkall"/></th><th style="width:100px;">操作</th><th style="width:80px;">编号</th><th>菜单名称</th><th style="width:80px;">排序</th></tr>
+            <%  models.forEach(function(item){  
+            %>
+            <tr><td>
+                <%if(!item.issystem){%>
+                <input type="checkbox" value="<%=item._id%>" name="chk"/>
+                <%}%>
+                </td>
+                <td>
+                    <%
+                        var text="显示";
+                        var style="btn-info";
+                        var status=-1;
+                        if(item.status==-1){
+                            text="已隐藏";
+                            style="btn-warning";
+                            status=0;
+                        }                        
+                    %>
+                    <div class="btn-group"><a class="btn btn-default btn-xs" href="/admin/columns_add?_id=<%=item._id%>">编辑</a></div>
+                </td>
+                <td><%=item._id%></td>
+                <td><%=item.name%></td>
+                <td><%=item.order%></td></tr>
+            <% }) %>
+        </table>  
+    </div>
+  </div>
+</div>
+<% include ../inc/footer.html%>

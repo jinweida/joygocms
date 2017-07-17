@@ -1,0 +1,98 @@
+﻿<% include inc/head.html%>
+
+<script type="text/javascript">
+    $(function () {
+        var ajax = new Ajax();
+        $('.go_submit').click(function () {
+            var data = $("#roles_form").serializeArray();
+            var cb = function (result) {
+                if (result.code == 0) {
+                    location.href = '/admin/roles';
+                } else {
+                    $('#error').text(result.message);
+                }
+            };
+            ajax.post('/admin/roles_update', data, cb);
+            return false;
+        });
+
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/roles">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="roles_form" id="roles_form" method="post">
+            <input type="hidden" name="role[_id]" id="role[_id]" value="<%=model._id%>">
+            <div class="row">
+			    <div class="col-md-9">
+				    <div class="panel panel-danger">
+					    <div class="panel-body">
+                            <div class="form-group">
+							    <div id="group_role[name]">
+								    <label for="role[name]" class="control-label">角色名称<span id="msg_role[name]">*</span></label>
+								    <input type="text" name="role[name]" id="role[name]" value="<%=model.name%>" class="validate form-control">
+							    </div>
+						    </div>
+                            <div class="form-group">
+								<label for="role[permission]" class="control-label">分配权限</label>
+                                <%locals.action.forEach(function(item){%>
+                                <%if(item.path===''){%><br /><br /><%}%>
+                                <label class="checkbox-inline">
+                                  <input type="checkbox" name="role[permission]" value="<%=item.code%>"
+                                      <%if(model.permission.indexOf(item.code) >=0){%>
+                                      checked
+                                      <%}%>/>
+                                    <%if(item.path===''){%><b><%=item.title%></b><%}else{%>
+                                    <%=item.title%>
+                                    <%}%>
+                                </label>
+                                <%if(item.path===''){%><br /><%}%>
+                                <%})%>
+						    </div>
+                            <div class="form-group">
+							    <button type="button" class="go_submit btn btn-danger">提交</button>
+                                <p class="text-danger"><small class="red" id="error"></small></p>
+						    </div>
+                        </div>
+                    </div>
+                </div>
+			    <div class="col-md-3">
+				    <div class="well">
+                        <div class="form-group">
+						    <label for="role[status]">状态</label>
+                            <br />
+                            <label class="radio-inline">
+                              <input type="radio" name="role[status]" value="1" <%if(model.status==1){%>checked<%}%>> 正常
+                            </label>
+                            <label class="radio-inline">
+                              <input type="radio" name="role[status]" value="0" <%if(model.status==0){%>checked<%}%>> 停用
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<% include inc/footer.html%>

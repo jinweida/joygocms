@@ -1,0 +1,116 @@
+﻿<% include inc/head.html%>
+
+<script type="text/javascript">
+    $(function () {
+        var ajax = new Ajax();
+        $('.go_submit').click(function () {
+            var data = $("#user_form").serializeArray();
+            console.log(data);
+            var cb = function (result) {
+                if (result.code == 0) {
+                    location.href = '/admin/users';
+                } else {
+                    $('#error').text(result.message);
+                }
+            };
+            ajax.post('/admin/users_create', data, cb);
+            return false;
+        });
+
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/users">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="user_form" id="user_form" method="post">
+            <div class="row">
+			    <div class="col-md-9">
+				    <div class="panel panel-danger">
+					    <div class="panel-body">
+                            <div class="form-group">
+							    <div id="group_user_login">
+								    <label for="user_login" class="control-label">登录帐号<span id="msg_user_login">*</span></label>
+								    <input type="text" name="user_login" id="user_login" value="" class="validate form-control">
+							    </div>
+						    </div>
+                            <div class="form-group">
+							    <div id="group_user_pass">
+								    <label for="user_pass" class="control-label">密码<span id="msg_user_pass">*</span></label>
+								    <input type="password" name="user_pass" id="user_pass" value="" class="validate form-control">
+							    </div>
+						    </div>
+                            <div class="form-group">
+							    <div id="group_user_confirm_pass">
+								    <label for="user_pass" class="control-label">确认密码<span id="msg_user_confirm_pass">*</span></label>
+								    <input type="password" name="user_confirm_pass" id="user_confirm_pass" value="" class="validate form-control">
+							    </div>
+						    </div>
+                            <div class="form-group">
+							    <div id="group_user_nicename">
+								    <label for="user_nicename" class="control-label">昵称<span id="msg_user_nicename">*</span></label>
+								    <input type="text" name="user_nicename" id="user_nicename" value="" class="validate form-control">
+							    </div>
+						    </div>
+                            <div class="form-group">
+							    <div id="group_user_email">
+								    <label for="user_email" class="control-label">邮箱<span id="msg_user_email">*</span></label>
+								    <input type="text" name="user_email" id="user_email" value="" class="validate form-control">
+							    </div>
+						    </div>
+                            <div class="form-group">
+							    <button type="button" class="go_submit btn btn-primary">提交</button>
+                                <p class="text-danger"><small class="red" id="error"></small></p>
+						    </div>
+                        </div>
+                    </div>
+                </div>
+
+			    <div class="col-md-3">
+				    <div class="well">
+
+                        <div class="form-group">
+						    <label for="user_roleid">角色</label>
+                            <select id="user_roleid" name="user_roleid" class="form-control">
+                                <%roles.forEach(function(item){%>
+                                <option value="<%=item._id%>"><%=item.name%></option>
+                                <%})%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+						    <label for="user_status">状态</label>
+                            <br />
+                            <label class="radio-inline">
+                              <input type="radio" name="user_status" value="1" checked> 正常
+                            </label>
+                            <label class="radio-inline">
+                              <input type="radio" name="user_status" value="0" > 停用
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<% include inc/footer.html%>

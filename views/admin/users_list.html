@@ -1,0 +1,60 @@
+﻿<% include inc/head.html%>
+<script>
+    $(function () {
+        $(document).on("click", ".del", function () {
+            var ajax = new Ajax();
+            if (confirm("确认删除用户吗？")) {
+                ajax.get($(this).attr("data-url"), {}, function (result) {
+                    if (result.code == 0) {
+                        $("#success").show();
+                        setTimeout("$('.roles').hide();location.reload();", 2000);
+                    }
+                    else {
+                        $("#error").show();
+                    }
+                });
+            }
+        })
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <div class="pull-left">
+			    <ul class="list-inline">
+                    <li><a href="/admin/users_add" id="delall"><span class="glyphicon glyphicon-plus"></span> 新增</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+				    </li>
+			    </ul>
+		    </div>
+		    <div class="pull-right">
+            </div>
+		    <div class="clearfix"></div>
+	    </div>
+
+        <div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr><th style="width:60px;">操作</th><th>登录帐号</th><th>昵称</th><th>邮箱</th><th>状态</th><th>注册时间</th></tr></thead>
+            <tbody>
+                <% users.forEach(function(item){
+                if(item.user_login!=="admin"){%>
+                <tr>
+                    <td><a href="#" class="btn btn-danger btn-xs del" data-url="/admin/user_delete?_id=<%=item._id%>">删除</a></td>
+                    <td><a href="/admin/users_edit?_id=<%=item._id%>"><%=item.user_login%></a></td>
+                    <td><%=item.user_nicename%></td>
+                    <td><%=item.user_email%></td>
+                    <td><%if(item.user_status==1){%><span class="label label-info">正常</span><%}else{%><span class="label label-danger">停用</span><%}%></td>
+                    <td><%=item.createtime%></td>
+                <%}})%>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+<% include inc/footer.html%>

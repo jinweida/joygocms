@@ -1,0 +1,11 @@
+﻿<div class="col-md-6">
+	<div class="form-group form-group-sm">
+	<label for="post_votes">插入投票</label>
+	    <select id="post_votes" name="post_votes" class="form-control">
+	        <option value="">----选择投票----</option>
+	        <%voteslist.forEach(function(item){%>
+	        <option value="<%=item._id%>"><%=item.title%></option>
+	        <%})%>
+	    </select>
+	</div>
+</div>

@@ -1,0 +1,239 @@
+<% include ../inc/head.html%>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="sidebar">
+                <% include ../inc/left.html%>
+            </div>
+            <div class="main">
+                <div class="form-group">
+                    <div class="pull-left">
+                        <ul class="list-inline">
+                            <li><a href="#" id="delAllBtn"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+                            <li><a href="javascript:void(0)" id="surveillance"><span class="glyphicon glyphicon-facetime-video"></span> 直播视频监控 </a></li>
+                            <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+                        </ul>
+                    </div>
+                    <div class="pull-right">
+                        <form class="form-inline" id="searchForm" action="javascript:void(null);">
+                            <div class="form-group form-group-sm">
+                                <select class="form-control" name="columnName">
+                                    <option value="all">所属栏目</option>
+                                    <%columns.forEach(function(item) {%>
+                                        <option value="<%=item.name%>">
+                                            <%=item.name%>
+                                        </option>
+                                        <%});%>
+                                </select>
+                            </div>
+                            <div class="form-group form-group-sm">
+                                <input class="form-control" type="text" name="title" value="" placeholder="标题" />
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <input class="form-control" type="text" name="userName" value="" placeholder="上传人" />
+                                <div class="input-group-btn">
+                                    <button class="btn btn-danger btn-sm" id="searchBtn" type="button">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="tipBox" class="alert fade in" style="display:none;"></div>
+                <table id="dataTable" class="table table-striped table-condensed ellipsis">
+                    <thead>
+                        <tr>
+                          <th style="width:20px;">
+                            <input type="checkbox" name="checkAll">
+                          </th>
+                          <th style="width:40px">#</th>
+                          <th style="width:200px">操作</th>
+                          <th>主题</th>
+                          <th style="width:100px;">栏目名称</th>
+                          <th style="width:120px">上传人</th>
+                          <th style="width:120px">上传人身份</th>
+                          <th style="width:100px">是否置顶</th>
+                          <th style="width:150px">创建时间</th>
+                          <th style="width:80px">状态</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="10">
+                                <div id="page"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="modal fade" id="rejectModal">
+                    <div class="modal-dialog" style="width: 500px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">关闭理由</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <input type="hidden" name="rejectId" value="" />
+                                    <input type="hidden" name="chatroomid" value="" />
+                                    <input type="hidden" name="cid" value="" />
+                                    <textarea class="form-control" name="rejectReason" rows="4" cols=""></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-danger">确认</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var pageSize = 12;
+        var pageOptions = {
+            currentPage: 1,
+            totalPages: 1,
+            numberOfPages: 10,
+            bootstrapMajorVersion: 1,
+            alignment: "center",
+            onPageClicked: function(e, originalEvent, type, page) {
+                if (page > pageOptions.totalPages) {
+                    pageOptions.currentPage = pageOptions.totalPages;
+                } else {
+                    pageOptions.currentPage = page;
+                }
+                initData();
+            }
+        };
+        $(function() {
+            initData();
+            $('input[name="checkAll"]').change(function() {
+                var isChecked = $(this).is(':checked');
+                $('#dataTable tbody input[type="checkbox"]').each(function() {
+                    $(this).prop('checked', isChecked);
+                });
+            });
+            $('#delAllBtn').click(function() {
+                var ids = new Array();
+                $('#dataTable tbody input[type="checkbox"]:checked').each(function() {
+                    ids.push($(this).val());
+                });
+                if (ids.length == 0) {
+                    alert("至少选择一项！");
+                } else if (confirm("确定删除？")) {
+                    action('/admin/lives/live/delete', {
+                        ids: ids.join(',')
+                    });
+                }
+            });
+            $('#searchBtn').click(function() {
+                pageOptions.currentPage = 1;
+                initData();
+            });
+            $('#rejectModal button.btn-danger').click(function() {
+                var param = {
+                    id: $('input[name="rejectId"]').val(),
+                    status: -1,
+                    chatroomid:$('input[name="chatroomid"]').val(),
+                    cid:$('input[name="cid"]').val(),
+                    type:1,
+                    rejectionReason: $('textarea[name="rejectReason"]').val()
+                };
+                console.log(param);
+                action('/admin/lives/live/update', param);
+                $('textarea[name="rejectReason"]').val('');
+                $('#rejectModal').modal('hide');
+            });
+        });
+
+		function initData() {
+			$.post('/admin/lives/live/ajax_list', $('#searchForm').serialize() + '&page=' + pageOptions.currentPage + '&pagesize=' + pageSize, function(data) {
+				if (data.code == 0) {
+					var result = data.message;
+					$("#dataTable tbody").empty();
+					if (result.list.length > 0) {
+						$("#tmpl").tmpl(result.list).appendTo("#dataTable tbody");
+					} else if (pageOptions.currentPage > 1) {
+						pageOptions.currentPage--;
+						initData();
+					}
+					pageOptions.totalPages = result.pagecount;
+					if (pageOptions.totalPages > 0) {
+						$('#page').bootstrapPaginator(pageOptions);
+					} else {
+						$('#page').empty();
+					}
+					$('.top').click(function() {
+						action('/admin/lives/live/update', {
+							id: $(this).attr('data-id'),
+							attr: $(this).attr('data-attr')
+						});
+					});
+					$('.stop').click(function() {
+						$('input[name="rejectId"]').val($(this).attr('data-id'));
+                        $('input[name="chatroomid"]').val($(this).attr('data-chatroomid'));
+                        $('input[name="cid"]').val($(this).attr('data-cid'));
+						$('#rejectModal').modal('show');
+					});
+					$('.del').click(function() {
+						if (confirm("确定删除？")) {
+							action('/admin/lives/live/delete', {
+								ids: $(this).attr('data-id')
+							});
+						}
+					});
+				}
+			});
+		}
+        $('#surveillance').click(function(){
+            var id=$('.top').eq(0).attr('data-id')
+            if(!(id==undefined)){
+                window.location.href="/admin/lives/live/detail?id="+id
+            }
+        })
+		function action(url, param) {
+			$.post(url, param, function(data) {
+				if (data.code == 0) {
+					initData();
+					$('#tipBox').removeClass('alert-danger').addClass('alert-success').html(data.message).show();
+				} else {
+					$('#tipBox').removeClass('alert-success').addClass('alert-danger').html(data.message).show();
+				}
+				window.setTimeout(function() {
+					$('#tipBox').hide();
+				}, 3000);
+			});
+		}
+	</script>
+	<script id="tmpl" type="text/x-jquery-tmpl">
+		<tr>
+			<td>
+				{{if status!=1}}
+				<input type="checkbox" value="${_id}"> {{/if}}
+			</td>
+			<td>${index}</td>
+			<td>
+				<div class="btn-group">
+					{{if attr==0}}
+					<a class="btn btn-primary btn-xs top" href="#" data-id="${_id}" data-attr="1">置顶</a> {{else}}
+					<a class="btn btn-warning btn-xs top" href="#" data-id="${_id}" data-attr="0">取消置顶</a> {{/if}} {{if status!=1}}
+					<a class="btn btn-danger btn-xs del" href="#" data-id="${_id}">删除</a> {{else}}
+					<a class="btn btn-warning btn-xs stop" href="#" data-id="${_id}" data-cid="${cds.cid}" data-chatroomid="${chatroom.chatroomid}">关闭</a> {{/if}}
+					<a class="btn btn-default btn-xs" href="/admin/lives/live/detail?id=${_id}">
+					{{if status == 0}}审核{{else}}详情{{/if}}
+					</a><a class="btn btn-info btn-xs" href="/admin/lives/live/statistics/list?mid=${_id},type=1">统计</a></div>
+			</td>
+			<td>${title}</td>
+			<td>${columns.name}</td>
+			<td>${user.nickname}</td>
+			<td>${user.roles}</td>
+			<td>${istop}</td>
+			<td>${createtime}</td>
+            <td>{{if status==1}}<span class="text-success">{{/if}}{{if status==0}}<span class="text-info">{{/if}}{{if status==-1}}<span class="text-warning">{{/if}}${statusname}</span></td>
+		</tr>
+	</script>
+	<% include ../inc/footer.html%>

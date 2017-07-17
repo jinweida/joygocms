@@ -1,0 +1,122 @@
+<% include ../../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group">
+					<div class="pull-left">
+						<ul class="list-inline">
+							<li><a href="/admin/lives/message/list_send_page"><span class="glyphicon glyphicon-random"></span> &nbsp;发送消息</a></li>
+							<li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+						</ul>
+					</div>
+					<div class="pull-right">
+						<form name="article_search" id="article_search" action="/admin/lives/message/list" method="get" class="form-inline">
+							<div class="form-group">
+								<div class="input-group">
+									<input type="text" name="title" id="title" placeholder="标题" value="<%=msgtitle %>" class="form-control input-sm">
+									<span class="input-group-btn">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-search"></span>
+									</button>
+									</span>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+				<div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+				<div class="form-group">
+					<table class="table table-striped table-condensed table-hover">
+						<thead>
+							<tr>
+								<th style="width:30px">#</th>
+								<th style="width:200px;">标题</th>
+								<th>内容</th>
+								<th style="width:120px;">发送人</th>
+								<th style="width:180px;">时间</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% messages.forEach(function(item){ %>
+								<tr>
+									<td>
+										<%=item.index%>
+									</td>
+									<td>
+											<%=item.title%>
+									</td>
+									<td>
+										<span data-toggle="tooltip" title="<%=item.context%>" data-placement="bottom">
+											<%=item.shorttitle%>
+										</span>
+									</td>
+									<td>
+										<%=item.creator%>
+									</td>
+									<td>
+										<%=item.createtime%>
+									</td>
+								</tr>
+								<% }) %>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="5">
+									<div id="page"></div>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script id="post_comm_tpl" type="text/x-jquery-tmpl">
+		<tr>
+			<td>${index}</td>
+			<td>${title}</td>
+			<td><span data-toggle="tooltip" title="${context}" data-placement="bottom">${shorttitle}</span></td>
+			<td>${creator}</td>
+			<td>${createtime}</td>
+		</tr>
+	</script>
+	<script>
+		$(function() {
+			$("[data-toggle='popover']").popover();
+			var ajax = new Ajax();
+			var pagecount = "<%=pagecount %>";
+			var currentPage = 1;
+			if (pagecount != 0) {
+				//分页功能
+				var options = {
+					currentPage: 1,
+					totalPages: pagecount,
+					numberOfPages: "<%=pagesize%>",
+					bootstrapMajorVersion: 1,
+					alignment: "center",
+					onPageClicked: function(e, originalEvent, type, page) {
+						var data = {
+							page: page,
+							title: $("#title").val()
+						};
+						ajax.post('/admin/lives/message/ajax_list', data, function(result) {
+							if (result.code == 0) {
+								$("table tbody").empty();
+								$("#post_comm_tpl")
+									.tmpl(result.message)
+									.appendTo("table tbody");
+                  $("[data-toggle='tooltip']").tooltip();
+							}
+						});
+					}
+				}
+				$('#page').bootstrapPaginator(options);
+			}
+		});
+	</script>
+	<% include ../../inc/footer.html%>

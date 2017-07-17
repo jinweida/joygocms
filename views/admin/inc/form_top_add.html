@@ -1,0 +1,89 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+			<div id="group_post_title">
+				<label for="post_title" class="control-label">标题<span id="msg_post_title">*</span></label>
+				<input type="text" name="post_title" id="post_title" placeholder="必填" class="validate form-control">
+			</div>
+		</div>
+    </div>
+    <div class="col-md-4">
+       <div class="form-group form-group-sm">
+            <div id="group_post_author">
+                <label for="post_author">作者</label>
+                <input type="text" name="post_author" id="post_author" value="<%=locals.current_user.user_login%>" placeholder="选填" class="validate form-control">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+            <div id="group_post_source">
+                <label for="post_source">来源<span><small>10个汉字以内</small></span></label>
+                <input type="text" name="post_source" id="post_source" placeholder="选填" class="validate form-control">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+            <div id="group_post_subtitle">
+                <label for="post_subtitle" class="control-label">副标题</label>
+                <input type="text" name="post_subtitle" id="post_subtitle" placeholder="选填" class="validate form-control">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+            <label for="post_tag" class="control-label">标签<span id="msg_post_tag"></span></label>
+            <select id="post_tag" name="post_tag" class="form-control">
+                <%tags.forEach(function(item){%>
+                <option value="<%=item.id%>,<%=item.name%>"><%=item.name%></option>
+                <%})%>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+            <div id="group_post_desc">
+                <label for="post_desc" class="control-label">导语</label>
+                <textarea rows="2" cols="40" class="form-control" placeholder="请输入导语" name="post_desc" id="post_desc"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="post_area" value="-1"/>
+<input type="hidden" name="post_hangye" value="-1"/>
+<script>
+  $(function () {
+    $('.go_submit').on('click',function () {
+      effect.show();
+      if ($("#post_content").size()>0) {
+        $("#post_content").val(editor.html());
+      }
+      var data = $("form").serializeArray();
+      if (window.location.search.substr(6)==8) {
+        var tit=$('input[name="post_title"]').val()
+        if(tit.length>15){
+            return effect.error('创建失败',function(){
+            effect.hide();
+            $('#error').text('广告标题过长');
+          });
+        }
+      }
+      $.post('/admin/posts_create', data, function (result) {
+        console.log(result);
+        if (result.code == 0) {
+          effect.success('创建成功',function(){
+            $('.go_submit').off('click')
+            effect.hide();
+            location.href = '/admin/posts';
+          })
+        } else {
+          effect.error('创建失败',function(){
+            effect.hide();
+            $('#error').text(result.message);
+          });
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,41 @@
+<% include ../inc/head.html%>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="sidebar">
+                <% include ../inc/left.html%>
+            </div>
+            <div class="main">
+                <div class="form-group">
+                    <div class="pull-left">
+                        <ul class="list-inline">
+                            <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="page-header">
+                      <h4 class="text-center text-danger">今日微直播统计</h4>
+                    </div>
+                      <ul class="list-group">
+                        <li class="list-group-item list-group-item-success"><span>点播数</span><span class="badge"><%=data.today.vod%></span></li>
+                        <li class="list-group-item list-group-item-info"><span>预告数</span><span class="badge"><%=data.today.trailer%></span></li>
+                        <li class="list-group-item list-group-item-danger"><span>直播数</span><span class="badge"><%=data.today.lives%></span></li>
+                      </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="page-header">
+                      <h4 class="text-muted text-center">昨日微直播统计</h4>
+                    </div>
+                      <ul class="list-group">
+                        <li class="list-group-item list-group-item-success"><span>点播数</span><span class="badge"><%=data.yestody.vod%></span></li>
+                        <li class="list-group-item list-group-item-info"><span>预告数</span><span class="badge"><%=data.yestody.trailer%></span></li>
+                        <li class="list-group-item list-group-item-danger"><span>直播数</span><span class="badge"><%=data.yestody.vod%></span></li>
+                      </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% include ../inc/footer.html%>

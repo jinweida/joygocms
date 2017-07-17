@@ -1,0 +1,1837 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title><%=title%></title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <link rel='stylesheet' href='/stylesheets/bootstrap-switch.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="/javascripts/app.js"></script>
+    <script src="/javascripts/bootstrap-switch.min.js"></script>
+</head>
+<body>
+<br>
+    <div class="container">
+      <ul id="myTabs" class="nav nav-tabs" role="tablist">
+        <li role="presentation"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">V1</a></li>
+        <li role="presentation" class="active"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">V1.2</a></li>
+        <li role="presentation" class="dropdown">
+          <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents">V1.3 <span class="caret"></span></a>
+        </li>
+      </ul>
+      <div id="myTabContent" class="tab-content">
+      <div role="tabpanel" class="tab-pane fade" id="home" aria-labelledby="home-tab">
+        <div class="row">
+            <div class="col-md-3">
+                <form name="article_form" id="Form11" action="http://user.joygo.com/huala/user/login" method="post">
+                <h3>哗啦</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button35">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text8" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">password</button>
+                    </span>
+                    <input type="text" name="password" id="password" class="form-control" placeholder="password"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <form name="article_form" id="Form11" action="/api/set_coin" method="post">
+                <h3>测试增减福币</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button35">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text8" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">cointype</button>
+                    </span>
+                    <input type="text" name="cointype" id="cointype" class="form-control" placeholder="cointype"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <form name="article_form" id="Form11" action="/api/set_feedback" method="post">
+                <h3>建议反馈</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button35">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text8" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">content</button>
+                    </span>
+                    <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">contact</button>
+                    </span>
+                    <input type="text" name="contact" id="contact" class="form-control" placeholder="content"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">feedbacktype</button>
+                    </span>
+                    <input type="text" name="feedbacktype" id="feedbacktype" class="form-control" placeholder="content"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+            <form name="article_form" id="Form2" action="/v1.2/api/set_houses/" method="post" enctype="multipart/form-data" >
+                <h3>二手房上传</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">用户id</button>
+                    </span>
+                    <input type="text" name="mpno" class="form-control" placeholder="用户id"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">标题</button>
+                    </span>
+                    <input type="text" name="title" class="form-control" placeholder="标题"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">联系人</button>
+                    </span>
+                    <input type="text" name="linkman" class="form-control" placeholder="联系人"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">电话</button>
+                    </span>
+                    <input type="text" name="linkphone" class="form-control" placeholder="电话"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">区域</button>
+                    </span>
+                    <input type="text" name="provincecode" class="form-control" placeholder="区域"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">面积</button>
+                    </span>
+                    <input type="text" name="acreage" class="form-control" placeholder="面积"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">价格</button>
+                    </span>
+                    <input type="text" name="price" class="form-control" placeholder="价格"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button6">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button6">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file1" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button6">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file2" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+            <form name="article_form" id="Form10" action="/api/set_scores" method="post">
+                <h3>测试评分</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button31">mid</button>
+                    </span>
+                    <input type="text" name="mid" id="mid" class="form-control" placeholder="mid"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button32">title</button>
+                    </span>
+                    <input type="text" name="title" id="title" class="form-control" placeholder="title"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button33">num</button>
+                    </span>
+                    <input type="text" name="num" id="Text10" class="form-control" placeholder="num"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button34">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text11" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <form name="article_form" id="Form11" action="http://user.joygo.com/fuguang/user/login" method="post">
+                <h3>测试登录</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button35">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text8" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">password</button>
+                    </span>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="password"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+            <form name="article_form" id="Form2" action="/api/set_attachs/" method="post" enctype="multipart/form-data" >
+                <h3>用户上传</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">用户id</button>
+                    </span>
+                    <input type="text" name="mpno" class="form-control" placeholder="用户id"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">标题</button>
+                    </span>
+                    <input type="text" name="title" class="form-control" placeholder="标题"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">描述</button>
+                    </span>
+                    <input type="text" name="desc" class="form-control" placeholder="描述"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">内容</button>
+                    </span>
+                    <input type="text" name="content" class="form-control" placeholder="content"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">栏目</button>
+                    </span>
+                    <input type="text" name="columnid" class="form-control" placeholder="栏目"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">类型</button>
+                    </span>
+                    <input type="text" name="type" class="form-control" placeholder="类型"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button6">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button6">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file1" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button6">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file2" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <form name="article_form" id="Form11" action="/api/set_votes" method="post">
+                <h3>测试投票</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button35">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text8" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">vid</button>
+                    </span>
+                    <input type="text" name="vid" id="vid" class="form-control" placeholder="vid"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button36">rid</button>
+                    </span>
+                    <input type="text" name="rid" id="rid" class="form-control" placeholder="rid"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-3">
+            <form name="article_form" id="article_form" action="/api/set_comments" method="post">
+                <h3>测试评论</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="mid_label">评论mid</button>
+                    </span>
+                    <input type="text" name="mid" id="mid" class="form-control" placeholder="评论mid"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button1">nickname</button>
+                    </span>
+                    <input type="text" name="nickname" id="nickname" class="form-control" placeholder="nickname"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button2">content</button>
+                    </span>
+                    <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button37">head</button>
+                    </span>
+                    <input type="text" name="head" id="head" class="form-control" placeholder="head"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button3">uid</button>
+                    </span>
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+            <form name="article_form" id="Form1" action="/api/set_assist" method="post">
+                <h3>测试点赞</h3>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button4">commentid</button>
+                </span>
+                <input type="text" name="commentid" id="commentid" class="form-control" placeholder="commentid"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">mpno</button>
+                </span>
+                <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="go_submit btn btn-primary">保存</button>
+            </div>
+            </form>
+            </div>
+            <div class="col-md-3">
+            <form name="article_form" id="Form1" action="/api/set_regs" method="post">
+            <h3>测试培训报名</h3>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button4">mpno</button>
+                </span>
+                <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">name</button>
+                </span>
+                <input type="text" name="name" id="name" class="form-control" placeholder="name"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">sex</button>
+                </span>
+                <input type="text" name="sex" id="sex" class="form-control" placeholder="sex"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">birthday</button>
+                </span>
+                <input type="text" name="birthday" id="birthday" class="form-control" placeholder="birthday"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">place</button>
+                </span>
+                <input type="text" name="place" id="place" class="form-control" placeholder="place"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">nation</button>
+                </span>
+                <input type="text" name="nation" id="nation" class="form-control" placeholder="nation"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">edu</button>
+                </span>
+                <input type="text" name="edu" id="edu" class="form-control" placeholder="edu"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">idnumber</button>
+                </span>
+                <input type="text" name="idnumber" id="idnumber" class="form-control" placeholder="idnumber"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">phone</button>
+                </span>
+                <input type="text" name="phone" id="phone" class="form-control" placeholder="phone"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">address</button>
+                </span>
+                <input type="text" name="address" id="address" class="form-control" placeholder="address"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">resume</button>
+                </span>
+                <input type="text" name="resume" id="resume" class="form-control" placeholder="resume"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">mark</button>
+                </span>
+                <input type="text" name="mark" id="mark" class="form-control" placeholder="mark"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="go_submit btn btn-primary">保存</button>
+            </div>
+            </form>
+            </div>
+            <div class="col-md-3">
+            <form name="article_form" id="Form1" action="http://fuzhou.cms.joygo.com:9090/api/set_questions" method="post" enctype="multipart/form-data">
+            <h3>测试提问</h3>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button4">content</button>
+                </span>
+                <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button4">publishmpno</button>
+                </span>
+                <input type="text" name="publishmpno" id="publishmpno" class="form-control" placeholder="publishmpno"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">publishusername</button>
+                </span>
+                <input type="text" name="publishusername" id="publishusername" class="form-control" placeholder="publishusername"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">publishuserface</button>
+                </span>
+                <input type="text" name="publishuserface" id="publishuserface" class="form-control" placeholder="publishuserface"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">answermpno</button>
+                </span>
+                <input type="text" name="answermpno" id="answermpno" class="form-control" placeholder="answermpno"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">answerusername</button>
+                </span>
+                <input type="text" name="answerusername" id="answerusername" class="form-control" placeholder="answerusername"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">answeruserface</button>
+                </span>
+                <input type="text" name="answeruserface" id="answeruserface" class="form-control" placeholder="answeruserface"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">answercontent</button>
+                </span>
+                <input type="text" name="answercontent" id="answercontent" class="form-control" placeholder="answercontent"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">file</button>
+                </span>
+                <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">file</button>
+                </span>
+                <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="go_submit btn btn-primary">保存</button>
+            </div>
+            </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-3">
+            <form name="article_form" id="Form8" action="/api/set_posts_assist" method="post" >
+                <h3>测试媒资点赞</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button23">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button24">mid</button>
+                    </span>
+                    <input type="text" name="mid" id="mid" class="form-control" placeholder="mid"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+
+            <form name="article_form" id="Form9" action="/api/set_activitys" method="post" >
+                <h3>活动报名</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button25">mid</button>
+                    </span>
+                    <input type="text" name="mid" id="Text1" class="form-control" placeholder="mid"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button26">title</button>
+                    </span>
+                    <input type="text" name="title" id="Text3" class="form-control" placeholder="title"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button27">fullname</button>
+                    </span>
+                    <input type="text" name="fullname" id="fullname" class="form-control" placeholder="fullname"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button28">sex</button>
+                    </span>
+                    <input type="text" name="sex" id="Text4" class="form-control" placeholder="sex"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button29">card</button>
+                    </span>
+                    <input type="text" name="card" id="Text6" class="form-control" placeholder="card"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button30">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text7" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-3">
+            <form name="article_form" id="Form1" action="/api/set_answers" method="post" enctype="multipart/form-data">
+            <h3>回答问题</h3>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button4">questionid</button>
+                </span>
+                <input type="text" name="questionid" id="questionid" class="form-control" placeholder="questionid"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">answermpno</button>
+                </span>
+                <input type="text" name="answermpno" id="answermpno" class="form-control" placeholder="answermpno"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">answerusername</button>
+                </span>
+                <input type="text" name="answerusername" id="answerusername" class="form-control" placeholder="answerusername"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">answeruserface</button>
+                </span>
+                <input type="text" name="answeruserface" id="answeruserface" class="form-control" placeholder="answeruserface"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">content</button>
+                </span>
+                <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">isanchors</button>
+                </span>
+                <input type="text" name="isanchors" id="isanchors" class="form-control" placeholder="isanchors"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">file</button>
+                </span>
+                <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="Button5">file</button>
+                </span>
+                <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="go_submit btn btn-primary">保存</button>
+            </div>
+            </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+            <form name="article_form" id="Form2" action="/api/set_upload/" method="post" enctype="multipart/form-data" >
+                <h3>上传视频</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button7">用户id</button>
+                    </span>
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="用户id"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button6">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form name="article_form" id="Form3" action="/cds/set_upload" method="post" enctype="multipart/form-data" >
+                <h3>cds导入</h3>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button9">选择文件</button>
+                    </span>
+                    <input type="file" name="file" id="file1" class="form-control" placeholder="选择文件"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+            <form name="article_form" id="Form6" action="/api/set_favorites" method="post" >
+                <h3>添加收藏</h3>
+
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button19">mid</button>
+                    </span>
+                    <input type="text" name="mid" id="mid" class="form-control" placeholder="mid"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button20">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form name="article_form" id="Form7" action="/api/delete_favorites" method="post" >
+                <h3>删除收藏</h3>
+
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button21">_id</button>
+                    </span>
+                    <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button22">mpno</button>
+                    </span>
+                    <input type="text" name="mpno" id="Text5" class="form-control" placeholder="mpno"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+            <form name="article_form" id="Form4" action="/cds/set_posts" method="post" >
+                <h3>上传xml</h3>
+
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button8">title</button>
+                    </span>
+                    <input type="text" name="title" id="title" class="form-control" placeholder="title"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button10">desc</button>
+                    </span>
+                    <input type="text" name="desc" id="desc" class="form-control" placeholder="content"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button11">videoid</button>
+                    </span>
+                    <input type="text" name="videoid" id="videoid" class="form-control" placeholder="videoid"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" id="Button12">pics</button>
+                    </span>
+                    <input type="text" name="pics" id="pics" class="form-control" placeholder="content"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-warning">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade active in" id="profile" aria-labelledby="profile-tab">
+        <div class="row">
+            <div class="col-md-2">
+            <form name="article_form" id="Form4" action="/v1.2/api/set_anchors_dynamics" method="post" enctype="multipart/form-data">
+                <h3>测试主播动态</h3>
+                <div class="form-group">
+                  <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+                </div>
+                <div class="form-group">
+                  <input type="text" name="face" id="face" class="form-control" placeholder="face"/>
+                </div>
+                <div class="form-group">
+                  <input type="text" name="anchorsid" id="anchorsid" class="form-control" placeholder="anchorsid"/>
+                </div>
+                <div class="form-group">
+                  <input type="file" name="file" id="file" class="form-control" placeholder="选择文件"/>
+                </div>
+                <div class="form-group">
+                  <input type="file" name="file" id="file1" class="form-control" placeholder="选择文件"/>
+                </div>
+                <div class="form-group">
+                  <input type="file" name="file" id="file2" class="form-control" placeholder="选择文件"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-warning">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form1" action="/v1.2/api/set_answers" method="post" enctype="multipart/form-data">
+              <h3>回答问题</h3>
+              <div class="form-group">
+                <input type="text" name="questionid" id="questionid" class="form-control" placeholder="questionid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="answermpno" id="answermpno" class="form-control" placeholder="answermpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="answerusername" id="answerusername" class="form-control" placeholder="answerusername"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="answeruserface" id="answeruserface" class="form-control" placeholder="answeruserface"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="isanchors" id="isanchors" class="form-control" placeholder="isanchors"/>
+              </div>
+              <div class="form-group">
+                  <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+              </div>
+              <div class="form-group">
+                  <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-warning">保存</button>
+              </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form1" action="/v1.2/api/set_questions" method="post" enctype="multipart/form-data">
+              <h3>测试提问</h3>
+              <div class="form-group">
+                  <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="publishmpno" id="publishmpno" class="form-control" placeholder="publishmpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="publishusername" id="publishusername" class="form-control" placeholder="publishusername"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="publishuserface" id="publishuserface" class="form-control" placeholder="publishuserface"/>
+              </div>
+              <div class="form-group">
+                <input type="text" name="answermpno" id="answermpno" class="form-control" placeholder="answermpno"/>
+              </div>
+              <div class="form-group">
+                <input type="text" name="answerusername" id="answerusername" class="form-control" placeholder="answerusername"/>
+              </div>
+              <div class="form-group">
+                <input type="text" name="answeruserface" id="answeruserface" class="form-control" placeholder="answeruserface"/>
+              </div>
+              <div class="form-group">
+                <input type="text" name="answercontent" id="answercontent" class="form-control" placeholder="answercontent"/>
+              </div>
+              <div class="form-group">
+                <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+              </div>
+              <div class="form-group">
+                <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="go_submit btn btn-warning">保存</button>
+              </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form1" action="/v1.2/api/set_anchors_img" method="post" enctype="multipart/form-data">
+              <h3>测试修改主播信息-img</h3>
+              <div class="form-group">
+                  <input type="text" name="anchorsid" id="anchorsid" class="form-control" placeholder="anchorsid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="key" id="key" class="form-control" placeholder="key"/>
+              </div>
+              <div class="form-group">
+                <input type="file" name="mark" id="mark" class="form-control" placeholder="mark"/>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="go_submit btn btn-warning">保存</button>
+              </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form1" action="/v1.2/api/set_anchors_text" method="post">
+              <h3>测试修改主播信息-text</h3>
+              <div class="form-group">
+                  <input type="text" name="anchorsid" id="anchorsid" class="form-control" placeholder="anchorsid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="key" id="key" class="form-control" placeholder="key"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="value" id="value" class="form-control" placeholder="value"/>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="go_submit btn btn-warning">保存</button>
+              </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form1" action="/v1.2/api/set_posts_assist" method="post">
+              <h3>测试点赞</h3>
+              <div class="form-group">
+                  <input type="text" name="mid" id="mid" class="form-control" placeholder="mid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="type" id="type" class="form-control" placeholder="''=文章点赞，1=主播动态点暂"/>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="go_submit btn btn-warning">保存</button>
+              </div>
+              </form>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/set_comments" method="post"><h3>评论</h3>
+              <div class="form-group">
+                  <input type="text" name="mid" id="mid" class="form-control" placeholder="评论mid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="type" id="type" class="form-control" placeholder="''||0=媒资评论,1=主播动态评论"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="nickname" id="nickname" class="form-control" placeholder="nickname"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="head" id="head" class="form-control" placeholder="head"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/lives/set_users" method="post">
+            <h3>实名认证</h3>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="name" id="name" class="form-control" placeholder="name"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="occupation" id="occupation" class="form-control" placeholder="occupation"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="place" id="place" class="form-control" placeholder="place"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="idnumber" id="idnumber" class="form-control" placeholder="idnumber"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="phone" id="phone" class="form-control" placeholder="phone"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="idpics" id="idpics" value="R0lGODlhdQAmAKIAAOYyL+rU4llg6Jmd8e92dCky4eEGAv///yH5BAAAAAAALAAAAAB1ACYAAAP/eLrc/jC2IEoZMATJu/9gyFVWIUyksIls677LUJbrEcxWDe98f+CWk4I0w/iOSNANKJQBC8mo9LEEDp8F3XR7
+rOIU2Cx3jHwKsUKyWqRhEEvGN3xN91BoCq8l9tTW/244Rk4mOkBGgIl8VjF+d4V5A5KKf3IWiCCEOZRraGxPnGqeIZpzoVyjDBptDpYmp1yumI9BWq5QUQS6fn+lm3lYmLdSBsW8xcjJBgAABLwfAMhXRQt6ODWu
+J8rb3AYK0d3h4OHIBC7jC0TCYb/ZB+Th3/Dc4/PmLOgSvkwK+xjMAAEmCwhQnrc8rFSxGkiwnoFnEnTp0mdqlJw0DgIggwgu/08xABM+KkhGJdm9JJqMhGkyQIAATA3HxVwATuO8jyQfECiXJyYzZwzyOSilcqWE
+mzkP1ES6LGmDcStshjspNJAgMOwwNmBajGZXGyJVhU22quxOaR7hrahqQ52DC1jh/nj1AG0Eux3BLgu59x3SkxHO9mVLhJfcirUc2IWA96vUbvf+QkNbldCgIGCKHi6h1e/Bu1+VOiYHYAVTwBHyCfWyocoZzZov
+bf3ok1njzx/IltUg+GG13twMfta0gdDruLH3MOD6uaPDcI8hCAZp4/k24elmtOacGXlcPAuYe/VmnVt0ncioTyeYU+ibQRWOHyCRXEz40BDyivYWYBzQAIbTbeBUNTIZRF1QlNlVimGdfffLSPg9oJ9+vVV4H23s
+mWSgFqrZZc0AWiTWACMXcjAhfgAqgxpXKwDXDXbZsSPjVcth6NNtZj3nzCpM1dDfPDACM+OQ9l2I1HiPlfNceentMoGLygQp5Eq3aKfYaUgOdBIB9RyYSEsmvASiFgG0RMRLEK2RAAA7" class="form-control" placeholder="idpics"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="applyreasons" id="applyreasons" class="form-control" placeholder="applyreasons"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/lives/set_lives" method="post">
+              <h3>发起直播&预告</h3>
+              <div class="form-group">
+                  <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="title" id="title" class="form-control" placeholder="title"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="desc" id="desc" class="form-control" placeholder="desc"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="face" id="face" class="form-control" placeholder="face"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="nickname" id="nickname" class="form-control" placeholder="nickname"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="tid" id="tid" class="form-control" placeholder="tid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="uid" id="uid" class="form-control" placeholder="uid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="cid" id="cid" class="form-control" placeholder="cid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="cdsid" id="cdsid" class="form-control" placeholder="cdsid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="url" id="url" class="form-control" placeholder="url"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="columnsname" id="columnsname" class="form-control" placeholder="columnsname"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="columnstype" id="columnstype" class="form-control" placeholder="columnstype"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="type" id="type" class="form-control" placeholder="type"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="starttime" id="starttime" class="form-control" placeholder="starttime"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="pics" id="pics" value="R0lGODlhdQAmAKIAAOYyL+rU4llg6Jmd8e92dCky4eEGAv///yH5BAAAAAAALAAAAAB1ACYAAAP/eLrc/jC2IEoZMATJu/9gyFVWIUyksIls677LUJbrEcxWDe98f+CWk4I0w/iOSNANKJQBC8mo9LEEDp8F3XR7
+rOIU2Cx3jHwKsUKyWqRhEEvGN3xN91BoCq8l9tTW/244Rk4mOkBGgIl8VjF+d4V5A5KKf3IWiCCEOZRraGxPnGqeIZpzoVyjDBptDpYmp1yumI9BWq5QUQS6fn+lm3lYmLdSBsW8xcjJBgAABLwfAMhXRQt6ODWu
+J8rb3AYK0d3h4OHIBC7jC0TCYb/ZB+Th3/Dc4/PmLOgSvkwK+xjMAAEmCwhQnrc8rFSxGkiwnoFnEnTp0mdqlJw0DgIggwgu/08xABM+KkhGJdm9JJqMhGkyQIAATA3HxVwATuO8jyQfECiXJyYzZwzyOSilcqWE
+mzkP1ES6LGmDcStshjspNJAgMOwwNmBajGZXGyJVhU22quxOaR7hrahqQ52DC1jh/nj1AG0Eux3BLgu59x3SkxHO9mVLhJfcirUc2IWA96vUbvf+QkNbldCgIGCKHi6h1e/Bu1+VOiYHYAVTwBHyCfWyocoZzZov
+bf3ok1njzx/IltUg+GG13twMfta0gdDruLH3MOD6uaPDcI8hCAZp4/k24elmtOacGXlcPAuYe/VmnVt0ncioTyeYU+ibQRWOHyCRXEz40BDyivYWYBzQAIbTbeBUNTIZRF1QlNlVimGdfffLSPg9oJ9+vVV4H23s
+mWSgFqrZZc0AWiTWACMXcjAhfgAqgxpXKwDXDXbZsSPjVcth6NNtZj3nzCpM1dDfPDACM+OQ9l2I1HiPlfNceentMoGLygQp5Eq3aKfYaUgOdBIB9RyYSEsmvASiFgG0RMRLEK2RAAA7" class="form-control" placeholder="pics"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/lives/set_ois_destroy" method="post">
+            <h3>ois->cms销毁微直播</h3>
+              <div class="form-group">
+                  <input type="text" name="cid" id="cid" class="form-control" placeholder="cid"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/lives/set_signs" method="post">
+            <h3>微直播签到</h3>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="position" id="position" class="form-control" placeholder="position"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/set_coin" method="post">
+            <h3>APP签到</h3>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="cointype" id="cointype" class="form-control" placeholder="cointype"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-2">
+                <form name="article_form" id="Form11" action="/v1.2/api/set_feedback" method="post">
+                <h3>建议反馈</h3>
+                <div class="form-group">
+                    <input type="text" name="mpno" id="Text8" class="form-control" placeholder="mpno"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="content" id="content" class="form-control" placeholder="content"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="contact" id="contact" class="form-control" placeholder="content"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="feedbacktype" id="feedbacktype" class="form-control" placeholder="feedbacktype"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form11" action="/v1.2/api/lives/set_lives_histories" method="post">
+                <h3>微直播记录</h3>
+                <div class="form-group">
+                    <input type="text" name="mpno" id="Text8" class="form-control" placeholder="mpno"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="livesid" id="livesid" class="form-control" placeholder="livesid"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form11" action="/v1.2/api/lives/set_lives_notice" method="post">
+                <h3>启动微直播</h3>
+                <div class="form-group">
+                    <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+
+            <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/lives/set_lives_destroy" method="post">
+            <h3>销毁微直播</h3>
+              <div class="form-group">
+                  <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/set_posts_albums" method="post">
+              <h3>活动图片上传</h3>
+              <div class="form-group">
+                  <input type="text" name="mid" id="mid" class="form-control" placeholder="mid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="nickname" id="nickname" class="form-control" placeholder="nickname"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="pics" id="pics" value="R0lGODlhdQAmAKIAAOYyL+rU4llg6Jmd8e92dCky4eEGAv///yH5BAAAAAAALAAAAAB1ACYAAAP/eLrc/jC2IEoZMATJu/9gyFVWIUyksIls677LUJbrEcxWDe98f+CWk4I0w/iOSNANKJQBC8mo9LEEDp8F3XR7
+rOIU2Cx3jHwKsUKyWqRhEEvGN3xN91BoCq8l9tTW/244Rk4mOkBGgIl8VjF+d4V5A5KKf3IWiCCEOZRraGxPnGqeIZpzoVyjDBptDpYmp1yumI9BWq5QUQS6fn+lm3lYmLdSBsW8xcjJBgAABLwfAMhXRQt6ODWu
+J8rb3AYK0d3h4OHIBC7jC0TCYb/ZB+Th3/Dc4/PmLOgSvkwK+xjMAAEmCwhQnrc8rFSxGkiwnoFnEnTp0mdqlJw0DgIggwgu/08xABM+KkhGJdm9JJqMhGkyQIAATA3HxVwATuO8jyQfECiXJyYzZwzyOSilcqWE
+mzkP1ES6LGmDcStshjspNJAgMOwwNmBajGZXGyJVhU22quxOaR7hrahqQ52DC1jh/nj1AG0Eux3BLgu59x3SkxHO9mVLhJfcirUc2IWA96vUbvf+QkNbldCgIGCKHi6h1e/Bu1+VOiYHYAVTwBHyCfWyocoZzZov
+bf3ok1njzx/IltUg+GG13twMfta0gdDruLH3MOD6uaPDcI8hCAZp4/k24elmtOacGXlcPAuYe/VmnVt0ncioTyeYU+ibQRWOHyCRXEz40BDyivYWYBzQAIbTbeBUNTIZRF1QlNlVimGdfffLSPg9oJ9+vVV4H23s
+mWSgFqrZZc0AWiTWACMXcjAhfgAqgxpXKwDXDXbZsSPjVcth6NNtZj3nzCpM1dDfPDACM+OQ9l2I1HiPlfNceentMoGLygQp5Eq3aKfYaUgOdBIB9RyYSEsmvASiFgG0RMRLEK2RAAA7" class="form-control" placeholder="pics"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form11" action="/v1.4/api/set_posts_albumns_assist" method="post">
+                <h3>活动图片点赞</h3>
+                <div class="form-group">
+                    <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+            <form name="article_form" id="Form1" action="/v1.2/api/lives/set_vod" method="post" enctype="multipart/form-data">
+              <h3>客户端上传&预告</h3>
+              <div class="form-group">
+                  <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="title" id="title" class="form-control" placeholder="title"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="desc" id="desc" class="form-control" placeholder="desc"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="face" id="face" class="form-control" placeholder="face"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="nickname" id="nickname" class="form-control" placeholder="nickname"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="tid" id="tid" class="form-control" placeholder="tid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="uid" id="uid" class="form-control" placeholder="uid"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="url" id="url" class="form-control" placeholder="url"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="columnsname" id="columnsname" class="form-control" placeholder="columnsname"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="columnstype" id="columnstype" class="form-control" placeholder="columnstype"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="type" id="type" class="form-control" placeholder="type"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="starttime" id="starttime" class="form-control" placeholder="starttime"/>
+              </div>
+              <div class="form-group">
+                  <input type="file" name="file" id="file" class="form-control" placeholder="file"/>
+              </div>
+              <div class="form-group">
+                  <input type="text" name="pics" id="pics" value="R0lGODlhdQAmAKIAAOYyL+rU4llg6Jmd8e92dCky4eEGAv///yH5BAAAAAAALAAAAAB1ACYAAAP/eLrc/jC2IEoZMATJu/9gyFVWIUyksIls677LUJbrEcxWDe98f+CWk4I0w/iOSNANKJQBC8mo9LEEDp8F3XR7
+rOIU2Cx3jHwKsUKyWqRhEEvGN3xN91BoCq8l9tTW/244Rk4mOkBGgIl8VjF+d4V5A5KKf3IWiCCEOZRraGxPnGqeIZpzoVyjDBptDpYmp1yumI9BWq5QUQS6fn+lm3lYmLdSBsW8xcjJBgAABLwfAMhXRQt6ODWu
+J8rb3AYK0d3h4OHIBC7jC0TCYb/ZB+Th3/Dc4/PmLOgSvkwK+xjMAAEmCwhQnrc8rFSxGkiwnoFnEnTp0mdqlJw0DgIggwgu/08xABM+KkhGJdm9JJqMhGkyQIAATA3HxVwATuO8jyQfECiXJyYzZwzyOSilcqWE
+mzkP1ES6LGmDcStshjspNJAgMOwwNmBajGZXGyJVhU22quxOaR7hrahqQ52DC1jh/nj1AG0Eux3BLgu59x3SkxHO9mVLhJfcirUc2IWA96vUbvf+QkNbldCgIGCKHi6h1e/Bu1+VOiYHYAVTwBHyCfWyocoZzZov
+bf3ok1njzx/IltUg+GG13twMfta0gdDruLH3MOD6uaPDcI8hCAZp4/k24elmtOacGXlcPAuYe/VmnVt0ncioTyeYU+ibQRWOHyCRXEz40BDyivYWYBzQAIbTbeBUNTIZRF1QlNlVimGdfffLSPg9oJ9+vVV4H23s
+mWSgFqrZZc0AWiTWACMXcjAhfgAqgxpXKwDXDXbZsSPjVcth6NNtZj3nzCpM1dDfPDACM+OQ9l2I1HiPlfNceentMoGLygQp5Eq3aKfYaUgOdBIB9RyYSEsmvASiFgG0RMRLEK2RAAA7" class="form-control" placeholder="pics"/>
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="go_submit btn btn-primary">保存</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-2">
+              <form name="article_form" id="Form11" action="/v1.2/api/lives/set_lives_attachs" method="post" enctype="multipart/form-data">
+                <h3>直播封面上传</h3>
+                <div class="form-group">
+                    <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="token" id="token" class="form-control" placeholder="md5(tv1)"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form11" action="/v1.2/api/lives/set_lives_assist" method="post">
+                <h3>直播点赞</h3>
+                <div class="form-group">
+                    <input type="text" name="_id" id="_id" class="form-control" placeholder="_id"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="assistcount" id="assistcount" class="form-control" placeholder="assistcount"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form2" action="/v1.2/api/set_attachs/" method="post" enctype="multipart/form-data" >
+                <h3>用户上传</h3>
+                <div class="form-group">
+                    <input type="text" name="mpno" class="form-control" placeholder="mpno"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="title" class="form-control" placeholder="标题"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="desc" class="form-control" placeholder="描述"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="content" class="form-control" placeholder="content"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="columnid" class="form-control" placeholder="栏目"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="type" class="form-control" placeholder="类型"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="lon" class="form-control" placeholder="lon"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="lat" class="form-control" placeholder="lat"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="address" class="form-control" placeholder="address"/>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="file" id="file" class="form-control" placeholder="选择文件"/>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="file" id="file1" class="form-control" placeholder="选择文件"/>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="file" id="file2" class="form-control" placeholder="选择文件"/>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <form name="article_form" id="Form1" action="/v1.2/api/set_regs" method="post">
+                <h3>测试培训报名</h3>
+                <div class="form-group">
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="name" id="name" class="form-control" placeholder="name"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="sex" id="sex" class="form-control" placeholder="sex"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="birthday" id="birthday" class="form-control" placeholder="birthday"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="place" id="place" class="form-control" placeholder="place"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="nation" id="nation" class="form-control" placeholder="nation"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="edu" id="edu" class="form-control" placeholder="edu"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="idnumber" id="idnumber" class="form-control" placeholder="idnumber"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="phone" id="phone" class="form-control" placeholder="phone"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="address" id="address" class="form-control" placeholder="address"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="resume" id="resume" class="form-control" placeholder="resume"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="mark" id="mark" class="form-control" placeholder="mark"/>
+                </div>
+                <div class="form-group">
+                <input type="text" name="pics" id="pics" value="R0lGODlhdQAmAKIAAOYyL+rU4llg6Jmd8e92dCky4eEGAv///yH5BAAAAAAALAAAAAB1ACYAAAP/eLrc/jC2IEoZMATJu/9gyFVWIUyksIls677LUJbrEcxWDe98f+CWk4I0w/iOSNANKJQBC8mo9LEEDp8F3XR7
+rOIU2Cx3jHwKsUKyWqRhEEvGN3xN91BoCq8l9tTW/244Rk4mOkBGgIl8VjF+d4V5A5KKf3IWiCCEOZRraGxPnGqeIZpzoVyjDBptDpYmp1yumI9BWq5QUQS6fn+lm3lYmLdSBsW8xcjJBgAABLwfAMhXRQt6ODWu
+J8rb3AYK0d3h4OHIBC7jC0TCYb/ZB+Th3/Dc4/PmLOgSvkwK+xjMAAEmCwhQnrc8rFSxGkiwnoFnEnTp0mdqlJw0DgIggwgu/08xABM+KkhGJdm9JJqMhGkyQIAATA3HxVwATuO8jyQfECiXJyYzZwzyOSilcqWE
+mzkP1ES6LGmDcStshjspNJAgMOwwNmBajGZXGyJVhU22quxOaR7hrahqQ52DC1jh/nj1AG0Eux3BLgu59x3SkxHO9mVLhJfcirUc2IWA96vUbvf+QkNbldCgIGCKHi6h1e/Bu1+VOiYHYAVTwBHyCfWyocoZzZov
+bf3ok1njzx/IltUg+GG13twMfta0gdDruLH3MOD6uaPDcI8hCAZp4/k24elmtOacGXlcPAuYe/VmnVt0ncioTyeYU+ibQRWOHyCRXEz40BDyivYWYBzQAIbTbeBUNTIZRF1QlNlVimGdfffLSPg9oJ9+vVV4H23s
+mWSgFqrZZc0AWiTWACMXcjAhfgAqgxpXKwDXDXbZsSPjVcth6NNtZj3nzCpM1dDfPDACM+OQ9l2I1HiPlfNceentMoGLygQp5Eq3aKfYaUgOdBIB9RyYSEsmvASiFgG0RMRLEK2RAAA7" class="form-control" placeholder="pics"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+                </form>
+            </div>
+             <div class="col-md-2">
+              <form name="article_form" id="Form11" action="/v1.2/api/delete_myuploads" method="post">
+                <h3>删除我的上传</h3>
+                <div class="form-group">
+                    <input type="text" name="_ids" id="_ids" class="form-control" placeholder="_ids"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form11" action="/v1.2/api/set_broadcasts_assist" method="post">
+                <h3>测试广播点暂</h3>
+                <div class="form-group">
+                    <input type="text" name="_id" id="_id" class="form-control" placeholder="_ids"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="assistcount" id="assistcount" class="form-control" placeholder="1"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form11" action="/v1.3/api/set_awards" method="post">
+                <h3>测试投注</h3>
+                <div class="form-group">
+                    <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="no" id="no" class="form-control" placeholder="no"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="result" id="result" class="form-control" placeholder="result"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+              <form name="article_form" id="Form11" action="http://localhost:8090/api/com/reg" method="post">
+                <h3>jfinal上传</h3>
+                <div class="form-group">
+                    <input type="text" name="deviceid" id="deviceid" class="form-control" placeholder="_id"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="name" id="name" class="form-control" placeholder="md5(tv1)"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="ip" id="ip" class="form-control" placeholder="md5(tv1)"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="go_submit btn btn-primary">保存</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.3/api/set_user_ranking" method="post">
+                    <h3>活动排行</h3>
+                    <div class="form-group">
+                        <input type="text" name="user" id="user" class="form-control" placeholder="user"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="name"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="result" id="result" class="form-control" placeholder="result"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.3/api/set_cooper" method="post">
+                    <h3>合作单位</h3>
+                    <div class="form-group">
+                        <input type="text" name="id" id="id" class="form-control" placeholder="id" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="name"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="phone" id="phone" class="form-control" placeholder="phone"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mpno"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="img" id="img" class="form-control" placeholder="img"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="desc" id="desc" class="form-control" placeholder="desc"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="ads" id="ads" class="form-control" placeholder="ads"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="nickname" id="nickname" class="form-control" placeholder="nickname"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="cause" id="cause" class="form-control" placeholder="cause"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.4/api/mobile_audit" method="post">
+                    <h3>wap评审</h3>
+                    <div class="form-group">
+                        <input type="text" name="ids" id="ids" class="form-control" placeholder="ids" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="type" id="type" class="form-control" placeholder="type"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="status" id="status" class="form-control" placeholder="status"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="token" id="token" class="form-control" placeholder="token"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="rejectionReason" id="rejectionReason" class="form-control" placeholder="rejectionReason"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.4/api/get_login" method="post">
+                    <h3>用户登录</h3>
+                    <div class="form-group">
+                        <input type="text" name="user_login" id="user_login" class="form-control" placeholder="user_login" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="user_pass" id="user_pass" class="form-control" placeholder="user_pass"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.4/api/authcookie" method="post">
+                    <h3>验证登录</h3>
+                    <div class="form-group">
+                        <input type="text" name="user_login" id="user_login" class="form-control" placeholder="user_login" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="user_pass" id="user_pass" class="form-control" placeholder="user_pass"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.4/api/set_new_img" method="post">
+                    <h3>bsae64直传</h3>
+                    <div class="form-group">
+                        <input type="text" name="base64" id="base64" class="form-control" placeholder="img" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.4/api/set_new_video" method="post" enctype="multipart/form-data">
+                    <h3>视频</h3>
+                    <div class="form-group">
+                        <input type="file" name="file">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.5/api/set_registration" method="post">
+                    <h3>报名表</h3>
+                    <div class="form-group">
+                        <input type="text" name="mid" id="mid" class="form-control" placeholder="mid" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="information" id="information" class="form-control" placeholder="information"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="mpno" id="information" class="form-control" placeholder="mpno"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="cost" id="information" class="form-control" placeholder="cost"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="num" id="information" class="form-control" placeholder="num"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="http://user.test.joygo-dev.com/test/Shake/GenerateDiscount/" method="post">
+                    <h3>报名表</h3>
+                    <div class="form-group">
+                        <input type="text" name="mpno" id="mpno" class="form-control" placeholder="mid" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="tvdiscountruleid" id="tvdiscountruleid" class="form-control" value="268"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.4/api/director_message" method="post">
+                    <h3>报名表</h3>
+                    <div class="form-group">
+                        <input type="text" name="nickname" id="mpno" class="form-control" placeholder="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="content" id="tvdiscountruleid" class="form-control" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="mid" id="tvdiscountruleid" class="form-control" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="title" id="tvdiscountruleid" class="form-control" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form name="article_form" id="Form12" action="/v1.5/api/set_vouchers" method="post">
+                    <h3>发放代金券</h3>
+                    <div class="form-group">
+                        <input type="text" name="mpno" id="mpno" class="form-control" placeholder="手机号码" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="vouchers" id="vouchers" class="form-control" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="go_submit btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="dropdown1" aria-labelledby="dropdown1-tab">
+        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="dropdown2" aria-labelledby="dropdown2-tab">
+        <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+      </div>
+    </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<div class="modal fade" id="modal_post_video_live" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_live" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel_live">选择直播</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline" style="margin-bottom:15px;">
+                    <div class="form-group form-group-sm">
+                        <div class="input-group input-group-sm">
+                            <input type="text" name="post_video_title_find" id="post_video_live_title_find" class="form-control input-sm" placeholder="标题">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger" id="post_video_live_find">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="modalbody_post_video_live" class="row">正在加载...</div>
+                <div id="page"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var ajax = new Ajax();
+        var eventTarget;
+        $(document).delegate(".btn_select_video_live","click", function () {
+            eventTarget = this;
+            $("#modal_post_video_live").modal('show');
+            var data = { title: $("#post_video_live_title_find").val()};
+            get_videos_list(data);
+        });
+        $(document).on("click","#post_video_live_find", function (){
+            var data = { title: $("#post_video_live_title_find").val()};
+            get_videos_list(data);
+        })
+        function get_videos_list(data) {
+            ajax.post('/admin/lives/live/ajax_posts_list', data, function (result) {
+                dataList = result.message.list;
+                console.log(result);
+                if (result.code == 0) {
+                    //分页功能
+                    var options = {
+                        currentPage: result.message.cuurentpage,
+                        totalPages: result.message.pagecount,
+                        numberOfPages: 12,
+                        bootstrapMajorVersion: 1,
+                        onPageClicked: function (e, originalEvent, type, page) {
+                            data.page=page;
+                            get_videos_list(data);
+                        }
+                    }
+                    if(options.totalPages > 0){
+                        $('#page').show().bootstrapPaginator(options);
+                    }else{
+                        $('#page').hide();
+                    }
+                    $("#modalbody_post_video_live").empty();
+                    $("#post_video_live_tpl").tmpl(dataList).appendTo("#modalbody_post_video_live");
+                }
+            });
+        }
+        $(document).on("click",".select_live", function () {
+            var live_title = $(this).attr("data-title");
+            var live_desc = $(this).attr("data-desc");
+            var live_pics = $(this).attr("data-pics");
+            var live_url = $(this).attr("data-video");
+            if($(this).attr('data-type')===3)
+                live_url= $(this).attr("data-url");
+            var live_type = $(this).attr("data-type");
+            $('#'+$(eventTarget).attr("data-video-for")).val(live_url);
+            $('#'+$(eventTarget).attr("data-title-for")).val(live_title);
+            $('#'+$(eventTarget).attr("data-desc-for")).val(live_desc);
+            $('#'+$(eventTarget).attr("data-pics-for")).val(live_pics);
+            $('#'+$(eventTarget).attr("data-type-for")).val(live_type);
+            $('#modal_post_video_live').modal("hide");
+        })
+    });
+</script>
+<script id="post_video_live_tpl" type="text/x-jquery-tmpl">
+    <div class="col-xs-6 col-md-3 item" style="max-height:195px;">
+        <div class="thumbnail">
+        <img src="${pics}" data-video="${_id}" data-url="${cds.url}" title="${title}" data-title="${title}" data-desc="${desc}" data-pics="${pics}" data-type="${type}" class="select_live" alt="${title}" style="display: block;height:120px;width:100%;"/>
+        <div title="${title}" class="caption">${title}</div>
+        </div>
+    </div>
+</script>

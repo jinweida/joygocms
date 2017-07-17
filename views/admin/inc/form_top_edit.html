@@ -1,0 +1,94 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+			<div id="group_post_title">
+				<label for="post_title" class="control-label">标题<span id="msg_post_title">*</span></label>
+				<input type="text" name="post_title" id="post_title" placeholder="必填" value="<%=model.title%>" class="validate form-control">
+			</div>
+		</div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+			<div id="group_post_author">
+				<label for="post_author">作者</label>
+				<input type="text" name="post_author" id="post_author" value="<%=model.author%>" placeholder="选填" class="validate form-control">
+			</div>
+		</div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+			<div id="group_post_source">
+				<label for="post_source">来源<span><small>10个汉字以内</small></span></label>
+				<input type="text" name="post_source" id="post_source" value="<%=model.source%>" placeholder="选填" class="validate form-control">
+			</div>
+		</div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+            <div id="group_post_subtitle">
+                <label for="post_subtitle" class="control-label">副标题</label>
+                <input type="text" name="post_subtitle" id="post_subtitle" placeholder="选填" value="<%=model.subtitle%>" class="validate form-control">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+            <label for="post_tag" class="control-label">标签<span id="msg_post_tag"></span></label>
+            <select id="post_tag" name="post_tag" class="form-control">
+                <%tags.forEach(function(item){%>
+                <option value="<%=item.id%>,<%=item.name%>" <%if(model.tagtype){
+                    %><%if(item.id==model.tagtype){%>selected<%}%><%}%>
+                    ><%=item.name%></option>
+                <%})%>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group form-group-sm">
+        	<div id="group_post_desc">
+        		<label for="post_desc" class="control-label">导语</label>
+                <textarea rows="2" cols="40" class="form-control" name="post_desc" placeholder="请输入导语" id="post_desc"><%=model.desc%></textarea>
+        	</div>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="post_area" value="<%=model.area%>"/>
+<input type="hidden" name="post_hangye" value="<%=model.hangye%>"/>
+<script>
+    $(function(){
+        $('.go_submit').on('click',function () {
+            effect.show();
+            if ($("#post_content").size()>0) {
+                $("#post_content").val(editor.html());
+              }
+            var source=$('input[name="post_source"]').val()
+            if(source.length>10){
+                return effect.error('修改失败',function(){
+                    effect.hide();
+                    $('#error').text('来源超过规定字符');
+                  });
+            }
+            if(!$('input[name="post_title"]').val()){
+                return effect.error('修改失败',function(){
+                    effect.hide();
+                    $('#error').text('标题不能为空');
+                  });
+            }
+            $.post('/admin/posts_update', $("form").serializeArray(), function (result) {
+                if (result.code == 0) {
+                  effect.success('修改成功',function(){
+                    $('.go_submit').off('click')
+                    effect.hide();
+                    location.href = '/admin/posts';
+                  })
+                } else {
+                  effect.error('修改失败',function(){
+                    effect.hide();
+                    $('#error').text(result.message);
+                  });
+                }
+            });
+        });
+    })
+</script>

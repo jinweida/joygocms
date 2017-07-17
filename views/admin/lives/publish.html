@@ -1,0 +1,163 @@
+<% include ../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group pull-left">
+					<ul class="list-inline">
+						<li>
+							<a href="#" target="_blank">
+								<span class="glyphicon glyphicon-question-sign"></span> 帮助
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="form-group">
+					<div class="pull-right">
+						<form name="article_search" id="article_search" method="get" class="form-inline">
+							<div class="form-group">
+								<div class="input-group">
+									<input type="text" name="mpno" id="loginAccount" placeholder="登录帐号" value="<%=mpno %>" class="form-control input-sm">
+									<span class="input-group-btn">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+        <table class="table table-striped table-condensed">
+            <thead>
+            	<tr>
+            		<th style="width:30px">#</th>
+            		<th>操作</th>
+            		<th>申请帐号</th>
+            		<th>申请名称</th>
+            		<th>职业</th>
+            		<th>申请手机号</th>
+            		<th>申请角色</th>
+            	</tr>
+            </thead>
+            <tbody>
+            	<% lives.forEach(function(item){ %>
+                <tr>
+                    <td><%=item.index%></td>
+                    <td>
+                    	<div class="btn-group">
+                    		<button class="btn btn-xs btn-danger cancleAuth" '<% if (item.status!=-1) { %> disabled="disabled" <% } %>' type="button" data-id="<%= item._id %>">
+                    				<span class="glyphicon glyphicon-share-alt"></span> <span class="statusText">驳回</span>
+                    		</button>
+                    		<button class="btn btn-xs btn-primary auth" '<% if (item.status!=-1) { %> disabled="disabled" <% } %>' type="button" data-id="<%= item._id %>">
+                    			<span class="glyphicon glyphicon-ok-circle"></span> <span>通过</span>
+                    		</button>
+                    		<button class="btn btn-xs btn-default view" type="button" data-id="<%= item._id %>">
+                    			<span class="glyphicon glyphicon-zoom-in"></span> <span>查看</span>
+                    		</button>
+                    	</div>
+                    </td>
+                    <td><%=item.mpno%></td>
+                    <td><%=item.name%></td>
+                    <td><%=item.occupation %></td>
+                    <td><%=item.phone%></td>
+                    <td><%=item.roles%></td>
+                </tr>
+                <% }) %>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="7">
+                <div id="page"></div></td></tr>
+            </tfoot>
+        </table>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script id="post_comm_tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${index}</td>
+    	<td>
+    		<div class="btn-group">
+    			{{if status != -1 }}
+	        		<button class="btn btn-xs btn-danger cancleAuth" disabled="disabled" type="button" data-id="${_id}">
+	        				<span class="glyphicon glyphicon-share-alt"></span> <span class="statusText">驳回</span>
+	        		</button>
+        		{{else}}
+        			<button class="btn btn-xs btn-danger cancleAuth" type="button" data-id="${_id}">
+        				<span class="glyphicon glyphicon-share-alt"></span> <span class="statusText">驳回</span>
+        		</button>
+        		{{/if}}
+        		{{if status != -1 }}
+	        		<button class="btn btn-xs btn-primary auth" disabled="disabled" type="button" data-id="${_id}">
+	        			<span class="glyphicon glyphicon-ok-circle"></span> <span>通过</span>
+	        		</button>
+        		{{else}}
+	        		<button class="btn btn-xs btn-primary auth" type="button" data-id="${_id}">
+	        			<span class="glyphicon glyphicon-ok-circle"></span> <span>通过</span>
+	        		</button>
+        		{{/if}}
+        		<button class="btn btn-xs btn-default view" type="button" data-id="${_id}">
+        			<span class="glyphicon glyphicon-zoom-in"></span> <span>查看</span>
+        		</button>
+        	</div>
+        </td>
+        <td>${mpno}</td>
+        <td>${name}</td>
+        <td>${occupation}</td>
+        <td>${phone}</td>
+        <td>${roles}</td>    
+    </tr>
+</script>
+<script>
+	$(function() {
+		var ajax = new Ajax();
+		var pagecount = "<%=pagecount %>";
+		var currentPage = 1;
+		if (pagecount != 0) {
+			//分页功能
+			var options = {
+				currentPage: 1,
+				totalPages: pagecount,
+				numberOfPages: "<%=pagesize%>",
+				bootstrapMajorVersion: 1,
+				alignment: "center",
+				onPageClicked: function(e, originalEvent, type, page) {
+					var data = {
+						page: page,
+						status: $("#authStatus").val(),
+						mpno: $("#loginAccount").val(),
+					};
+					ajax.get('/admin/lives/publish/ajax_list', data, function(result) {
+						if (result.code == 0) {
+							$("table tbody tr").html('');
+							console.log(result.message);
+							$("#post_comm_tpl")
+								.tmpl(result.message)
+								.appendTo("table tbody");
+						}
+					});
+				}
+			}
+			$('#page').bootstrapPaginator(options);
+		}
+		$(".auth").click(function(e) {
+			var id = $(this).attr("data-id");
+			window.location.href = "/admin/lives/publish/list_pass/" + id;
+		});
+		$(".cancleAuth").click(function() {
+			var id = $(this).attr("data-id");
+			window.location.href = "/admin/lives/publish/list_reject/" + id;
+		});
+		$(".view").click(function(e) {
+			var id = $(this).attr("data-id");
+			window.location.href = "/admin/lives/publish/list/" + id;
+		});
+	})
+</script>
+<% include ../inc/footer.html%>

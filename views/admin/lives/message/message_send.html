@@ -1,0 +1,304 @@
+<% include ../../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group">
+					<ul class="list-inline">
+						<li>
+							<a href="/admin/lives/message/list">
+								<span class="glyphicon glyphicon-chevron-left"></span> 返回
+							</a>
+						</li>
+						<li>
+							<a href="#" target="_blank">
+								<span class="glyphicon glyphicon-question-sign"></span> 帮助
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div id="success" class="alert alert-success fade in" style="display:none;">发送成功！</div>
+				<div id="error" class="alert alert-danger fade in" style="display:none;">发送失败！</div>
+				<form name="auth_form" class="form-horizontal" id="auth_form" method="post">
+					<div class="row">
+						<div class="col-xs-11" style="margin-left:15px;padding-top:10px;border: 1px solid #AAAAAA; border-radius: 5px;">
+							<div class="col-xs-8">
+								<div class="col-xs-12">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:34px;">标题<span id="msg_message[title]">*</span></label>
+										<div class="col-xs-10" style="padding-left:0px;">
+											<input type="text" name="message[title]" placeholder="必填项" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12">
+									<div class="form-group">
+										<label class="col-xs-2">正文<span id="msg_message[context]">*</span></label>
+										<div class="col-xs-10" style="padding-left:0px;">
+											<textarea type="text" rows="7" name="message[context]" placeholder="必填项" class="form-control"></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12">
+									<div class="form-group">
+				                        <label class="col-xs-2" style="line-height:34px;padding-left:0px;">推送类型</label>
+				                        <div class="col-xs-10" style="padding-left:0px;">
+					                        <select class="form-control" name="message[sendtype]" id="adtype">
+					                            <option value="0">无</option>
+					                            <option value="1">栏目</option>
+					                            <option value="2">商城</option>
+					                            <option value="3">网页</option>
+					                            <option value="4">新闻</option>
+					                        </select>
+				                        </div>
+				                    </div>
+			                    </div>
+			                    <div class="col-xs-12 URLObj hide">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:34px;padding-left:0px;">URL</label>
+										<div class="col-xs-10" style="padding-left:0px;">
+											<input type="text" name="message[url]" placeholder="必填项" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 mediaObj hide">
+									<div class="form-group">
+				                        <label class="col-xs-2" style="line-height:34px;padding-left:0px;">选择媒资</label>
+				                        <div class="col-xs-10" style="padding-left:0px;">
+				                            <input type="text" name="mediaitem" data-provide="autocomplete" id="mediaitem" value="" placeholder="选填" class="form-control">
+				                            <input type="hidden" name="message[mediaitem]" id="message_mediaitem" value="">
+				                            <input type="hidden" name="message[mediatitle]" id="message_mediatitle" value="">
+				                        </div>
+				                    </div>
+			                    </div>
+			                    <div class="col-xs-12 menuObj hide">
+				                    <div class="form-group">
+				                        <label class="col-xs-2" style="line-height:34px;padding-left:0px;">选择菜单</label>
+				                        <div class="col-xs-10" style="padding-left:0px;">
+					                        <select name="message[menuitem]" class="form-control">
+					                            <option value="-1">请选择菜单</option>
+					                            <%columns.forEach(function(item){
+						                            var tree="";
+						                            if(item.level>1) tree="| --";
+					                            %>
+					                            <option value="<%=item._id%>"><%=tree%><%=item.name%></option>
+					                            <%})%>
+					                        </select>
+				                        </div>
+				                    </div>
+			                    </div>
+
+								<div class="col-xs-12">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:24px; padding-left:0px;">发送设备</label>
+										<div class="col-xs-10" style="padding-left:0px; line-height:24px; text-align: left;">
+											<input type="text" name="message[devicetype]" value=1 class="hide" />
+											<input type="radio" id="device0" checked="checked" aria-label="...">&nbsp;安卓 &nbsp;&nbsp;
+											<input type="radio" id="device1" aria-label="...">&nbsp;ios
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:24px; padding-left:0px;">发送给</label>
+										<div class="col-xs-10" style="padding-left:0px; line-height:24px; text-align: left;">
+											<input type="text" name="message[usertype]" value=0 class="hide" />
+											<input type="radio" id="usertype0" checked="checked" aria-label="..." />&nbsp;所有人 &nbsp;&nbsp;
+											<input type="radio" id="usertype1" aria-label="..." />&nbsp;单人&nbsp;&nbsp;
+											<input type="radio" id="usertype2" aria-label="..." />&nbsp;用户群
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 usersingle" style="display:none;">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:34px;padding-left:0px;">用户id</label>
+										<div class="col-xs-10" style="padding-left:0px;">
+											<input type="text" name="message[usersingle]" placeholder="" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 usergroup" style="display:none;">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:34px;padding-left:0px;">用户群</label>
+										<div class="col-xs-10" style="padding-left:0px;">
+											<select class="form-control" name="message[usergroup]">
+												<% groups.forEach(function(item){ %>
+													<option value="<%=item._id %>">
+														<%=item.name%>
+													</option>
+													<% }) %>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 sendchance">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:24px; padding-left:0px;">发送时机</label>
+										<div class="col-xs-10" style="padding-left:0px;  line-height:24px; text-align: left;">
+											<input type="text" name="message[sendtimetype]" value=0 class="hide" />
+											<input type="radio" id="sendtype0" checked="checked" aria-label="...">&nbsp;立即发送 &nbsp;&nbsp;
+											<input type="radio" id="sendtype1" aria-label="...">&nbsp;定时发送
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 sendtiming">
+									<div class="form-group">
+										<label class="col-xs-2" style="line-height:34px;padding-left:0px;">发送时间</label>
+										<div class="col-xs-10" style="padding-left:0px;">
+											<input type="text" name="message[sendtimetiming]]" disabled="disabled" style="width:45%;" placeholder="单击弹出时间输入框" class="form-control input_date">
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-xs-12" style="margin-left:5px;">
+										<button type="button" class="go_submit btn btn-danger">提交</button>
+										<p class="text-danger"><small class="red" id="errorText">&nbsp;&nbsp;</small></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			var current_send_type = 0;
+			var ajax = new Ajax();
+			$(".input_date").datetimepicker({
+	          	step:1,
+	          	lang:'ch',
+	      	});
+
+			$("select[name='message[sendtype]']").bind("change",function(){
+				var sendType = $(this).val();
+				current_send_type = sendType;
+				$("input[name='message[url]']").val("");
+				$("#message_mediatitle").val("");
+				$("#message_mediaitem").val("");
+				$("select[name='message[menuitem]']").val("-1");
+				if(sendType != 0){
+					if(sendType == 1){		//栏目
+						$(".mediaObj").addClass("hide");
+						$(".URLObj").addClass("hide");
+						$(".menuObj").removeClass("hide");
+					}else if(sendType == 2 || sendType == 3){  //商城 网页
+						$(".mediaObj").addClass("hide");
+						$(".menuObj").addClass("hide");
+						$(".URLObj").removeClass("hide");
+					}else if(sendType == 4){
+						$(".mediaObj").removeClass("hide");
+						$(".URLObj").addClass("hide");
+						$(".menuObj").addClass("hide");
+					}
+				}else{
+					$(".mediaObj").addClass("hide");
+					$(".URLObj").addClass("hide");
+					$(".menuObj").addClass("hide");
+				}
+			});
+
+			$("#mediaitem").autocomplete ({
+		        source:function(query,process){
+		            var parameter = {title: query};
+		            ajax.get('/admin/medias/getFullMedias', parameter, function(result){
+		                console.log(result.message);
+		                return process(result.message);
+		            });
+		        },
+		        formatItem:function(item){
+		            return item.title+" - "+item.cid.name;
+		        },
+		        setValue:function(item){
+		            return {'data-value':item.title,'real-value':item._id};
+		        },
+		        delay:30,
+		        items:20
+		    });
+
+			$("#device0").bind("change", function() {
+				$("input[name='message[devicetype]']").val(1);
+				$("#device1").removeAttr("checked");
+			});
+			$("#device1").bind("change", function() {
+				$("input[name='message[devicetype]']").val(2);
+				$("#device0").removeAttr("checked");
+			});
+			$("#usertype0").bind("change", function() {
+				$(".sendchance").css("display", "block");
+				$(".sendtiming").css("display", "block");
+				$(".usersingle").css("display", "none");
+				$(".usergroup").css("display", "none");
+				$("input[name='message[usertype]']").val(0);
+				$("#usertype1").removeAttr("checked");
+				$("#usertype2").removeAttr("checked");
+			});
+			$("#usertype1").bind("change", function() {
+				$(".sendchance").css("display", "none");
+				$(".sendtiming").css("display", "none");
+				$(".usergroup").css("display", "none");
+				$(".usersingle").css("display", "block");
+				$("input[name='message[usertype]']").val(1);
+				$("#usertype0").removeAttr("checked");
+				$("#usertype2").removeAttr("checked");
+			});
+			$("#usertype2").bind("change", function() {
+				$(".sendchance").css("display", "none");
+				$(".sendtiming").css("display", "none");
+				$(".usersingle").css("display", "none");
+				$(".usergroup").css("display", "block");
+				$("input[name='message[usertype]']").val(2);
+				$("#usertype0").removeAttr("checked");
+				$("#usertype1").removeAttr("checked");
+			});
+			$("#sendtype0").bind("change", function() {
+				$("input[name='message[sendtimetype]']").val(0);
+				$(".input_date").attr("disabled", true);
+				$("#sendtype1").removeAttr("checked");
+			});
+			$("#sendtype1").bind("change", function() {
+				$("input[name='message[sendtimetype]']").val(1);
+				$(".input_date").removeAttr("disabled");
+				$("#sendtype0").removeAttr("checked");
+			});
+			$(".go_submit").click(function() {
+				var sendType = $("input[name='message[usertype]']").val();
+				if(current_send_type == 4){
+					$("#message_mediatitle").val($("#mediaitem").val());
+			        if($("#message_mediatitle").val()!=''){
+			            $("#message_mediaitem").val($("#mediaitem").attr("real-value"));
+			        }else{
+			            $("#message_mediaitem").val('');
+			        }
+				}
+				$("#errorText").text("");
+				if ($("input[name='message[title]']").val() == "") {
+					$("#errorText").text("标题不能为空");
+					return;
+				}
+				if ($("textarea[name='message[context]']").val() == "") {
+					$("#errorText").text("发送内容不能为空");
+					return;
+				}
+				var params = $("#auth_form").serialize();
+				ajax.post("/admin/lives/message/list_send", params, function(result) {
+					if (result.code == 0) {
+						$("#success").show();
+						setTimeout(function() {
+							$("#success").hide()
+						}, 2000);
+					} else {
+						$("#error").text(result.message);
+						$("#error").show();
+						setTimeout(function() {
+							$("#error").hide();
+						}, 2000);
+					}
+				});
+			});
+		});
+	</script>
+	<% include ../../inc/footer.html%>

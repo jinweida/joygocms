@@ -1,0 +1,124 @@
+﻿<% include ../inc/head.html%>
+<script>
+$(function(){
+    var ajax = new Ajax();
+    //分页功能
+    var options = {
+        currentPage: 1,
+        totalPages: "<%=pagecount%>",
+        numberOfPages: "<%=pagesize%>",
+        bootstrapMajorVersion: 1,
+        alignment: "center",
+        onPageClicked: function (e, originalEvent, type, page) {
+            var data = {
+                page: page,
+                title: $("[name='content']").val()
+            }
+            ajax.get('/admin/questions_ajax_get_list', data, function (result) {
+                if (result.code == 0) {
+                    $("table tbody tr").html('');
+                    console.log(result.message);
+                    $("#tpl")
+                            .tmpl(result.message)
+                            .appendTo("table tbody");
+                }
+            });
+        }
+    }
+    if (options.totalPages > 0) {
+        $('#page').bootstrapPaginator(options);
+    }
+    $("#delall").on("click", function () {
+        var _ids = $("[name='chk']:checked").serializeArray();
+        if (_ids.length==0) {
+            $("#error").show();
+            window.setTimeout(function () { $("#error").hide() }, 2000);
+            return;
+        }
+        if (confirm("确认删除选中项吗？")) {
+            ajax.post('/admin/questions_delete', {
+                _ids: _ids,
+            }, function (result) {
+                if (result.code == 0) {
+                    $("#success").show();
+                    setTimeout("$('#success').hide();location.reload();", 2000);
+                } else {
+                    $("#error").html(result.message).show();
+                    window.setTimeout(function () { $("#error").hide() }, 2000);
+                }
+            });
+        }
+        return;
+    })
+})
+</script>
+<div class="container-fluid">
+   <div class="row">
+   <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <div class="pull-left">
+                <ul class="list-inline"><ul class="list-inline">
+                    <li><a href="#" id="delall"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+                </ul>
+            </div>
+            <div class="pull-right">
+                <form name="article_search" id="article_search" action="/admin/questions" method="get" class="form-inline">
+                    <div class="form-group">
+                        <div class="input-group">
+                        <input type="text" name="content" id="content" placeholder="问答内容" value="<%=findcontent%>" class="form-control input-sm">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+        <div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr><th style="width:30px;"><input type="checkbox" name="chkall"></th><th style="width:30px">#</th><th>问题</th><th style="width:60px">状态</th><th style="width:80px">回答次数</th><th style="width:180px">发布时间</th><th style="width:180px">最后回答时间</th></tr></thead>
+            <tbody>
+                <% models.forEach(function(item){%>
+                <tr>
+                    <td><input type="checkbox" value="<%=item._id%>" name="chk" /></td>
+                    <td><%=item.index%></td>
+                    <td><%=item.content%></td>
+                    <td><span class="<%=item.isquestionsstyle%>"><%=item.isquestions%></span></td>
+                    <td><%=item.answerrecordcount%></td>
+                    <td><%=item.createtime%></td>
+                    <td><%=item.lasttime%></td>
+                </tr>
+                <%})%>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="8">
+                <div id="page"></div></td></tr>
+            </tfoot>
+        </table>
+        </div>
+    </div>
+  </div>
+</div>
+<script id="tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td><input type="checkbox" value="${_id}" name="chk" /></td>
+        <td>${index}</td>
+        <td>${content}</td>
+        <td><span class="${isquestionsstyle}">${isquestions}</span></td>
+        <td>${answerrecordcount}</td>
+        <td>${createtime}</td>
+        <td>${lasttime}</td>
+    </tr>
+</script>
+
+<% include ../inc/footer.html%>

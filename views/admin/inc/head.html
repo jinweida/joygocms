@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%=title%></title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/normalize.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap-submenu.min.css" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/jquery.fileupload.css' />
+    <link rel="stylesheet" href="/javascripts/jstree/themes/default/style.min.css" />
+    <link rel='stylesheet' href='/stylesheets/bootstrap-datetimepicker.min.css' />
+    <link rel='stylesheet' href='/stylesheets/bootstrap-spinner.css' />
+    <link rel="stylesheet" href="/stylesheets/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="/stylesheets/effect.css">
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/bootstrap-submenu.min.js"></script>
+    <script src="/javascripts/app.js"></script>
+    <script src="/javascripts/bootstrap-paginator.min.js"></script>
+    <script src="/javascripts/jquery.ui.widget.js"></script>
+    <script src="/javascripts/jquery.iframe-transport.js"></script>
+    <script src="/javascripts/jquery.fileupload.js"></script>
+    <script src="/javascripts/jstree/jstree.min.js"></script>
+    <script src="/javascripts/jquery.tmpl.min.js"></script>
+    <script src="/javascripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="/javascripts/jquery.spinner.min.js"></script>
+    <script src='/javascripts/imagesLoaded.js'></script>
+	<script src='/javascripts/alert.js'></script>
+    <script type="text/javascript" src="/javascripts/masonry.pkgd.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap.autocomplete.js"></script>
+    <script>
+        $(function () {
+            $("[name='chkall']").click(function () {
+                if ($(this).is(":checked")) {
+                    $(":checkbox").prop("checked",true);
+                }else{
+                    $(":checkbox").prop("checked",false);
+                }
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+
+            var url = '<%=locals.path%>';
+            $("#accordion").find("a").each(function () {
+                if (url.indexOf($(this).attr("href")) >= 0) {
+                    $(this).addClass("active");
+                    $(this).parent().parent().addClass("in");
+                }
+            })
+            $(".changepwd").on("click", function () {
+                var ajax = new Ajax();
+                var data = $("#change_form").serializeArray();
+                var cb = function (result) {
+                    if (result.code == 0) {
+                        $("#success_changepwd").text(result.message).show();
+                    } else {
+                        $('#error_changepwd').text(result.message).show();
+                    }
+                    setTimeout("$('.tip').hide();", 2000);
+                };
+                // 更新博客
+                ajax.post('/admin/changepwd', data, cb);
+                return false;
+            });
+        })
+    </script>
+</head>
+<body>
+  <nav id="header" class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="#" class="logo"><img src="/images/system/logo.png"><%=locals.wwwname%> <span class="label label-danger"><%=version%></span></a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span> <%=locals.current_user.user_login%></a></li>
+          <li><a href="#" data-toggle="modal" data-target="#modal_changepwd"><span class="glyphicon glyphicon-lock"></span> 修改密码</a></li>
+          <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> 退出</a></li>
+        </ul>
+    </div>
+  </div>
+</nav>

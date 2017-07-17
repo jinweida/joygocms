@@ -1,0 +1,138 @@
+﻿<% include ../inc/head.html%>
+<script>
+$(function () {
+    var ajax = new Ajax();
+    $('.go_submit').click(function () {
+        var data = $("form").serializeArray();
+        var cb = function (result) {
+            if (result.code == 0) {
+                location.href = '/admin/ads';
+            } else {
+                $('#error').text(result.message);
+            }
+        };
+        // 更新博客
+        ajax.post('/admin/ads_create', data, cb);
+        return false;
+    });
+    $('#adtype').on('change',function(){
+        alert($(this).val());
+    })
+})
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/authors">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="ads_form" id="ads_form" method="post">
+            <div class="row">                
+			    <div class="col-md-3">
+                    <div class="well">     
+                        <div class="form-group">
+                            <label for="ads[adimg]">广告图片</label>
+                            <div class="input-group">
+                            <span class="input-group-btn">
+                            <span class="btn btn-danger fileinput-button">
+                                    <span>上传</span>
+                                    <!-- The file input field used as target for the file upload widget -->
+                                    <input id="fileupload" type="file" name="files[]" multiple>
+                                </span> 
+                            </span>
+                            <input type="text" name="ads[adimg]" id="ads[adimg]" class="form-control" value="" placeholder="640*480图片">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger select_pic" data-value="post_pics" id="select_pics">选择</button>
+                                </span>
+                            </div>
+                            <p class="help-block" id="files"></p> 
+                        </div> 
+                        <div class="form-group">                            
+                            <label for="ads[adposition]">广告位置</label>
+                            <div id="group_ads[adposition]">
+                            <select class="form-control" name="ads[adposition]">
+                                <option value="0">首页广告</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="group_ads[order]">
+                                <label for="authors_name" class="control-label">排序<span id="msg_ads[order]">*</span></label>
+                                <input type="text" name="ads[order]" id="ads[order]" placeholder="" class="validate form-control">
+                            </div>
+                        </div>                     
+                    </div>
+                </div>
+			    <div class="col-md-9">
+				    <div class="form-group">
+						<div id="group_ads[title]">
+							<label for="authors_name" class="control-label">标题<span id="msg_ads[title]">*</span></label>
+							<input type="text" name="ads[title]" id="ads[title]" placeholder="必填" class="validate form-control">
+						</div>
+					</div>                                                  
+                    <div class="form-group">
+						<div id="group_ads[adurl]">
+						    <label for="ads[adurl]">URL</label>
+							<input type="text" name="ads[adurl]" id="ads[adurl]" value="" placeholder="选填" class="form-control">
+						</div>
+					</div>
+                      
+                    <div class="form-group">                            
+                        <label for="ads[adtype]">广告类型</label>
+                        <div id="group_ads[adtype]">
+                        <select class="form-control" name="ads[adtype]" id="adtype">
+                            <option value="1">单页</option>
+                            <option value="2">栏目</option>
+                        </select>
+                        </div>
+                    </div>                      
+                    <div class="form-group">                            
+                        <label for="ads[menuitem]">选择菜单</label>
+                        <div id="group_ads[menuitem]">
+                        <select class="form-control" name="ads[menuitem]">
+                            <%columns.forEach(function(item){
+                            var tree="";
+                            if(item.level>1)tree="| --";
+                            %>  
+                            <option value="<%=item._id%>"><%=tree%><%=item.name%></option>
+                            <%})%>
+                        </select>
+                        </div>
+                    </div>                      
+                    <div class="form-group">                            
+                        <label for="ads[desc]">备注</label>
+                        <div id="group_ads[desc]">
+                        <textarea rows="2" cols="40" class="form-control" placeholder="请输入导语" name="ads[desc]" id="ads[desc]"></textarea>
+                        </div>
+                    </div> 
+                    <div class="form-group">
+						<button type="button" class="go_submit btn btn-primary">保存</button>
+                        <p class="text-danger"><small class="red" id="error"></small></p>
+					</div>
+                </div>                
+            </div>    
+
+        </form>
+    </div>
+  </div>
+</div>
+<script id="tpl" type="text/x-jquery-tmpl">
+    <option value="${_id}">${name}</option>
+</script>
+<% include ../inc/footer.html%>

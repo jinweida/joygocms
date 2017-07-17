@@ -1,0 +1,151 @@
+﻿
+<div class="modal fade" id="modal_post_pic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">选择缩略图</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="input-group">
+		        <input type="text" name="post_pic_title_find" id="post_pic_title_find" class="form-control" placeholder="文件名">
+		        <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="post_pic_find">查询</button></span>
+                </div>
+            </div>
+            <div class="row" id="modalbody_post_pic"></div>
+            <div id="page_pic"></div>
+        </div>
+    </div>
+    </div>
+</div>
+<input type="hidden" id="current_pics" name="current_pics" value=""/>
+<input type="hidden" id="upload_current_input" name="upload_current_input" value=""/>
+<script id="post_pic_tpl" type="text/x-jquery-tmpl">
+    <div class="col-xs-6 col-md-3 item">
+        <div class="thumbnail">
+            <img src="${pics}" alt="${name}" class="rounded" style="height:120px;width:100%;" data-toggle="tooltip" data-placement="left" title="${name}"/>
+        </div>
+    </div>
+</script>
+<script>
+    $(function () {
+        var ajax = new Ajax();
+        $(document).on("click",".select_pic", function () {
+            $('#modal_post_pic').modal("show");
+            $("#current_pics").val($(this).attr("data-value"));
+            var data = {};
+            get_attachs_count(data);
+            get_attachs_list(data);
+        });
+        $("#post_pic_find").on("click", function () {
+            var data = { title: $("#post_pic_title_find").val() };
+            get_attachs_count(data);
+            get_attachs_list(data);
+        })
+        function get_attachs_count(data) {
+            ajax.get('/admin/attachs_ajax_get_count', data, function (result) {
+                //分页功能
+                var options = {
+                    currentPage: 1,
+                    totalPages: result.message.pagecount,
+                    numberOfPages: result.message.pagesize,
+                    bootstrapMajorVersion: 1,
+                    onPageClicked: function (e, originalEvent, type, page) {
+                        data.page = page;
+                        get_attachs_list(data);
+                    }
+                }
+            console.log(options);
+                if(options.totalPages > 0){
+                    $('#page_pic').show().bootstrapPaginator(options);
+                }else{
+                    $('#page_pic').hide();
+                }
+            });
+        }
+        function get_attachs_list(data) {
+            ajax.get('/admin/attachs_ajax_get_list', data, function (result) {
+                if (result.code == 0) {
+                    console.log(result);
+                    $("#modalbody_post_pic").html('');
+
+                    $("#post_pic_tpl")
+                            .tmpl(result.message)
+                            .appendTo("#modalbody_post_pic");
+                }
+            });
+        }
+        $(document).on("click", ".rounded", function () {
+
+            $("#" + $("#current_pics").val()).val($(this).attr("src"));
+            $('#modal_post_pic').modal("hide");
+        })
+
+        var mime = new Array();
+        mime[0] = "image/jpeg";
+        mime[1] = "image/png";
+        mime[2] = "image/jpg";
+        mime[3] = "image/gif";
+        function upload_msg(_upload_name, _upload_msg) {
+            _str_msg = "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">" +
+                "<span aria-hidden=\"true\">&times;</span>" +
+                "<span class=\"sr-only\">Close</span>" +
+            "</button>" +
+            "<div class=\"alert_overflow\">" + _upload_name + "</div>" +
+            "<div>" + _upload_msg + "</div>";
+
+            return _str_msg;
+        }
+        $('#fileupload').on("click",function(){
+            $("#upload_current_input").val($(this).attr("data-value"));
+        }).fileupload({
+            url: '/upload',
+            dataType: 'json',
+            add: function (e, data) {
+                var goUpload = true;
+                var file = data.files[0];
+                if (jQuery.inArray(file.type, mime) >= 0) {
+                    if (file.size > 1024000) {
+                        goUpload = false;
+                        _str_msg = upload_msg(file.name, "上传文件不能超过 1000 KB");
+                        data.context = $("<div/>").html(_str_msg).appendTo("#files");
+                        data.context.attr("class", "alert alert-danger alert-dismissible");
+                    } else {
+                        _str_msg = upload_msg(file.name, "正在上传");
+                        data.context = $("<div/>").html(_str_msg).appendTo("#files");
+                        data.context.attr("class", "alert alert-info alert-dismissible");
+                    }
+                } else {
+                    goUpload = false;
+                    _str_msg = upload_msg(file.name, "不允许上传的类型");
+                    data.context = $("<div/>").html(_str_msg).appendTo("#files");
+                    data.context.attr("class", "alert alert-danger alert-dismissible");
+                }
+                if (goUpload) {
+                    data.submit();
+                }
+                setTimeout("$('#files').empty();", 3000);
+            },
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $("#"+$("#upload_current_input").val()).val(file.path);
+                    _str_msg = upload_msg(file.name, "上传成功");
+                    data.context.html(_str_msg);
+                    data.context.attr("class", "alert alert-success  alert-dismissible");
+                    //data.context.html($("img").attr("src", file.path).css("width", "100%")).removeAttr("class");
+                });
+
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .progress-bar').css(
+                    'width',
+                    progress + '%'
+                );
+            }
+        }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    })
+</script>

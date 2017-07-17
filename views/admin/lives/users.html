@@ -1,0 +1,238 @@
+<% include ../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group pull-left">
+					<ul class="list-inline">
+						<li>
+							<a href="/admin/lives/users/list_addAuthPage">
+								<span class="glyphicon glyphicon-plus"></span> 发起实名认证
+							</a>
+						</li>
+						<li>
+							<a href="#" target="_blank">
+								<span class="glyphicon glyphicon-question-sign"></span> 帮助
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="form-group">
+					<div class="pull-right">
+						<form name="article_search" id="article_search" action="/admin/lives/users/list" method="get" class="form-inline">
+							<div class="form-group">
+								<div class="input-group">
+	                		<select id="authStatus" name="status" class="form-control input-sm">
+	                			<option value="" '<% if(status===''){ %> selected="selected" <% } %>'>全部</option>
+	                			<option value="0" '<% if(status==='0'){ %> selected="selected" <% } %>'>正常</option>
+	                			<option value="1" '<% if(status==='1'){ %> selected="selected" <% } %>'>已认证</option>
+	                			<option value="2" '<% if(status==='2'){ %> selected="selected" <% } %>'>认证失败</option>
+                                <option value="-2" '<% if(status==='-2'){ %> selected="selected" <% } %>'>黑名单</option>
+	                		</select>
+                		</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                        <input type="text" name="mpno" id="loginAccount" placeholder="登录帐号" value="<%=mpno %>" class="form-control input-sm">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="success" class="alert alert-success fade in" style="display:none;">操作成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">操作失败！</div>
+        <div class="form-group">
+        <table class="table table-striped table-condensed">
+            <thead>
+            	<tr>
+            		<th style="width:30px">#</th>
+            		<th>操作</th>
+            		<th>登录帐号</th>
+            		<th>名称</th>
+            		<th>认证状态</th>
+            		<th>身份证号</th>
+            		<th>籍贯</th>
+            	</tr>
+            </thead>
+            <tbody>
+            	<% lives.forEach(function(item){ %>
+                <tr>
+                    <td><%=item.index%></td>
+                    <td>
+                    	<% if (item.status==1) { %>
+                    		<button class="btn btn-xs btn-danger cancleAuth" type="button" data-id="<%= item._id %>"><span class="glyphicon glyphicon-minus-sign"></span> <span class="statusText">取消认证</span></button>
+                    	<% } else { %>
+                    		<button class="btn btn-xs btn-primary auth" type="button" data-id="<%= item._id %>"><span class="glyphicon glyphicon-flag"></span> <span>实名认证</span></button>
+                    	<% } %>
+                    </td>
+                    <td><%=item.mpno%></td>
+                    <td><%=item.name%></td>
+                    <td>
+                    	<% if (item.status==1) { %>
+                    		<span class="text-primary">实名认证</span>
+                    	<% } else if(item.status==0) { %>
+                    		<span class="text-success">正常</span>
+                    	<% } else if(item.status==2) { %>
+                    		<span class="text-warning">认证失败</span>
+                    	<% } else { %>
+                    		<span class="text-danger">黑名单</span>
+                    	<% } %>
+                    </td>
+                    <td><%=item.idnumber%></td>
+                    <td><%=item.place%></td>
+                </tr>
+                <% }) %>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="7">
+                <div id="page"></div></td></tr>
+            </tfoot>
+        </table>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal_housesinfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">用户详情</h4>
+        </div>
+        <div class="modal-body" id="infobody" style="overflow-y:auto">
+        <form class="form-horizontal">
+        <div class="row">
+        <div class="col-xs-9">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">标题</label>
+            <p class="form-control-static" id="modal_title"></p>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">地址</label>
+            <p class="form-control-static" id="modal_address"></p>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">区域</label>
+            <p class="form-control-static" id="modal_province"></p>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">联系人</label>
+            <p class="form-control-static" id="modal_linkman"></p>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">电话</label>
+            <p class="form-control-static" id="modal_linkphone"></p>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">描述</label>
+            <p class="form-control-static" id="modal_desc"></p>
+          </div>
+        </div>
+        <div class="col-xs-3">
+            <img src="" style="width:100%" id="modal_pics"/>
+        </div>
+        </div>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+<script id="post_comm_tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td>${index}</td>
+    	<td>
+        	{{if status == 1 }}
+        		<button class="btn btn-xs btn-warning cancleAuth" type="button" data-id="${_id}"><span class="glyphicon glyphicon-minus-sign"></span> <span class="statusText">取消认证</span></button>
+        	{{else}}
+        		<button class="btn btn-xs btn-info auth" type="button" data-id="${_id}"><span class="glyphicon glyphicon-flag"></span> <span>实名认证</span></button>
+        	{{/if}}
+        </td>
+        <td>${mpno}</td>
+        <td>${name}</td>
+        <td>
+        	{{if status == 1 }}
+        		<span class="text-primary">实名认证</span>
+        	{{else status == 0}}
+        		<span class="text-success">正常</span>
+        	{{else status == 2}}
+        		<span class="text-warning">认证失败</span>
+        	{{else}}
+        		<span class="text-danger">黑名单</span>
+        	{{/if}}
+			</td>
+			<td>${idnumber}</td>
+			<td>${place}</td>
+		</tr>
+	</script>
+	<script>
+		$(function() {
+			var ajax = new Ajax();
+			var pagecount = "<%=pagecount %>";
+			var currentPage = 1;
+			if (pagecount != 0) {
+				//分页功能
+				var options = {
+					currentPage: 1,
+					totalPages: pagecount,
+					numberOfPages: "<%=pagesize%>",
+					bootstrapMajorVersion: 1,
+					alignment: "center",
+					onPageClicked: function(e, originalEvent, type, page) {
+						var data = {
+							page: page,
+							status: $("#authStatus").val(),
+							mpno: $("#loginAccount").val(),
+						};
+						ajax.get('/admin/lives/users/ajax_list', data, function(result) {
+							if (result.code == 0) {
+								$("table tbody tr").html('');
+								console.log(result.message);
+								$("#post_comm_tpl")
+									.tmpl(result.message)
+									.appendTo("table tbody");
+							}
+						});
+					}
+				}
+				$('#page').bootstrapPaginator(options);
+			}
+			$(".auth").click(function(e) {
+				var id = $(this).attr("data-id");
+				window.location.href = "/admin/lives/users/list/" + id;
+			});
+        
+			$(".cancleAuth").click(function() {
+				var id = $(this).attr("data-id");
+				ajax.get("/admin/lives/users/cancleauth", {
+					id: id
+				}, function(result) {
+					if (result.code == 0) {
+						$("#success").show();
+						location.reload();
+						setTimeout(function() {
+							$("#success").hide()
+						}, 2000);
+					} else {
+						$("#error").show();
+						setTimeout(function() {
+							$("#error").hide()
+						}, 2000);
+					}
+				});
+			});
+        
+			$("#authStatus").bind("change", function() {
+				$("#article_search").submit();
+			});
+		})
+	</script>
+	<% include ../inc/footer.html%>

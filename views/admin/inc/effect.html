@@ -1,0 +1,98 @@
+<!-- 加载效果 -->
+<div class="sk-circle" style="display:none">
+  <div class="sk-circle1 sk-child"></div>
+  <div class="sk-circle2 sk-child"></div>
+  <div class="sk-circle3 sk-child"></div>
+  <div class="sk-circle4 sk-child"></div>
+  <div class="sk-circle5 sk-child"></div>
+  <div class="sk-circle6 sk-child"></div>
+  <div class="sk-circle7 sk-child"></div>
+  <div class="sk-circle8 sk-child"></div>
+  <div class="sk-circle9 sk-child"></div>
+  <div class="sk-circle10 sk-child"></div>
+  <div class="sk-circle11 sk-child"></div>
+  <div class="sk-circle12 sk-child"></div>
+</div>
+<!-- 操作成功 -->
+<div class="effectSuccess bg-success">
+	<blockquote style="padding:0px 20px">
+		<span class="glyphicon glyphicon-ok text-success" style="font-size:75px;display: inline-block;"></span>
+		<p style="margin-left:65px;line-height:81px;display:inline-block;vertical-align: top;">操作成功</p>
+	</blockquote>
+</div>
+<!-- 操作失败 -->
+<div class="effectError bg-danger">
+	<blockquote style="padding:0px 20px">
+		<span class="glyphicon glyphicon-remove text-danger" style="font-size:75px;display: inline-block;"></span>
+		<p style="margin-left:65px;line-height:81px;display:inline-block;vertical-align: top;">操作失败</p>
+	</blockquote>
+</div>
+<!-- 遮罩层 -->
+<div class="bg" style="display:none"></div>
+<script>
+	var effect={
+		height:screen.height/4,
+		width:screen.width/2,
+		seep:1000,
+		show:function(){
+			$('.bg').show()
+			$('.sk-circle').show()
+		},
+		hide:function(){
+			$('.bg').hide()
+			$('.sk-circle').hide()
+		},
+		success:function(message,db){
+			if(arguments.length==0){
+				$('.effectSuccess').fadeIn('slow', function() {
+					$(this).fadeOut(this.seep)
+				});
+			}else if(arguments.length==1){
+				var item=arguments[0]
+				if($.isFunction(item)){	
+					$('.effectSuccess').fadeIn('slow', function() {
+						$(this).fadeOut(this.seep,item())
+					});
+				}else{
+					$('.effectSuccess').find('p').html(item);
+					$('.effectSuccess').fadeIn('slow', function() {
+						$(this).fadeOut(this.seep)
+					});
+				}		
+			}else{
+				$('.effectSuccess').find('p').html(message);
+				$('.effectSuccess').fadeIn('slow', function() {
+					$(this).fadeOut(this.seep,db())
+				});
+			}
+		},
+		error:function(message,db){
+			if(arguments.length==0){
+				$('.effectError').fadeIn('slow', function() {
+					$(this).fadeOut(this.seep)
+				});
+			}else if(arguments.length==1){
+				var item=arguments[0]
+				if($.isFunction(item)){	
+					$('.effectError').fadeIn('slow', function() {
+						$(this).fadeOut(this.seep,item())
+					});
+				}else{
+					$('.effectError').find('p').html(message);
+					$('.effectError').fadeIn('slow', function() {
+						$(this).fadeOut(this.seep)
+					});
+				}		
+			}else{
+				$('.effectError').find('p').html(message);
+				$('.effectError').fadeIn('slow', function() {
+					$(this).fadeOut(this.seep,db())
+				});
+			}
+		}
+	}
+	$('.sk-circle').css({
+		'top':effect.height+'px',
+		'left':effect.width+'px'
+	})
+</script>

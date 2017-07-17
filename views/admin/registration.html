@@ -1,0 +1,75 @@
+<% include inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+   	 <div class="row">
+       <%  regs.forEach(function(item){
+            %>
+	       <div class="col-md-12">
+	       		<p><%=item.index%></p>
+	       		<table class="table table-bordered">
+		       		<tr>
+		       		<td style="width:80px">姓名</td><td><%=item.name%></td>
+		       		<td style="width:80px">性别</td><td><%=item.sex%></td>
+		       		<td style="width:80px">民族</td><td><%=item.nation%></td>
+		       		<td style="width:80px">身高</td><td><%=item.height%></td>
+		       		<td rowspan=5 style="width:143px"><img style="width:100%" src="<%=item.pics%>"/></td>
+		       		</tr>
+		       		<tr>
+		       		<td style="width:80px">报名时间</td><td><%=item.createtime%></td>
+		       		<td style="width:80px">出生日期</td><td><%=item.birthday%></td>
+		       		<td style="width:80px">职业</td><td colspan=3><%=item.occupation%></td>
+		       		</tr>
+		       		<tr>
+		       		<td style="width:80px">特长</td><td colspan=3><%=item.specialty%></td>
+		       		<td style="width:80px">籍贯</td><td colspan=3><%=item.place%></td>
+		       		</tr>
+		       		<tr>
+		       		<td style="width:80px">身份证</td><td colspan=3><%=item.idnumber%></td>
+		       		<td style="width:80px">电话</td><td colspan=3><%=item.phone%></td>
+		       		</tr>
+		       		<tr>
+		       		<td style="width:80px">学校</td><td colspan=3><%=item.school%></td>
+		       		<td style="width:80px">地址</td><td colspan=3><%=item.address%></td>
+		       		</tr>
+					<tr><td colspan=9 style="min-height:50px"><%=item.resume%></td></tr>
+				</table>
+			</div>	
+		<%});%>	
+	 </div>
+    </div>
+  </div>
+</div>
+<script>
+	// var html="" 
+	// var arr=[];
+	// $.each(data,function(i,v){
+	// 	var n=v.name;
+	// 	if(arr.lastIndexOf(n)==-1){
+	// 				arr.push(n)
+
+	// 	html+='<table><tr>'+i+'</tr><tr><td >姓名：'+v.name+'</td></tr>\
+	// 		<tr><td>性别：'+v.sex+'</td></tr>\
+	// 		<tr><td>特长：'+v.specialty+'</td></tr>\
+	// 		<tr><td>民族：'+v.nation+'</td></tr>\
+	// 		<tr><td>籍贯：'+v.place+'</td></tr>\
+	// 		<tr><td>出生：'+v.birthday+'</td></tr>\
+	// 		<tr><td>职业：'+v.occupation+'</td></tr>\
+	// 		<tr><td>身份证：'+v.idnumber+'</td></tr>\
+	// 		<tr><td>身高：'+v.height+'</td></tr>\
+	// 		<tr><td>学校：'+v.school+'</td></tr>\
+	// 		<tr><td>地址：'+v.address+'</td></tr>\
+	// 		<tr><td>电话：'+v.phone+'</td></tr>\
+	// 		<tr><td >图片：<img width="180px"  src="http://honghe.cms.joygo.com'+v.pics+'"/></td></tr>\
+	// 		<tr><td style="width:500px">简历：'+v.resume+'</td></tr></br></table>'
+	// 	}
+
+
+	// })
+	// console.log(arr);
+	// $('#sign_up').html(html)
+</script>
+<% include inc/footer.html%>

@@ -1,0 +1,255 @@
+﻿<% include ../inc/head.html%>
+<style>
+    .main .form-inline .form-control{
+        max-width:100px;
+    } 
+</style>
+<script>
+    $(function () {
+        var ajax = new Ajax();
+        $('.go_submit').click(function () {
+            $("body").queue([]);
+            $("#success,#error").html('');
+            $(":input[type='checkbox']").each(function(){
+                if ($(this).is(":checked")) {
+                    $(this).val(1);
+                }else{
+                    $(this).val(0);
+                }
+            })
+           $("table tbody tr").each(function(index){
+                var tr=$(this);
+                $("body").queue(function(n){
+                    var data=$("form").find("tbody tr:eq("+index+")").find("input").serializeArray();                
+                    data[data.length]={name:'kpis[type]',value:$("[name='kpis[type]']").val()};
+                    data[data.length]={name:'kpis[position]',value:$("[name='kpis[position]']").val()};
+                    data[data.length]={name:'kpis[year]',value:$("[name='kpis[year]']").val()};
+                    data[data.length]={name:'kpis[month]',value:$("[name='kpis[month]']").val()}; 
+                    console.log(data);
+                    var queue=$(this);
+                    ajax.post('/admin/kpis_create', data, function (result) {
+                        console.log(result);
+                        if (result.code == 0) {
+                            console.log(result);
+                            queue.dequeue();//上一个队列成功，移除队列
+                            //tr.remove();
+                            /*tr.find("input").each(function(key){
+                                $(this).attr("disabled","disabled");
+                            })*/
+                            $("#success").append("<p>第"+(index+1)+"行：成功提交</p>");                            //location.href = '/admin/kpis';
+                        } else {
+                            var msg = result.message.split(':');
+                            $("#error").text("第"+(index+1)+"行："+msg[1]);
+                        }
+                    });
+                });
+           })
+        });
+
+        $("form").on("keyup",".item", function () {
+            var total = 0;
+            var parent=$(this).parent().parent().parent();
+            parent.find(".item").each(function(key,val){                
+                if ($(this).val() !== "") total += parseInt($(this).val());
+            })
+            parent.find(".total").val(total);
+        })
+        $("#addrecord").on("click",function(){
+            $("#tpl").tmpl().appendTo("table tbody");
+            $('[data-trigger="spinner"]').spinner();
+        })
+        $("form").on("click",".del",function(){
+            $(this).parent().parent().remove();
+        })
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/kpis">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form method="post">     
+            <input type="hidden" name="kpis[type]" value="<%=type%>"/>
+            <input type="hidden" name="kpis[position]" value=""/>
+            <div class="col-md-2">
+                <div class="well">
+                    <div class="form-group">                            
+                        <div class="input-group">
+                        <select name="kpis[year]" class="form-control">
+                            <%for(var i=2010;i<=2020;i++){
+                            var selected=(parseInt(i)===parseInt(year))?"selected":"";%>
+                            <option value="<%=i%>" <%=selected%>><%=i%></option>
+                            <%}%>
+                        </select>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger">年</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">                      
+                        <div class="input-group">
+                        <select name="kpis[month]" class="form-control">
+                            <%for(var i=1;i<13;i++){
+                            var m=i>9?i:'0'+i;
+                            var selected=(m===month)?"selected":"";
+                            %>
+                            <option value="<%=i%>" <%=selected%>><%=m%></option>
+                            <%}%>
+                        </select>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger">月</button>
+                            </span>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="col-md-10">
+                <table class="table table-hover">
+                    <thead>
+                        <tr><th style="width:20%">标题</th><th>人员</th><th>业务</th><th>党群</th><th>奖励</th><th style="width:80px;">综合</th><th style="width:30%"></th><th></th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    <% kpisunits.forEach(function(item){%>                        
+                    <tr>
+                        <td>
+                            <input type="text" name="kpis[title]" value="<%=item.title%>" placeholder="单位" class="form-control input-sm"></td>
+                        <td>
+                            <div class="input-group spinner" data-trigger="spinner">
+                                <input type="text" name="kpis[renyuan]" placeholder="人员" value="40" data-max="40" data-min="0" data-step="1" class="input-sm form-control item">  
+                                <div class="input-group-addon input-sm ">
+                                <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+                                <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group spinner" data-trigger="spinner">
+                                <input type="text" name="kpis[yewu]" placeholder="业务" value="50" data-max="50" data-min="0" data-step="1"  class="input-sm form-control item">        
+                                <div class="input-group-addon input-sm ">
+                                <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+                                <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group spinner" data-trigger="spinner">
+                                <input type="text" name="kpis[dangqun]" placeholder="党群" value="10" data-max="10" data-min="0" data-step="1"  class="input-sm form-control item">           
+                                <div class="input-group-addon input-sm ">
+                                <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+                                <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group spinner" data-trigger="spinner">
+                                <input type="text" name="kpis[jiangli]" placeholder="奖励" value="0" data-max="10000" data-min="0" data-step="1"   class="input-sm form-control item">              
+                                <div class="input-group-addon input-sm ">
+                                <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+                                <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>                          
+                            <input type="text" name="kpis[total]" placeholder="综合" value="100" class="input-sm form-control total" readonly>         
+                        </td>
+                        <td>
+                            <label class="checkbox-inline">
+                              <input type="checkbox" id="kpis[modelunit]" name="kpis[modelunit]" value="0"> 标兵窗口
+                            </label>
+                            <label class="checkbox-inline">
+                              <input type="checkbox" id="kpis[advanced]" name="kpis[advanced]" value="0"> 先进窗口
+                            </label>
+                            <label class="checkbox-inline">
+                              <input type="checkbox" id="kpis[veto]" name="kpis[veto]" value="0"> 一票否决
+                            </label>
+                        </td>
+                        <td><a href="#" class="btn btn-danger del">删除</a></td>
+                    </tr>
+                    <%})%>
+                    </tbody>
+                </table>
+                <div class="form-group">
+                    <a href="#" class="btn btn-danger" id="addrecord"><span class="glyphicon glyphicon-plus"></span> 添加单位</a>
+                    <button type="button" class="go_submit btn btn-danger">保存</button>
+                    <p class="text-danger"><small class="red" id="error"></small></p>
+                    <div id="success"></div>
+                </div>
+            </div>
+        </form>        
+        <!--选择缩略图-->        
+        <% include ../inc/thumbnail.html%>
+    </div>
+  </div>
+</div>
+<script id="tpl" type="text/x-jquery-tmpl">
+<tr>
+    <td style="width:20%"><input type="text" name="kpis[title]" placeholder="单位" class="form-control input-sm"></td>
+    <td><div class="input-group spinner" data-trigger="spinner">
+            <input type="text" name="kpis[renyuan]" placeholder="人员"  value="40" data-max="40" data-min="0" data-step="1"   class="input-sm form-control item">              
+            <div class="input-group-addon input-sm ">
+            <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+            <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+            </div>
+        </div>
+    </td>
+    <td>             
+        <div class="input-group spinner" data-trigger="spinner">
+            <input type="text" name="kpis[yewu]" placeholder="业务"  value="50" data-max="50" data-min="0" data-step="1"   class="input-sm form-control item">              
+            <div class="input-group-addon input-sm ">
+            <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+            <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+            </div>
+        </div>
+    </td>
+    <td>       
+        <div class="input-group spinner" data-trigger="spinner">
+            <input type="text" name="kpis[dangqun]" placeholder="党群"  value="10" data-max="10" data-min="0" data-step="1"   class="input-sm form-control item">              
+            <div class="input-group-addon input-sm ">
+            <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+            <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+            </div>
+        </div>
+    </td>
+    <td> 
+        <div class="input-group spinner" data-trigger="spinner">
+            <input type="text" name="kpis[jiangli]" placeholder="奖励" value="0" data-max="10000" data-min="0" data-step="1"   class="input-sm form-control item">              
+            <div class="input-group-addon input-sm ">
+            <a href="javascript:;" class="spin-up" data-spin="up"><span class="glyphicon glyphicon-triangle-top"></span></a>
+            <a href="javascript:;" class="spin-down" data-spin="down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+            </div>
+        </div>
+    </td>
+    <td><input type="text" name="kpis[total]"  placeholder="综合" value="100" class="input-sm form-control total" readonly>
+    </td>
+    <td>
+        <label class="checkbox-inline">
+          <input type="checkbox" name="kpis[modelunit]" value="0"> 标兵窗口
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" name="kpis[advanced]" value="0"> 先进窗口
+        </label>        
+        <label class="checkbox-inline">
+          <input type="checkbox" id="kpis[veto]" name="kpis[veto]" value="0"> 一票否决
+        </label>
+    </td>
+    <td><a href="#" class="btn btn-danger del">删除</a></td>
+</tr>
+</script>
+<% include ../inc/footer.html%>

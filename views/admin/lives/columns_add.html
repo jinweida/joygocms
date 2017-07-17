@@ -1,0 +1,122 @@
+﻿<% include ../inc/head.html%>
+<script>
+    $(function () {
+    	var ajax = new Ajax();
+        $("input[name='type0']").bind("change",function(){
+        	if($(this).attr("checked") != "undefined" && $(this).attr("checked") != null){
+        		$("input[name='column[type]']").val(1);
+        		$(this).removeAttr("checked");
+        		$("input[name='type1']").attr("checked",true);
+        	}else {
+        		$("input[name='column[type]']").val(0);
+        		$("input[name='type1']").removeAttr("checked");
+        		$(this).attr("checked",true);
+        	}
+        });
+
+        $("input[name='type1']").bind("change",function(){
+        	if($(this).attr("checked") != "undefined" && $(this).attr("checked") != null){
+        		$("input[name='column[type]']").val(0);
+        		$(this).removeAttr("checked");
+        		$("input[name='type0']").attr("checked",true);
+        	}else {
+        		$("input[name='column[type]']").val(1);
+        		$("input[name='type0']").removeAttr("checked");
+        		$(this).attr("checked",true);
+        	}
+        });
+
+        $(".go_submit").click(function(){
+        	$("#errorText").text("");
+        	var order = $("input[name='column[order]']").val();
+        	var name = $("input[name='column[name]']").val();
+        	if(name==""){
+        		$("#errorText").text("栏目名称不能为空");
+        		return;
+        	}
+
+        	var params = $("#auth_form").serialize();
+        	ajax.post("/admin/lives/columns/add_submit", params, function (result) {
+                console.log(result);
+                if (result.code == 0) {
+                    $("#success").show();
+                    setTimeout(function(){$("#success").hide()},2000);
+                    window.location.href = "/admin/lives/columns/list"
+                }else {
+                    console.log(result.message);
+                    $("#errorText").text('操作失败');
+                }
+            });
+        });
+
+        function integer(value) {
+		    var regex = new RegExp("^-?\\d+$");
+		    return regex.test(value);
+		}
+    });
+</script>
+<div class="container-fluid">
+   <div class="row">
+   <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/lives/columns/list">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+	    <div id="success" class="alert alert-success fade in" style="display:none;">操作成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">操作失败！</div>
+        <form name="auth_form" class="form-horizontal" id="auth_form" method="post">
+        	<% if(column._id != "undefined" && column._id != ""){ %>
+        		<input type="text" name="column[_id]" value="<%=column._id %>" class="hide" />
+        	<% } %>
+            <div class="row">
+			    <div class="col-xs-11" style="margin-left:15px;padding-top:10px;border: 1px solid #AAAAAA; border-radius: 5px;">
+                    <div class="col-xs-12">
+	                    <div class="form-group">
+	                        <label class="control-label" style="padding-bottom:10px;">栏目名称</label>
+	                        <input type="text" name="column[name]" style="width:70%;" value="<%=column.name %>" placeholder="必填项" class="form-control">
+	                    </div>
+                    </div>
+                    <div class="col-xs-12">
+						<div class="form-group">
+	                        <label class="control-label" style="padding-bottom:10px;">排序<span>请输入一个整数</span></label>
+	                        <input type="text" name="column[order]" style="width:70%;" value="<%=column.order %>" placeholder="请输入数字" class="form-control">
+	                    </div>
+                    </div>
+                    <div class="col-xs-12">
+	                    <div class="form-group">
+	                        <label class="col-xs-2" style="line-height:34px; padding-left:0px;">栏目类型</label>
+	                        <div class="col-xs-10" style="padding-left:0px; margin-left:-40px; line-height:34px; text-align: left;">
+	                        	<input type="text" name="column[type]" value="<%=column.type %>" class="hide"/>
+	                        	<input type="checkbox" name="type0" '<% if(column.type == 0){%> checked="checked" <% } %>'  aria-label="...">&nbsp;系统栏目 &nbsp;&nbsp;
+	                        	<input type="checkbox" name="type1" '<% if(column.type == 1){ %> checked="checked" <% } %>' aria-label="...">&nbsp;自定义栏目
+							</div>
+						</div>
+					</div>
+                    <div class="form-group">
+                    	<div class="col-xs-12" style="margin-left:5px;">
+							<button type="button" class="go_submit btn btn-danger">提交</button>
+	                        <p class="text-danger"><small class="red" id="errorText">&nbsp;&nbsp;</small></p>
+                        </div>
+					</div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<% include ../inc/footer.html%>

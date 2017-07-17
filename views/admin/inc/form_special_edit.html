@@ -1,0 +1,14 @@
+﻿<div class="col-md-6">
+	<div class="form-group form-group-sm">
+	<label for="post_special">加入专题</label>
+	    <select id="post_special" name="post_special" class="form-control">
+	        <option value="">----加入专题----</option>
+	        <%specialslist.forEach(function(item){
+	          var select="";
+	          if(item._id==model.specials)select="selected";
+	          %>
+	        <option value="<%=item._id%>" <%=select%>><%=item.title%></option>
+	        <%})%>
+	    </select>
+	</div>
+</div>		

@@ -1,0 +1,112 @@
+<div class="modal fade" id="modal_post_video" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">选择视频</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-inline" style="margin-bottom:15px;">
+                    <div class="form-group form-group-sm">
+                        <select id="post_video_columnid_find" name="post_video_columnid_find" class="form-control input-sm">
+                            <option value="-1">栏目分类</option>
+                            <%columns.forEach(function(item){ var tree="" ; if(item.level>1)tree="| --"; %>
+                                <option value="<%=item._id%>">
+                                    <%=tree%>
+                                        <%=item.name%>
+                                </option>
+                                <%})%>
+                        </select>
+                        <div class="input-group input-group-sm">
+                            <input type="text" name="post_video_title_find" id="post_video_title_find" class="form-control input-sm" placeholder="标题">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger" id="post_video_find">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="modalbody_post_video" class="row">正在加载...</div>
+                <div id="page_video"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="post_video_tpl" type="text/x-jquery-tmpl">
+    <div class="col-xs-6 col-md-3 item" style="max-height:195px;">
+        <div class="thumbnail">
+        <img src="${pics}" data-video="${video}" title="${name}" data-title="${videoname}" data-tag="${tag}" data-desc="${desc}" data-pics="${pics}" data-from="${from}" class="select" alt="${title}" style="display: block;height:120px;width:100%;"/>
+        <div title="${name}" class="caption">${videoname}</div>
+        </div>
+    </div>
+</script>
+<script type="text/javascript">
+    $(function () {
+        var ajax = new Ajax();
+        var eventTarget;
+        $(document).delegate(".btn_select_video","click", function () {
+            eventTarget = this;
+            $("#modal_post_video").modal('show');
+            var data = { title: $("#post_video_title_find").val() ,columnid:$("#post_video_columnid_find").val()};
+            get_videos_count(data);
+            get_videos_list(data);
+        });
+        $(document).on("click","#post_video_find", function (){
+            var data = { title: $("#post_video_title_find").val() ,columnid:$("#post_video_columnid_find").val()};
+            get_videos_count(data);
+            get_videos_list(data);
+        })
+        function get_videos_count(data) {
+            ajax.get('/admin/videos_ajax_get_addcount', data, function (result) {
+                //分页功能
+                var options = {
+                    currentPage: 1,
+                    totalPages: result.message.pagecount,
+                    numberOfPages: result.message.pagesize,
+                    bootstrapMajorVersion: 1,
+                    onPageClicked: function (e, originalEvent, type, page) {
+                        data.page=page;
+                        get_videos_list(data);
+                    }
+                }
+                if(options.totalPages > 0){
+                    $('#page_video').show().bootstrapPaginator(options);
+                }else{
+                    $('#page_video').hide();
+                }
+            });
+        }
+        function get_videos_list(data) {
+            ajax.get('/admin/videos_ajax_get_addlist', data, function (result) {
+                console.log(result);
+                if (result.code == 0) {
+                    $("#modalbody_post_video").html('');
+                    $("#post_video_tpl")
+                            .tmpl(result.message)
+                            .appendTo("#modalbody_post_video");
+                }
+            });
+        }
+        $(document).on("click",".select", function () {
+            var video_path = $(this).attr("data-video");
+            var video_title = $(this).attr("data-title");
+            var video_desc = $(this).attr("data-desc");
+            var video_pic = $(this).attr("data-pics");
+            var url = "";
+            url=("http://epgs.joygo.com:5000/" + video_path + ".m3u8?protocal=hls&user=sunniwell&tid=pccommon&sid=" + video_path + "&type=pc&token=guoziyun");
+            if($(this).attr("data-from")>0){
+                url=video_path;
+            }else{
+                //$("#post_title").val($(this).attr("data-title"));
+                //$("#post_desc").val($(this).attr("data-desc"));
+                //$("#post_tag").val($(this).attr("data-tag"));
+            }
+            $('#'+$(eventTarget).attr("data-video-for")).val(url);
+            $('#'+$(eventTarget).attr("data-title-for")).val(video_title);
+            $('#'+$(eventTarget).attr("data-desc-for")).val(video_desc);
+            $('#'+$(eventTarget).attr("data-pics-for")).val(video_pic);
+            $('#'+$(eventTarget).attr("data-type-for")).val(3);
+            $('#modal_post_video').modal("hide");
+        })
+    });
+</script>

@@ -1,0 +1,43 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%=title%></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+      <style>
+          .container img{
+		        max-width: 100%;height: auto;
+                width:100%;
+	        }
+
+      </style>
+  </head>
+  <body>    
+    <div class="container" style="padding-top:15px;font-size:18px;color:#333">
+        <h1><%=model.title%></h1>
+        <h4><span class="text-info"><%=datetime%></span> <span class="text-danger">
+            <%
+            var str=model.clickcount
+            if(model.clickcount>10000){
+                str=Math.round((model.clickcount));
+            }%><%=str%> 浏览</span></h4>
+        <div>
+            <p><img src="<%=model.pics[2]%>" /></p>
+            <h4><strong>导语</strong></h4>
+            <p><%=model.desc%></p>
+            <div class="list-group">
+            <%specials.forEach(function(item){%>
+              <a href="/home/detail?mid=<%=item.mid%>" class="list-group-item"><%=item.title%></a>
+            <%})%>                
+            </div>
+        </div>
+        
+        <p></p>
+    </div>
+  </body>
+</html>

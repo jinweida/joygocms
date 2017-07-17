@@ -1,0 +1,115 @@
+﻿<% include inc/head.html%>
+<script>
+    $(function () {
+        $("[name='chkall']").click(function () {
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
+            })
+        });
+        var ajax = new Ajax();
+        $(".removecolumn").click(function () {
+            if(confirm("确定删除栏目分类吗?")){
+                var data={_id:$(this).data("index")};
+                var cb = function (result) {
+                    if (result.code == 0) {
+                        window.setTimeout(function () { $("#success").hide(); location.href = '/admin/columns';}, 2000);
+                    } else {
+                        $("#error").text(result.message).show();
+                        window.setTimeout(function () { $("#error").hide() }, 2000);
+                    }
+                };
+                // 更新博客
+                ajax.post('/admin/columns_remove', data, cb);
+                return false;
+            }
+        });
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <div class="pull-left">
+			    <ul class="list-inline">
+				    <li><a href="/admin/columns_add"><span class="glyphicon glyphicon-plus"></span> 创建</a>
+
+                    <li><a href="/bg_help/ctl.php?mod=admin&act_get=article" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+				    </li>
+			    </ul>
+		    </div>
+		    <div class="pull-right">
+					    </div>
+		    <div class="clearfix"></div>
+	    </div>
+        <div id="success" class="alert alert-success fade in" style="display:none;">操作成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+        <table class="table table-striped table-condensed">
+            <tr><th style="width:25px;"><input type="checkbox" value="" name="chkall"/></th><th style="width:150px;">操作</th><th style="width:80px;">编号</th><th>栏目名称</th><th style="width:80px;">菜单排序</th><th style="width:80px;">发布</th><th style="width:80px;">评论</th><th style="width:80px;">上传</th><th style="width:80px;">排序</th><th style="width:100px;">样式</th></tr>
+            <%  columns.forEach(function(item){
+            %>
+            <tr><td><input type="checkbox" value="<%=item._id%>" name="chk"/></td>
+                <td>
+                    <%
+                        var text="显示";
+                        var style="btn-info";
+                        var status=-1;
+                        if(item.status==-1){
+                            text="已隐藏";
+                            style="btn-warning";
+                            status=0;
+                        }
+                        var upname="允许";
+                    var upstyle="label label-info";
+                    if(item.upstatus===0){
+                        upname="禁止";
+                        upstyle="label label-warning";
+                    }
+                    var comment="允许";
+                    var commentstyle="label label-info";
+                    if(item.commentstatus===0){
+                        comment="禁止";
+                        commentstyle="label label-warning";
+                    }
+                    var isslide="";
+                    var isslidetyle="label label-warning";
+                    if(item.isslide){
+                        isslide="菜单";
+                        isslidetyle="label label-info";
+                    }
+                    var ispubstatus="允许";
+                    var ispubstatusstyle="label label-info";
+                    if(item.pubstatus===0){
+                        ispubstatus="禁止";
+                        ispubstatusstyle="label label-warning";
+                    }
+                    %>
+                    <div class="btn-group"><a class="btn btn-default btn-xs" href="/admin/columns_add?_id=<%=item._id%>">编辑</a><a class="btn btn-xs <%=style%>" href="/admin/columns_delete?_id=<%=item._id%>&status=<%=status%>" data-index="<%=item._id%>"><%=text%></a><%if(item.issystem){%><a href="#" class="btn btn-danger btn-xs removecolumn" data-index="<%=item._id%>" >删除</a><%}%></div>
+                </td>
+                <td><%=item._id%></td>
+                <td><%if(item.level>1){%>&nbsp;&nbsp;| <%for(i=0;i<item.level;i++){%>-<%}}%>
+                    <%if(item.level>1){%><%=item.name%><%}else{%><b><%=item.name%></b><%}%>&nbsp;<span class="badge"><%=isslide%></span>
+                </td>
+                <td><%=item.menuorder%></td>
+                <td><span class="<%=ispubstatusstyle%>"><%=ispubstatus%></span></td>
+                <td><span class="<%=commentstyle%>"><%=comment%></span></td>
+                <td><span class="<%=upstyle%>"><%=upname%></span></td>
+                <td><%=item.order%></td>
+                <td>
+                    <%listtype.forEach(function(m){%>
+                    <%if(m.id===item.listtype){%>
+                    <span class="<%=m.style%>"><%=m.name%></span>
+                    <%}})%>
+                </td></tr>
+            <% }) %>
+        </table>
+    </div>
+  </div>
+</div>
+<% include inc/footer.html%>

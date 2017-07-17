@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html style="font-size: 50px;">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title></title>
+		<script src="http://yichun.cms.joygo.com/javascripts/jquery.min.js"></script>
+		<script src="http://yichun.cms.joygo.com/javascripts/ckplayer/ckplayer.js"></script>
+		<script>
+		$(function(){
+			//http://yichun.micro.joygo.com:5000/minichnl_VC6HB1UuhwdWLocH_0.m3u8?protocal=hls&user=sunniwell&tid=tid001&sid=minichnl_VC6HB1UuhwdWLocH_0&type=3&token=guoziyun
+			var videoUrl = encodeURIComponent('http://wsl.live.chuangxing.tv/joygo/325/playlist.m3u8');
+			var flashvars = {
+				f: 'http://yichun.cms.joygo.com/javascripts/ckplayer/m3u8.swf',
+				a: videoUrl,
+				c: 0,
+				b: 1,
+				p: 1,
+				s: 4,
+				lv: 0,
+				my_url: encodeURIComponent(window.location.href)
+			};
+			var params = {
+				bgcolor: '#FFF',
+				allowFullScreen: true,
+				allowScriptAccess: 'always',
+				wmode: 'transparent'
+			};
+			CKobject.embedSWF('http://yichun.cms.joygo.com/javascripts/ckplayer/ckplayer.swf', 'video', 'ckplayer_video', '100%', $('#video').width() * 3 / 4, flashvars, params);	
+		})
+		</script>
+	</head>
+
+	<body>
+		<div id="video">
+		</div>
+	</body>
+
+</html>

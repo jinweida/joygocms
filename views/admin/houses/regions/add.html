@@ -1,0 +1,83 @@
+﻿<% include ../../inc/head.html%>
+<script>
+$(function () {
+    var ajax = new Ajax();
+    $('.go_submit').click(function () {
+        var data = $("form").serializeArray();
+        console.log(data);
+        var cb = function (result) {
+            if (result.code == 0) {
+                location.href = '/admin/regions';
+            } else {
+                $('#error').text(result.message);
+            }
+        };
+        // 更新博客
+        ajax.post('/admin/regions_create', data, cb);
+        return false;
+    });
+})
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/regions">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+        <form name="regions_form" id="regions_form" method="post">
+            <div class="row">
+			    <div class="col-md-3">
+                    <div class="well">
+                        <div class="form-group">
+                            <label for="regions_pid">隶属于区域</label>
+                            <select id="regions_pid" name="regions[pid]" class="form-control">
+                                <option value=",1">请选择</option>
+                                <% regions.forEach(function(item){
+                                var tree="";
+                                for(var i=1;i<item.level;i++){
+                                    tree+="&nbsp;&nbsp;&nbsp;&nbsp;"
+                                }
+                                if(tree!==''){
+                                    tree+="| --";
+                                }
+                                %>
+                                <option value="<%=item._id%>,<%=item.level+1%>"><%- tree%><%=item.name%></option>
+                                <%})%>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+			    <div class="col-md-9">
+				    <div class="form-group">
+						<div id="group_regions[name]">
+							<label for="regions[name]" class="control-label">区域<span id="msg_regions[name]">*</span></label>
+							<input type="text" name="regions[name]" id="regions[name]" placeholder="必填" class="form-control">
+						</div>
+					</div>
+                    <div class="form-group">
+						<button type="button" class="go_submit btn btn-danger">保存</button>
+                        <p class="text-danger"><small class="red" id="error"></small></p>
+					</div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<% include ../../inc/footer.html%>

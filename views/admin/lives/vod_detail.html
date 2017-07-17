@@ -1,0 +1,315 @@
+<% include ../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group">
+					<div class="pull-left">
+						<ul class="list-inline">
+							<li><a href="javascript:window.history.go(-1);"><span class="glyphicon glyphicon-chevron-left"></span> 返回</a></li>
+							<li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a></li>
+						</ul>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div id="tipBox" class="alert fade in" style="display:none;"></div>
+				<div class="panel panel-danger">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-12">
+										<div id="video"></div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-12 form-group form-group-sm">
+										<label class="control-label">主题</label>
+										<input class="form-control" type="text" value="<%=model.title%>" disabled />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">上传人</label>
+										<input class="form-control" type="text" value="<%=model.user.mpno%>" disabled />
+									</div>
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">上传人身份</label>
+										<input class="form-control" type="text" value="<%=model.user.roles%>" disabled />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">上传时间</label>
+										<input class="form-control" type="text" value="<%=model.createtime%>" disabled />
+									</div>
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">视频持续时间</label>
+										<input class="form-control" type="text" value="<%=model.cds.timelength%>" disabled />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">商品集</label>
+										<select class="form-control" name="commodity">
+											<option value="">----选择商品集----</option>
+								            <%commoditylist.forEach(function(item){
+								              var select="";
+								              if(item.id==model.ads.commodity)select="selected";
+								              %>
+								            <option value="<%=item.id%>" <%=select%>><%=item.name%></option>
+								            <%})%>
+										</select>
+									</div>
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">商品集结束时间</label>
+										<input type="text" placeholder="请选择商品结束时间" class="input_date form-control" name="commoditytime" value="<%=model.ads.time%>"/>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12 form-group form-group-sm">
+										<label class="control-label">红包策略</label>
+										<div calss="example">
+											<select class="form-control" name="envelope" multiple="multiple" id="envelope">
+												<%envelopelist.forEach(function(item){
+												var select="";
+												model.ads.envelope.split(',').forEach(function(node){
+												if(item.tvshakeid==node)select="selected";
+												})%>
+												<option value="<%=item.tvshakeid%>" <%=select%>><%=item.begintime%>\<%=item.endtime%>\<%=item.duration%>\<%=item.desc%></option>
+												<%})%>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12 form-group form-group-sm">
+										<label class="control-label">视频地址</label>
+										<input class="form-control" type="text" value="<%=model.cds.url%>" disabled />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">是否加入聊天室</label>
+										<select class="form-control" name="isjoin">
+											<option value="true" <%if(model.chatroom.isjoin){%>selected<%}%>>是</option>
+											<option value="false" <%if(!model.chatroom.isjoin){%>selected<%}%>>否</option>
+										</select>
+									</div>
+									<div class="col-md-6 form-group form-group-sm">
+										<label class="control-label">聊天室名称</label>
+										<input class="form-control" type="text" name="chatRoomName" value="<%=model.chatroom.chatroomname%>"/>
+									</div>
+								</div>
+								<%if(model.status != -1){%>
+								<div class="form-group">
+									<button class="btn btn-danger" id="addGuestBtn">
+										<span class="glyphicon glyphicon-plus"></span>添加嘉宾
+									</button>
+								</div>
+								<%}%>
+								<div class="form-group" id="guestList">
+									<%var i=0;model.guest.forEach(function(item) {
+                                    i++%>
+									<div class="row" id="row_<%=i%>">
+										<div class="col-md-6 form-group form-group-sm">
+											<div class="input-group input-group-sm">
+												<span class="input-group-btn"><button class="btn btn-danger deleteItem" id="<%=i%>" <%=item.disabled%> >删除选项</button></span>
+												<input class="form-control guest-mpno" type="text" value="<%=item.mpno%>" placeholder="用户ID" <%=model.disabled%> />
+											</div>
+										</div>
+										<div class="col-md-6 form-group form-group-sm">
+											<input class="form-control guest-name" type="text" value="<%=item.nickname%>" placeholder="名称" <%=model.disabled%> />
+										</div>
+									</div>
+									<%});%>
+								</div>
+								<div class="form-group">
+									<%if(model.status == 0 || model.status == -1) {%>
+									<button class="btn btn-danger" id="passBtn">通过</button>
+									<%} else {%>
+									<button class="btn btn-danger" id="saveBtn">保存</button>
+									<%}%>
+									<button class="btn btn-default" data-toggle="modal" data-target="#rejectModal">驳回</button>
+								</div>
+								<%if(model.status == -1) {%>
+								<div class="row">
+									<div class="col-md-12 form-group">
+										<label class="control-label">驳回理由</label>
+										<textarea class="form-control" rows="4" disabled>
+											<%=model.reject.reason%>
+										</textarea>
+									</div>
+								<%}%>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="rejectModal">
+					<div class="modal-dialog" style="width: 500px;">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								<h4 class="modal-title">驳回理由</h4>
+							</div>
+							<div class="modal-body">
+								<div class="form-group">
+									<textarea class="form-control" name="rejectReason" rows="4" cols=""></textarea>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+								<button type="button" class="btn btn-danger">确认</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/javascripts/ckplayer/ckplayer.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/javascripts/prettify.js"></script>
+    <script src="/javascripts/bootstrap-multiselect.js"></script>
+	<script type="text/javascript">
+		var id = window.location.search.substring(4);
+		$(function() {
+			$(".input_date").datetimepicker({
+				step:1,
+				lang:'ch',
+			});
+			$('#envelope').multiselect({
+		    	buttonWidth: '100%',
+	        	dropRight: true
+		    });
+			var videoUrl = encodeURIComponent('<%-model.cds.url%>');
+			var flashvars = {
+				f: '/javascripts/ckplayer/m3u8.swf',
+				a: videoUrl,
+				c: 0,
+				b: 1,
+				p: 1,
+				s: 4,
+				lv: 0,
+				my_url: encodeURIComponent(window.location.href)
+			};
+			var params = {
+				bgcolor: '#FFF',
+				allowFullScreen: true,
+				allowScriptAccess: 'always',
+				wmode: 'transparent'
+			};
+			CKobject.embedSWF('/javascripts/ckplayer/ckplayer.swf', 'video', 'ckplayer_video', '100%', $('#video').width() * 3 / 4, flashvars, params);
+			$('#addGuestBtn').click(function() {
+				var rowId = new Date().getTime();
+				var html = '<div class="row" id="row_' + rowId + '"><div class="col-md-6 form-group form-group-sm"><div class="input-group input-group-sm">';
+				html += '<span class="input-group-btn"><button class="btn btn-danger deleteItem" id="' + rowId + '">删除选项</button></span>';
+				html += '<input class="form-control guest-mpno" type="text" placeholder="用户ID" /></div></div>';
+				html += '<div class="col-md-6 form-group form-group-sm"><input class="form-control guest-name" type="text" placeholder="名称" /></div></div>';
+				$('#guestList').append(html).find('button.btn-danger').click(function() {
+					$('#row_' + $(this).attr('id')).remove();
+				});
+			});
+			$('#passBtn').click(function() {
+				var param = {
+					id: id,
+					status: 1,
+					commodity:$('select[name="commodity"]').val(),
+					commoditytime:$('input[name="commoditytime"]').val(),
+					envelope:envelopeValue()
+				};
+				if (!$('input[name="chatRoomName"]').is(':disabled')) {
+					param.chatRoomName = $('input[name="chatRoomName"]').val();
+				}
+				var guestList = new Array();
+				$('#guestList div.row').each(function() {
+					guestList.push({
+						mpno: $(this).find('.guest-mpno').val(),
+						nickname: $(this).find('.guest-name').val()
+					});
+				});
+				if (guestList.length > 0) {
+					param.guest = guestList;
+				}
+				if($('select[name="commodity"]').val()!=''){
+					if($('input[name="commoditytime"]').val()==''){
+						effect.error();
+					}else{	
+						action('/admin/lives/vod/update', param);
+					}
+				}else{
+					action('/admin/lives/vod/update', param);
+				}
+			});
+			$('#saveBtn').click(function() {
+				var param = {
+					id: id,
+					isjoin:$('[name="isjoin"]').val(),
+					chatRoomName:$('input[name="chatRoomName"]').val(),
+					commodity:$('select[name="commodity"]').val(),
+					commoditytime:$('input[name="commoditytime"]').val(),
+					envelope:envelopeValue()
+				};
+				var guestList = new Array();
+				$('#guestList div.row').each(function() {
+					guestList.push({
+						mpno: $(this).find('.guest-mpno').val(),
+						nickname: $(this).find('.guest-name').val()
+					});
+				});
+				if (guestList.length > 0) {
+					param.guest = guestList;
+				}
+				if($('select[name="commodity"]').val()!=''){
+					if($('input[name="commoditytime"]').val()==''){
+						effect.error();
+					}else{	
+						action('/admin/lives/vod/update', param);
+					}
+				}else{	
+					action('/admin/lives/vod/update', param);
+				}
+			});
+			$('#rejectModal button.btn-danger').click(function() {
+				var param = {
+					id: id,
+					status: -1,
+					rejectionReason: $('textarea[name="rejectReason"]').val()
+				};
+				action('/admin/lives/vod/update', param);
+				$('textarea[name="rejectReason"]').val('');
+				$('#rejectModal').modal('hide');
+			});
+			$('#guestList').on('click','.deleteItem', function() {
+				$('#row_' + $(this).attr('id')).remove();
+			});
+		});
+
+		function action(url, param) {
+			$.post(url, param, function(data) {
+				if (data.code == 0) {
+					$('#tipBox').removeClass('alert-danger').addClass('alert-success').html(data.message).show();
+				} else {
+					$('#tipBox').removeClass('alert-success').addClass('alert-danger').html(data.message).show();
+				}
+				window.setTimeout(function() {
+					$('#tipBox').hide();
+					window.location.reload();
+				}, 3000);
+			});
+		}
+	//获取下拉复选框的value
+	function envelopeValue(){
+		var envelope=[]
+		var envelopeInput=$('#envelope').find('option:checked')
+		envelopeInput.each(function(i,v) {
+			envelope.push(v.value)
+		});
+		return envelope
+	}
+	</script>
+	<% include ../inc/footer.html%>

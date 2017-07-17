@@ -1,0 +1,816 @@
+<% include ../inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+      <div class="pull-left">
+  	    <div class="form-group">
+  		    <ul class="list-inline">
+            <li><a href="javascript:history.go(-1)"><span class="glyphicon glyphicon-chevron-left"></span>返回</a>
+            </li>
+  		    </ul>
+  	    </div>
+      </div>
+      <div class="clearfix"></div>
+    	<ul class="nav nav-tabs" role="tablist">
+    	  <li class="active"><a href="#albums1" aria-controls="albums1" data-toggle="tab">线上视频&图片</a></li>
+    	  <li><a href="#albums2" aria-controls="albums2" data-toggle="tab">线下视频&图片</a></li>
+    	  <li><a href="#albums3" aria-controls="albums3" data-toggle="tab">活动直播间</a></li>
+    	  <li><a href="#albums4" aria-controls="albums4" data-toggle="tab">用户报名表编辑</a></li>
+    	  <li><a href="#albums5" aria-controls="albums5" data-toggle="tab">关联新闻</a></li>
+        <li><a href="#albums6" aria-controls="albums6" data-toggle="tab">用户报名表</a></li>
+    	  <li><a href="#albums7" aria-controls="albums7" data-toggle="tab">短信记录</a></li>
+    	</ul>
+    	<div class="tab-content" style="margin-top:15px;">
+    	  <div class="tab-pane active" id="albums1">
+		      <div class="pull-left">
+		  	    <div class="form-group">
+		  		    <ul class="list-inline">
+		  			    <li><a href="#" target="_self" id="exports"><span class="glyphicon glyphicon-export"></span> 导出excel </a></li>
+		  			    <!-- <li><a href="#" class="checked"><span class="glyphicon glyphicon-check"></span>全选<input type="checkbox" id="allCheck" style="display:none"></a></li> -->
+		  			    <li><a href="#" class="del"><span class="glyphicon glyphicon-trash"></span>删除</a>
+		  			    </li>
+		  			    <li><a href="#" class="nopass"><span class="glyphicon glyphicon-share-alt"></span>驳回</a>
+		  			    </li>
+		  			    <li><a href="#" class="pass"><span class="glyphicon glyphicon-ok"></span>通过</a>
+		  			    </li>
+                <!-- 		  			    <li><a href="#" id="assistcount"><span class="glyphicon glyphicon-sort"></span>票数</a>
+		  			    </li>
+		  			    <li><a href="#" id="createtime"><span class="glyphicon glyphicon-sort"></span>时间</a>
+		  			    </li> -->
+		  			    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span>帮助</a>
+		  			    </li>
+		  		    </ul>
+		  	    </div>
+		      </div>
+		      <div class="pull-right">
+			      <form action="" class="form-inline">
+			  		<div class="form-group form-group-sm">
+			  			<input class="form-control" type="text" name="no" placeholder="编号" />
+			  		</div>
+			  		<div class="input-group input-group-sm">
+			  			<input class="form-control" type="text" name="nickname" placeholder="上传人" />
+			  			<div class="input-group-btn">
+			  				<button class="btn btn-danger btn-sm" id="searchBtn" type="button">
+			  					<span class="glyphicon glyphicon-search"></span>
+			  				</button>
+			  			</div>
+			  		</div>
+			      </form>
+		      </div>
+		      <div class="clearfix"></div>
+		    	<div class="row" id="postsalbums1">
+		    	</div>
+		    	<div id="page"></div>
+    	  </div>
+    	  <div class="tab-pane" id="albums2">
+		      <div class="pull-left">
+		  	    <div class="form-group">
+		  		    <ul class="list-inline">
+		  			    <li><a href="#" class="backDel"><span class="glyphicon glyphicon-trash"></span>删除</a>
+		  			    </li>
+		  			    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span>帮助</a>
+		  			    </li>
+		  		    </ul>
+		  	    </div>
+		      </div>
+		      <div class="clearfix"></div>
+        	<form id="video_row">
+        	  <blockquote>
+        	  <div class="row" >
+        	    <div class="col-md-6">
+        	      <div class="form-group form-group-sm">
+        	          <div class="input-group input-group-sm">
+        	            <div class="input-group-btn">
+        	              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">选择视频 <span class="caret"></span></button>
+        	              <ul class="dropdown-menu dropdown-menu-right">
+        	                <li><a href="#" class="btn_select_video" data-video-for="post_activityvideos_2" data-title-for="post_videotitle_2" data-desc-for="post_videodesc_2" data-pics-for="post_activitypics_2" data-type-for="post_vtype_2"><span class="glyphicon glyphicon-hd-video" > 自有视频</span></a></li>
+        	                <li><a href="#" class="btn_select_video_live" data-video-for="post_activityvideos_2" data-title-for="post_videotitle_2" data-desc-for="post_videodesc_2" data-pics-for="post_activitypics_2" data-type-for="post_vtype_2"><span class="glyphicon glyphicon-facetime-video"> 微直播</span></a></li>
+        	              </ul>
+        	            </div><input type="text" name="activityvideos" id="post_activityvideos_2" class="form-control" placeholder="请点击选择视频">
+        	          </div>
+        	        </div>
+        	      </div>
+        	      <div class="col-md-6">
+        	          <div class="form-group">
+        	              <div class="input-group input-group-sm">
+        	                  <span class="input-group-btn">
+        	                      <span class="btn btn-danger fileinput-button">
+        	                          <span>上传</span>
+        	                          <input class='active_upload' type="file" data-value="post_activitypics_2" name="files[]">
+        	                      </span>
+        	                  </span>
+        	                  <input type="text" name="activitypics" class="form-control" value="" id="post_activitypics_2" placeholder="640*480图片">
+        	                  <span class="input-group-btn">
+        	                      <button type="button" class="btn btn-danger select_pic" data-value="post_activitypics_2" id="select_pics">选择</button>
+        	                  </span>
+        	              </div>
+        	          </div>
+        	      </div>
+        	      <div class="col-md-4">
+        	          <div class="form-group form-group-sm">
+        	              <div class="form-group" style="display: block;">
+        	                  <input type="text" name="videotitle" id="post_videotitle_2" value="" placeholder="视频标题" class="form-control">
+        	              </div>
+        	          </div>
+        	      </div>
+        	      <div class="col-md-4">
+        	          <div class="form-group form-group-sm">
+        	              <div class="form-group" style="display: block;">
+        	                  <input type="text" name="assistcount" id="post_assistcount_2" value="" placeholder="总赞数" class="form-control">
+        	              </div>
+        	          </div>
+        	      </div>
+        	      <br>
+        	      <div class="col-md-4">
+        	          <div class="form-group form-group-sm">
+        	              <div class="input-group input-group-sm">
+        	                  <input type="text" name="videodesc" id="post_videodesc_2" value="" placeholder="视频导语" class="form-control"/>
+        	                  <input type="hidden" id="post_vtype_2" name="vtype" value="10" />
+        	                  <span class="input-group-btn">
+        	                  <button type="button" class="btn_save_video btn btn-danger btn-sm">保存</button>
+        	                  </span>
+        	              </div>
+        	          </div>
+        	      </div>
+        	  </div>
+        	  </blockquote>
+        	</form>
+  	        <div id="postsalbums2">
+  	        </div>
+    	  </div>
+    	  <div class="tab-pane" id="albums3">
+	          <div class="form-group form-group-sm">
+	            <div class="input-group input-group-sm">
+	                <input type="text" name="host_id" class="form-control" value="" placeholder="主播ID">
+	                <span class="input-group-btn">
+	                  <button type="button" class="btn btn-danger add_host">添加主播</button>
+	                </span>
+	            </div>
+	          </div>
+	          <div class="form-group form-group-sm">
+	            <div class="input-group input-group-sm">
+	                <input type="text" name="air_url" class="form-control" value="<%=url%>" placeholder="直播间url">
+	                <span class="input-group-btn">
+	                	<%if(activitylives==0){%><button type="button" class="btn btn-danger open_air">开通直播间</button><%}else if(activitylives==1){%><button type="button" class="btn btn-danger set_air">确认修改</button><%}%>
+	                </span>
+	            </div>
+	          </div>
+	          <div id="postsalbums3">
+	          	<table class="table table-striped table-condensed table-hover">
+	  	            <thead>
+	  	            <tr><th style="width:20px;">#</th><th>主播ID</th><th style="width:80px;">操作</th></tr></thead>
+	  	            <tbody>
+	  	            </tbody>
+	  	        </table>
+	          </div>
+    	  </div>
+    	  <div class="tab-pane" id="albums4">
+	    	  <div class="form-group form-group-sm col-md-12">
+	    	    <button class="btn btn-danger btn-sm" id="addoptions">
+	    	      <span class="glyphicon glyphicon-plus"></span>添加列
+	    	    </button>
+	    	    <button class="btn btn-danger btn-sm" id="saveoptions">
+	    	      <span class="glyphicon glyphicon-ok"></span>保存
+	    	    </button>
+	    	  </div>
+	    	  <div class="form-group form-group-sm col-md-12">
+	    	  <div class="row">
+	    	      <div class="form-group form-group-sm col-md-4">
+	    	        <input name='' type="text" class="form-control" readonly value="姓名(列名称)"/>
+	    	      </div>
+	    	      <div class="col-md-4 form-group form-group-sm">
+	    	        <input name='' type="text" class="form-control" readonly value="xingming(列名称对应拼音)">
+	    	      </div>
+	    	      <div class="col-md-2 form-group form-group-sm">
+	    	        <input name='' type="text" class="form-control" readonly value="10(最大字数,不设置为空)">
+	    	      </div>
+	    	      <div class="col-md-2 form-group form-group-sm">
+	    	        <input name='' type="text" class="form-control" readonly value="是否必填项目，默认否">
+	    	      </div>
+	    	  </div>
+	    	  </div>
+	    	  <div id="postsalbums4" >
+
+	    	  </div>
+    	  </div>
+    	  <div class="tab-pane" id="albums5">
+	          <div class="form-group form-group-sm">
+	            <div class="input-group input-group-sm">
+	                <input type="text" name="host_id" class="form-control" value="" placeholder="新闻ID" id="getAssociated">
+	                <span class="input-group-btn">
+	                  <button type="button" class="btn btn-danger set_associated">关联新闻</button>
+	                </span>
+	            </div>
+	          </div>
+	          <div id="postsalbums5">
+	          	<table class="table table-striped table-condensed table-hover">
+	  	            <thead>
+	  	            <tr><th style="width:20px;">#</th><th>标题</th><th style="width:80px;">操作</th></tr></thead>
+	  	            <tbody>
+	  	            </tbody>
+	  	        </table>
+	          </div>
+    	  </div>
+    	  <div class="tab-pane" id="albums6">
+          <div class="pull-left">
+            <div class="form-group">
+              <ul class="list-inline">
+                <li><a href="#" target="_self" id="regExports"><span class="glyphicon glyphicon-export"></span> 导出excel </a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="row" id="postsalbums6">
+          </div>
+        </div>
+        <div class="tab-pane" id="albums7">
+		      <div class="pull-left">
+		  	    <div class="form-group">
+
+		  	    </div>
+		      </div>
+		      <div class="clearfix"></div>
+	    	  <div id="postsalbums7">
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                <tr><th>用户mpno</th><th style="width: 180px">发送时间</th></tr></thead>
+                <tbody>
+                </tbody>
+            </table>
+	    	  </div>
+    	  </div>
+		</div>
+		<!--选择缩略图-->
+		<% include ../inc/thumbnail.html%>
+		<!--选择视频-->
+		<% include ../inc/video.html%>
+		<!--选择直播-->
+		<% include ../inc/video_live.html%>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modal_review" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal_title"></h4>
+        </div>
+        <div class="modal-body" style="overflow-y:auto">
+            <div id="msg_attachs" style="width:568px">
+                <div id="video"><video src="" controls="controls" width='568px' height='426px'></video></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<script>
+	var mid=window.location.search.substring(5)
+	var options = {
+		    currentPage: 1,
+		    totalPages: 0,
+		    numberOfPages: 12,
+		    bootstrapMajorVersion: 1,
+		    alignment: "center",
+		    onPageClicked: function (e, originalEvent, type, page) {
+		    if (page > options.totalPages) {
+	          options.currentPage = options.totalPages;
+	        } else {
+	          options.currentPage = page;
+	        }
+	      	writeList({mid:mid,page:page})
+	    }
+	}
+	function writeList(data){
+		effect.show()
+	 	$.post('/admin/albums/ajax_list',data,function(result){
+		 	if(result.code==0){
+		 		if(result.message.list.length>0){
+			 		$("#postsalbums1").empty();
+					$("#tmpl").tmpl(result.message.list).appendTo("#postsalbums1");
+					$("[data-toggle='popover']").popover();
+		 		}else{
+		 			$('#postsalbums1').html('<div class="col-md-2">没有数据!!!</div>')
+		 		}
+		 		if (page) {
+					options.totalPages = result.message.pagecount;
+					if (options.totalPages > 0) {
+						$('#page').bootstrapPaginator(options);
+					} else {
+						$('#page').empty();
+					}
+		 		}
+		 		effect.hide();
+		 	}else{
+		 		effect.hide();
+		 		effect.error('加载失败');
+		 	}
+	  });
+	}
+	function writeBackList(data){
+		effect.show()
+	 	$.post('/admin/albums/ajax_list',data,function(result){
+		 	if(result.code==0){
+			 		$("#postsalbums2").empty();
+					$("#tmpl").tmpl(result.message.list).appendTo("#postsalbums2");
+					$("[data-toggle='popover']").popover();
+		 		effect.hide();
+		 	}else{
+		 		effect.hide();
+		 		effect.error('加载失败');
+		 	}
+	  });
+	}
+	function getHostList(){
+		effect.show()
+	 	$.get('/admin/albums/host_ajax_list',{mid:mid},function(result){
+		 	if(result.code==0){
+			 		$("#postsalbums3 tbody").empty();
+					$("#hosttmpl").tmpl(result.message.list).appendTo("#postsalbums3 tbody");
+		 		effect.hide();
+		 	}else{
+		 		effect.hide();
+		 		effect.error('加载失败');
+		 	}
+	  });
+	}
+	function getAssociated(){
+		effect.show()
+	 	$.get('/admin/albums/get_associated',{mid:mid},function(result){
+		 	if(result.code==0){
+			 		$("#postsalbums5 tbody").empty();
+					$("#associatedtmpl").tmpl(result.message.list).appendTo("#postsalbums5 tbody");
+		 		effect.hide();
+		 	}else{
+		 		effect.hide();
+		 		effect.error('加载失败');
+		 	}
+	  });
+	}
+	function getRegtemplate(){
+		effect.show()
+	 	$.get('/admin/albums/get_regtemplate',{mid:mid},function(result){
+		 	if(result.code==0){
+			 		$("#postsalbums4").empty();
+					$("#optionstpl").tmpl(result.message.list).appendTo("#postsalbums4");
+		 		effect.hide();
+		 	}else{
+		 		effect.hide();
+		 		effect.error('加载失败');
+		 	}
+	  });
+	}
+  function getRegistration(){
+    effect.show()
+    $.get('/admin/albums/get_registration',{mid:mid},function(result){
+      if(result.code==0){
+          $("#postsalbums6").empty();
+          $("#registrationtmpl").tmpl(result.message.list).appendTo("#postsalbums6");
+        effect.hide();
+      }else{
+        effect.hide();
+        effect.error('加载失败');
+      }
+    });
+  }
+  function getRegnotice(){
+		effect.show()
+	 	$.get('/admin/albums/get_regnotice',{mid:mid},function(result){
+		 	if(result.code==0){
+			 		$("#postsalbums7 tbody").empty();
+					$("#regnoticetmpl").tmpl(result.message.list).appendTo("#postsalbums7 tbody");
+		 		effect.hide();
+		 	}else{
+		 		effect.hide();
+		 		effect.error('加载失败');
+		 	}
+	  });
+	}
+	function updatePostsalbums(state){
+		var ids = new Array();
+		$('#postsalbums1 input[type="checkbox"]:checked').each(function() {
+		    ids.push($(this).val());
+		});
+		if (ids.length == 0) {
+		    alert("至少选择一项！");
+		} else if (confirm("确定操作？")) {
+		    $.post('/admin/albums/update', {_id: ids.join(','),status:state},function(result){
+		    	if(result.code==0){
+						writeList({mid:mid})
+					}
+		    });
+		}
+	};
+	function setPostsalbums(data){
+	    $.post('/admin/posts/set_postsalbums', data,function(result){
+	    	if(result.code==0){
+					writeBackList({mid:mid,form:3})
+				}
+	    });
+	};
+	//用户报名管理
+	$(function(){
+		//默认加载
+		writeList({mid:mid})
+		//排序和搜素
+		$("#assistcount").click(function() {
+			data.sort=0;
+			writeList()
+		});
+		$("#createtime").click(function() {
+			data.sort=1;
+			writeList()
+		});
+		$("#searchBtn").click(function() {
+			var data={}
+			no=$('input[name="no"]').val()
+			nickname=$('input[name="nickname"]').val()
+			data.no=no;
+			data.nickname=nickname;
+			data.page=1;
+			data.mid=mid
+			writeList(data)
+		});
+		$('.checked').click(function() {
+			$('#allCheck').click();
+			var isCheck = $('#allCheck').is(':checked');
+			$('#postsalbums1 input[type="checkbox"]').each(function() {
+				if($(this).attr('data-status')!=3){
+		            $(this).prop('checked',isCheck)
+					if(isCheck){$('.thumbnail').css({'border':'1px solid red'});}
+			        if(!isCheck){$('.thumbnail').css({'border':'1px solid #ddd'});}
+			    }
+	    	});
+		});
+		$(document).on("click",'.caption',function(){
+			var input=$(this).find('input');
+			if(input.attr('data-status')!=3){
+				var thumbnail=$(this).parent('.thumbnail')
+				input.click();
+				var isCheck = input.is(':checked');
+				if(isCheck){thumbnail.css({'border':'1px solid red'});}
+		        if(!isCheck){thumbnail.css({'border':'1px solid #ddd'});}
+			}
+		});
+		//更新
+		$(document).on('click','.del',function(){
+			updatePostsalbums(1)
+		});
+		$(document).on('click','.nopass',function(){
+			updatePostsalbums(2);
+		});
+		$(document).on('click','.pass',function(){
+			updatePostsalbums(0)
+		})
+		//导出资源
+		$("#exports").on("click", function () {
+	      location.href = '/admin/albums/excel?mid='+mid;
+	  })
+	  //看详情
+	    $(document).on("click",".review",function(){
+	      var videoUrl=$(this).attr("data-video");
+	      var videoW=$('#msg_attachs').width();
+	      if(videoUrl==''){
+	        $("#transcoding").show();
+	        setTimeout("$('.attachs').hide();", 2000);
+	      }else{
+	        $("#modal_review").modal("show");
+	        $("#modal_title").html($(this).attr("data-title"));
+	    		$('video').attr({
+					'src':videoUrl,
+					'width':videoW
+	    		})
+	      }
+	    })
+	    $('#modal_review').on('hidden.bs.modal', function (e) {
+	      $("#msg_attachs").html('<div id="video"><video src="" controls="controls"></video></div>');
+	    })
+	})
+	//后台上传
+	$(function () {
+		//加载后台上传
+		writeBackList({mid:mid,form:3})
+		//图片&视频
+		$(document).delegate('.btn_save_video', 'click',function(){
+		  var data=$("#video_row").serializeArray();
+		  data.push({name:'mid',value:mid});
+		  data.push({name:'activitytype',value:<%=activitytype%>});
+		  setPostsalbums(data)
+		});
+		//上传图片
+		$(document).on('click','.active_upload',function(){
+		  $("#being_upload").val($(this).attr("data-value"));
+		  $(this).fileupload({
+		      url: '/upload',
+		      dataType: 'json',
+		      acceptFileTypes:  /(\.|\/)(gif|jpe?g|png)$/i,
+		      add: function (e, data) {
+		          var goUpload = true;
+		          var file = data.files[0];
+		          if (file.size > 1024*1024*700) {
+		              goUpload = false;
+		              console.log(file.name, "上传文件不能超过 700MB");
+		          } else {
+		              console.log(file.name, "正在上传");
+		          }
+		          if (goUpload) {
+		              data.submit();
+		          }
+		      },
+		      submit:function(e,data){},
+		      done: function (e, data) {
+		        $.each(data.result.files, function (index, file) {
+		            $("#"+$("#being_upload").val()).val(file.path)
+		        });
+		      }
+		  }).prop('disabled', !$.support.fileInput)
+		      .parent().addClass($.support.fileInput ? undefined : 'disabled');
+		})
+		//删除
+		$(document).on('click','.backDel',function(){
+			var ids = new Array();
+				$('#postsalbums2 input[type="checkbox"]:checked').each(function() {
+				    ids.push($(this).val());
+				});
+				if (ids.length == 0) {
+				    alert("至少选择一项！");
+				} else if (confirm("确定操作？")) {
+				    $.post('/admin/albums/update', {_id: ids.join(','),status:1},function(result){
+				    	if(result.code==0){
+								writeBackList({mid:mid,form:3})
+							}
+				    });
+				}
+		});
+	});
+	//直播间
+	$(function(){
+		getHostList()
+		$('.add_host').on('click', function(event) {
+			var pid=$('input[name="host_id"]').val()
+			if (!pid) {
+				return
+			}
+		 	$.post('/admin/posts/set_host',{mid:mid,pid:pid,title:'<%=title%>'},function(result){
+			 	if(result.code==0){
+		 		 		effect.success('添加成功',function(){
+				 			getHostList()
+		 		 		})
+			 	}else{
+			 		effect.error('添加失败');
+			 	}
+		  });
+		});
+		$(document).on('click','.delHost', function(event) {
+			var id=$(this).attr("data-id")
+		 	$.post('/admin/posts/del_host',{id:id},function(result){
+			 	if(result.code==0){
+		 		 		effect.success('删除成功',function(){
+				 			getHostList()
+		 		 		})
+			 	}else{
+			 		effect.error('删除失败');
+			 	}
+		  });
+		});
+		$(document).on('click', '.set_air' ,function(event) {
+			var url=$('input[name="air_url"]').val()
+		 	$.post('/admin/posts/set_air',{mid:mid,url:url},function(result){
+			 	if(result.code==0){
+			 		effect.success('修改成功',function(){
+				 		$('input[name="air_url"]').val(result.message.url)
+			 		})
+			 	}else{
+			 		effect.error('修改失败');
+			 	}
+		  });
+		});
+		$('.open_air').on('click', function(event) {
+			var url=$('input[name="air_url"]').val()
+		 	$.post('/admin/posts/open_air',{mid:mid,url:url},function(result){
+			 	if(result.code==0){
+				 		effect.success('开通成功',function(){
+					 		$('input[name="air_url"]').val(result.message.url)
+              $(this).removeClass('open_air').addClass('set_air').html('确认修改')
+				 		})
+			 	}else{
+			 		effect.error('开通失败');
+			 	}
+		  });
+		});
+	})
+  //关联新闻
+  $(function(){
+  	getAssociated()
+  	$('.set_associated').on('click', function(event) {
+  		var str=$("#getAssociated").attr('real-value');
+  		var strArr=str.split('&');
+  		var id=strArr[0];
+  		var time=strArr[1];
+      var title=strArr[2];
+  		var type=strArr[3];
+		 	$.post('/admin/albums/set_associated',{mid:mid,nid:id,title:title,postcreattime:time,type:type},function(result){
+			 	if(result.code==0){
+		 		 		effect.success('添加成功',function(){
+		 		 			getAssociated()
+		 		 		})
+			 	}else{
+			 		effect.error('添加失败');
+			 	}
+		  });
+  	});
+  	$(document).on('click','.delAssociated', function(event) {
+  		var id=$(this).attr("data-id")
+  	 	$.post('/admin/albums/del_associated',{id:id},function(result){
+  		 	if(result.code==0){
+  	 		 		effect.success('删除成功',function(){
+  			 			getAssociated()
+  	 		 		})
+  		 	}else{
+  		 		effect.error('删除失败');
+  		 	}
+  	  });
+  	});
+  	$("#getAssociated").autocomplete ({
+  	    source:function(query,process){
+  	        var parameter = {title: query};
+  	        $.get('/admin/medias/getFullMedias', parameter, function(result){
+  	            return process(result.message);
+  	        });
+  	    },
+  	    formatItem:function(item){
+  	        return item.title;
+  	    },
+  	    setValue:function(item){
+  	        return {'data-value':item.title,'real-value':item._id+'&'+item.createtime+'&'+item.title+'&'+item.type};
+  	    },
+  	    delay:30,
+  	    items:20
+  	});
+  })
+  //用户报名表
+  $(function(){
+  	//默认加载报名表单
+  	getRegtemplate()
+  	//加载报名人
+    getRegistration()
+    //加载短信通知列表
+  	getRegnotice()
+  	//添加选项
+  	$('#addoptions').on('click',function(){
+  	  event.preventDefault();
+  	  var data={};
+  	  data.id=new Date().getTime();
+  	  $('#optionstpl')
+  	      .tmpl(data)
+  	      .appendTo('#postsalbums4')
+  	});
+  	//删除选项
+  	$('body').on('click','.deloptions',function(){
+  	  event.preventDefault();
+  	  var id=$(this).attr('data-id');
+  	  $('#row_'+id).remove()
+  	});
+  	//保存选项
+  	$('body').on('click','#saveoptions',function(){
+			var data={
+				mid:mid,
+				value:option()
+			}
+		  $.post('/admin/albums/set_regtemplate',data,function(result){
+		  	if(result.code==0){
+	 		 		effect.success('编辑成功',function(){
+	 		 			getRegtemplate()
+	 		 		})
+			 	}else{
+			 		effect.error('编辑失败');
+			 	}
+		  })
+  	});
+  	//配置
+  	function option(){
+  	  var arr=[]
+  	  $('#postsalbums4').find('.item_op').each(function(i,v){
+        var input=$(v).find('input');
+  	    var select=$(v).find('select');
+  	    var a=input[0].value;
+  	    var b=input[1].value;
+  	    var c=input[2].value;
+  	    var d=select[0].value;
+  	    if(a!='' && b!=''){
+  	      arr.push(a+'|'+b+'|'+c+'|'+d);
+  	    }
+  	  })
+  	  return arr.join(',')
+  	}
+		//导出资源
+		$("#regExports").on("click", function () {
+	    location.href = '/admin/albums/reg_excel?mid='+mid;
+	  })
+  })
+</script>
+<script id="optionstpl" type="text/x-jquery-tmpl">
+  <div class="item_op" id="row_${index}">
+    <div class="form-group form-group-sm col-md-4">
+      <div class="input-group input-group-sm">
+        <span class="input-group-btn"><a class="btn btn-danger deloptions" data-id="${index}">删除选项</a></span>
+        <input name='' type="text" class="form-control" placeholder="名称" value="${name}"/>
+      </div>
+    </div>
+    <div class="col-md-4 form-group form-group-sm">
+      <input name='' type="text" class="form-control" placeholder="名称对应拼音" value="${key}">
+    </div>
+    <div class="col-md-2 form-group form-group-sm">
+      <input name='' type="text" class="form-control" placeholder="最多字数" value="${max}">
+    </div>
+    <div class="col-md-2 form-group form-group-sm">
+      <select name="" class="form-control">
+        <option value="0" {{if status==0}}selected{{/if}}>否</option>
+        <option value="1" {{if status==1}}selected{{/if}}>是</option>
+      </select>
+    </div>
+  </div>
+</script>
+<script id="tmpl" type="text/x-jquery-tmpl">
+  <div class="col-md-2">
+    <div class="thumbnail" data-trigger="hover" data-toggle="popover" data-placement="bottom" title="用户：${user.mpno}"  data-content="描述：${desc}">
+	  {{if type==0}}
+	  	<a data-video="${video.url}" data-title="${name}" class="review"><img style="height:116px" src="${pics}"></a>
+	  {{/if}}
+	  {{if type==1}}
+      <a href="${pics}" target="_blank"><img style="height:116px" src="${pics}"></a>
+    {{/if}}
+    {{if type==2}}
+      {{if video.url}}
+      	<a data-video="${video.url}" data-title="${name}" class="review"><img style="height:116px" src="${pics}"></a>
+      {{else}}
+      	<a href="${pics}" target="_blank"><img style="height:116px" src="${pics}"></a>
+			{{/if}}
+    {{/if}}
+      <div class="caption">
+        <div style="word-break: keep-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">姓名：${name}</div>
+        <div>编号：${no}</div>
+        <div>票数：${assistcount}</div>
+        <div>状态：
+        {{if status==0}}
+        <span class="text-primary">审核通过
+        {{/if}}
+        {{if status==3}}
+        <span class="text-info">转码中
+        {{/if}}
+        {{if status==2}}
+        <span class="text-danger">被驳回
+        {{/if}}
+        {{if status==-1}}
+        <span class="text-success">未审核{{/if}}
+        </span></div>
+        <div>日期：${createtime}</div>
+        <input type="checkbox" value="${_id}" data-status="${status}" style="display:none"/>
+      </div>
+    </div>
+  </div>
+</script>
+<script id="hosttmpl" type="text/x-jquery-tmpl">
+	<tr>
+		<td>${index}</td>
+		<td>${pid}</td>
+		<td><span class="btn btn-xs btn-danger delHost" data-id="${_id}">删除</span></td>
+	</tr>
+</script>
+<script id="associatedtmpl" type="text/x-jquery-tmpl">
+	<tr>
+		<td>${index}</td>
+		<td>${title}</td>
+		<td><span class="btn btn-xs btn-danger delAssociated" data-id="${_id}">删除</span></td>
+	</tr>
+</script>
+<script id="registrationtmpl" type="text/x-jquery-tmpl">
+  <div class="col-md-2">
+    <div class="well">
+      {{each(i,list) information}}
+           <div>{{= list.key}} : {{= list.value}}</div>
+       {{/each}}
+      <div style="word-break: keep-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"></div>
+      <div>状态：
+      {{if paystatus==0}}
+      <span class="text-primary">未支付
+      {{/if}}
+      {{if paystatus==1}}
+      <span class="text-info">已支付
+      {{/if}}
+      </span></div>
+      <div>日期：${createtime}</div>
+      <input type="checkbox" value="${_id}" data-status="${status}" style="display:none"/>
+    </div>
+  </div>
+</script>
+<script id="regnoticetmpl" type="text/x-jquery-tmpl">
+  <tr>
+    <td>${mpno}</td>
+    <td>${createtime}</td>
+  </tr>
+</script>
+<% include ../inc/footer.html%>

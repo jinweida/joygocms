@@ -1,0 +1,69 @@
+﻿<div class="col-md-6">
+    <div class="form-group form-group-sm">
+		<label for="post_type">媒资类型</label>
+        <select id="post_type" name="post_type" class="form-control">
+            <%types.forEach(function(item){%>
+            <%if(item.id==type){%>
+            <option value="<%=type%>"><%=item.name%></option>
+            <%}%>
+            <%})%>
+        </select>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-group-sm">
+        <div id="group_post_ads">
+            <label for="post_ads" class="control-label">第三方url(此新闻将会链接到第三方)<span id="msg_post_ads"></span></label>
+            <input class="form-control" placeholder="请输入url" name="post_link" id="post_link" />
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-group-sm">
+	    <label for="post_date">发布时间</label>
+        <div id="post_date_input" class="form-group" style="display: block;">
+		    <input type="text" name="post_date" id="post_date" value="<%=datetime%>" class="validate form-control input_date" readonly>
+	    </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-group-sm">
+	    <label for="post_date">浏览次数</label>
+        <div id="group_post_click" class="form-group" style="display: block;">
+		    <input type="hidden" name="post_clickcount" id="post_clickcount" value="0" class="validate form-control">
+            <input type="text" name="post_pvcount" id="post_pvcount" value="<%=Math.round(Math.random() * 20000)%>" class="validate form-control">
+	    </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-group-sm">
+        <label for="post_tel">联系电话</label>
+        <input type="text" name="post_tel" id="post_tel" value="" class="validate form-control" placeholder="联系电话">
+        <p class="help-block"></p>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-group-sm">
+        <label for="post_address">联系地址</label>
+        <input type="text" name="post_address" id="post_address" value="" placeholder="联系地址" class="form-control">
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="form-group form-group-sm">
+    <label for="post_commodity">商品集</label>
+        <select id="post_commodity" name="post_commodity" class="form-control">
+            <option value="0">----选择商品集----</option>
+            <%commoditylist.forEach(function(item){%>
+            <option value="<%=item.id%>"><%=item.name%></option>
+            <%})%>
+        </select>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(".input_date").datetimepicker({
+            step:1,
+            lang:'ch',
+        });
+    })
+</script>

@@ -1,0 +1,128 @@
+﻿<% include inc/head.html%>
+<script>
+    $(function () {
+        var ajax = new Ajax();
+        //分页功能
+        var options = {
+            currentPage: 1,
+            totalPages: "<%=pagecount%>",
+            numberOfPages: "<%=pagesize%>",
+            bootstrapMajorVersion: 1,
+            alignment: "center",
+            onPageClicked: function (e, originalEvent, type, page) {
+                var data = {
+                    page: page,
+                    content:$("[name='content']").val()
+                }
+                ajax.get('/admin/ajax_get_authors_list', data, function (result) {
+                    if (result.code == 0) {
+                        $("table tbody tr").html('');
+                        console.log(result.message);
+                        $("#post_comments_tpl")
+                                .tmpl(result.message)
+                                .appendTo("table tbody");
+                    }
+                });
+            }
+        }
+        if (options.totalPages > 0) {
+            $('#page').bootstrapPaginator(options);
+        }
+        $("#delall").on("click", function () {
+            var _ids = "";
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    if (_ids != "") _ids += ",";
+                    _ids += $(this).val();
+                }
+            })
+            if (_ids == "") {
+                $("#error").show();
+                window.setTimeout(function () { $("#error").hide() }, 2000);
+                return;
+            }
+            if (confirm("确认删除作者吗？")){
+                var data = {
+                    _ids: _ids,
+                };
+                var cb = function (result) {
+                    console.log(result);
+                    if (result.code == 0) {
+                        $("#success").show();
+                        setTimeout("$('#success').hide();location.reload();", 2000);
+                    } else {
+                        $("#error").html(result.message).show();
+                        window.setTimeout(function () { $("#error").hide() }, 2000);
+                    }
+                };
+                ajax.post('/admin/authors_delete', data, cb);
+            }
+            return;
+        })
+        
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="form-group">
+		    <div class="pull-left">
+			    <ul class="list-inline">
+                    <li><a href="/admin/authors_add"><span class="glyphicon glyphicon-plus"></span> 添加作者</a></li>
+                    <li><a href="#" id="delall"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+				    </li>
+			    </ul>
+		    </div>
+		    <div class="pull-right">
+                <form name="article_search" id="article_search" action="/admin/authors" method="get" class="form-inline">
+			        <div class="form-group">
+				        <input type="text" name="authors_name" value="<%=name%>" placeholder="姓名" class="form-control input-sm">
+			        </div>
+			        <div class="form-group">
+				        <button type="submit" class="btn btn-default btn-sm" id="find">
+					        <span class="glyphicon glyphicon-search"></span>
+				        </button>
+			        </div>
+		        </form>
+            </div>
+		    <div class="clearfix"></div>
+	    </div>
+        
+        <div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+        <table class="table table-striped">
+            <thead>
+            <tr><th style="width:30px;"><input type="checkbox" name="chkall"></th><th style="width:40px">#</th><th>姓名</th><th>电话</th><th>简介</th><th style="width:15%">日期</th></tr></thead>
+            <tbody>
+                <% models.forEach(function(item){%>
+                <tr>
+                    <td><input type="checkbox" value="<%=item._id%>" name="chk" /></td>
+                    <td><%=item.index%></td>
+                    <td><a href="/admin/authors_edit?_id=<%=item._id%>"><%=item.name%></a></td>
+                    <td><%=item.phone%></td>
+                    <td><%=item.desc%></td>
+                    <td><%=item.createtime%></td></tr>
+                <%})%>
+            </tbody>            
+            <tfoot>
+                <tr><td colspan="8">
+                <div id="page"></div></td></tr>
+            </tfoot>
+        </table>  
+    </div>
+  </div>
+</div>
+<script id="post_comments_tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td><input type="checkbox" value="${_id}" name="chk" /></td>
+        <td>${index}</td>
+        <td>${name}</td>
+        <td>${phone}</td>
+        <td>${desc}</td>
+        <td>${createtime}</td></tr>
+</script>
+<% include inc/footer.html%>

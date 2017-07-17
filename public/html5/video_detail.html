@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html style="font-size: 50px;">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0rem;
+				background-color: #F5F5F5;
+				color: #212121;
+			}
+			img {
+				display: inline-block;
+				vertical-align: bottom;
+			}
+			.main {
+				margin-left: auto;
+				margin-right: auto;
+				max-width: 640px;
+			}
+			.video {
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+			.main-second {
+				padding-left: .2rem;
+				padding-right: .2rem;
+			}
+			.title,
+			.vote-title {
+				margin-top: .2rem;
+				font-size: .32rem;
+				font-weight: bold;
+			}
+			.source {
+				margin-top: .14rem;
+				font-size: .24rem;
+				color: #5D5C5C;
+			}
+			.content {
+				margin-top: .1rem;
+				line-height: .5rem;
+				font-size: .28rem;
+			}
+			.content p {
+				margin: 0rem;
+			}
+			.content img {
+				width: 100%;
+			}
+			.vote-box {
+				display: none;
+			}
+			.vote-info {
+				display: table;
+				margin-top: .15rem;
+				width: 100%;
+			}
+			.vote-info-col {
+				display: table;
+				float: left;
+			}
+			.vote-info-col:not(:last-child) {
+				margin-right: .2rem;
+			}
+			.vote-info-col img {
+				float: left;
+				margin: .04rem .04rem .04rem 0rem;
+				width: .22rem;
+				height: .22rem;
+			}
+			#vote_endtimer,
+			#vote_type,
+			#vote_user {
+				float: left;
+				font-size: .22rem;
+				color: #5D5C5C;
+			}
+			.box {
+				margin-top: .2rem;
+				border: 1px solid #DDDDDD;
+				border-radius: .08rem;
+				box-shadow: 0rem 0rem .08rem #DDDDDD;
+				background-color: #FFFFFF;
+			}
+			.pk-box {
+				position: relative;
+				display: table;
+				padding: .3rem .2rem;
+				width: 100%;
+			}
+			.vote-list-item,
+			.vote-list-item-2 {
+				position: relative;
+				margin-left: .2rem;
+				margin-right: .2rem;
+				line-height: .8rem;
+				font-size: .28rem;
+			}
+			.vote-list-item:not(:last-child),
+			.vote-list-item-2:not(:last-child) {
+				border-bottom: 1px solid #DDDDDD;
+			}
+			.vote-list-item input {
+				position: absolute;
+				top: .24rem;
+				right: 0rem;
+				width: .32rem;
+				height: .32rem;
+				border: 0rem;
+			}
+			.vote-list-item-2 {
+				line-height: .6rem;
+			}
+			.progress-box {
+				display: table;
+				width: 100%;
+			}
+			.progress-bg {
+				position: relative;
+				float: left;
+				top: .2rem;
+				left: 0rem;
+				width: 3.5rem;
+				height: .2rem;
+				border: 1px solid #D2D1D1;
+				border-radius: 10rem;
+				background-color: #DDDDDD;
+			}
+			.progress {
+				position: absolute;
+				top: 0rem;
+				left: 0rem;
+				width: 0rem;
+				height: .2rem;
+				border: 1px solid #A7010E;
+				border-radius: 10rem;
+				background-color: #BC000E;
+			}
+			.progress-text {
+				float: right;
+				font-size: .24rem;
+				color: #5D5C5C;
+			}
+			.vote-button {
+				display: none;
+				margin-bottom: .25rem;
+				width: 100%;
+				height: .80rem;
+				border: 0rem;
+				border-radius: 4rem;
+				background-color: #CCCBCB;
+				font-size: .32rem;
+				color: #FFFFFF;
+			}
+			#submitVoteBtn {
+				background-color: #BC000E;
+			}
+			.pk-0,
+			.pk-1 {
+				float: left;
+				text-align: center;
+				font-size: .28rem;
+			}
+			.pk-0 img,
+			.pk-1 img {
+				width: 1.16rem;
+				height: 1.16rem;
+				border-radius: 50%;
+			}
+			.pk-0 {
+				width: 50%;
+			}
+			.pk-1 {
+				width: 1.16rem;
+			}
+			.pk-progress-box {
+				position: relative;
+				float: left;
+				margin: .48rem .2rem 0rem .2rem;
+				width: 2.80rem;
+				font-size: .26rem;
+				color: #585858;
+			}
+			.pk-progress-bg {
+				width: 100%;
+				height: .2rem;
+				border: 1px solid #7797D2;
+				border-radius: 10rem;
+				background-color: #7797D2;
+			}
+			.pk-progress {
+				position: absolute;
+				top: 0rem;
+				left: 0rem;
+				width: 20%;
+				height: .2rem;
+				border: 1px solid #D94141;
+				border-radius: 10rem;
+				background-color: #D94141;
+			}
+			.comment-box {
+				margin-top: .2rem;
+				margin-bottom: .8rem;
+				padding: .3rem .2rem;
+				border-top: 1px solid #D0D0D0;
+			}
+			.comment {
+				display: table;
+				margin-bottom: .30rem;
+				width: 100%;
+			}
+			.comment-pics {
+				float: left;
+				font-size: 0rem;
+			}
+			.comment-pics img {
+				width: .8rem;
+				height: .8rem;
+			}
+			.comment-contents {
+				margin-left: 1rem;
+				width: auto;
+				border-bottom: 1px solid #E4E3E3;
+			}
+			.comment-user {
+				font-size: .20rem;
+				color: #5C5B5B;
+			}
+			.comment-content {
+				margin: .18rem 0rem;
+				font-size: .26rem;
+				color: #212121;
+				line-height: .6rem;
+			}
+			.menu-box {
+				position: fixed;
+				left: 0rem;
+				bottom: 0rem;
+				width: 100%;
+			}
+			.menu {
+				position: relative;
+				width: 100%;
+				height: .8rem;
+				background-color: #E2E2E2;
+				border-top: .01rem solid #B8B7B6;
+				font-size: 0rem;
+			}
+			.menu button {
+				padding: 0rem;
+				width: 25%;
+				height: .8rem;
+				border: 0;
+				background-color: rgba(0, 0, 0, 0);
+				text-align: center;
+			}
+			.menu img {
+				width: 0.4rem;
+				height: 0.4rem;
+			}
+			#assistCount {
+				position: absolute;
+				top: .2rem;
+				left: 1.124rem;
+				line-height: .4rem;
+				font-size: .28rem;
+				text-align: left;
+			}
+			.input-box {
+				display: none;
+				position: relative;
+				width: 100%;
+				height: .8rem;
+			}
+			#commentText {
+				position: absolute;
+				top: 0rem;
+				left: 0rem;
+				padding: .12rem 1.24rem .12rem .24rem;
+				width: 100%;
+				height: 100%;
+				border: .01rem solid #ccc;
+				font-size: .28rem;
+			}
+			#submitCommentBtn {
+				position: absolute;
+				top: 0rem;
+				right: 0rem;
+				width: 1.2rem;
+				height: 100%;
+				border: 0rem;
+				background-color: #BC000E;
+				font-size: .28rem;
+				color: #FFFFFF;
+			}
+			.tip-box {
+				display: none;
+				position: fixed;
+				bottom: 1.6rem;
+				width: 100%;
+				height: .66rem;
+			}
+			.tip {
+				margin-left: auto;
+				margin-right: auto;
+				width: 80%;
+				line-height: .66rem;
+				background-color: rgba(0, 0, 0, 0.7);
+				border: .01rem solid #040000;
+				border-radius: .08rem;
+				box-shadow: .04rem .1rem .02rem rgba(68, 68, 68, 0.9);
+				font-size: .28rem;
+				color: #FFFFFF;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="main">
+			<div class="video"></div>
+			<div class="main-second">
+				<div class="title"></div>
+				<div class="source"></div>
+				<div class="content"></div>
+				<div class="vote-box">
+					<div class="vote-title"></div>
+					<div class="vote-info">
+						<div class="vote-info-col">
+							<img src="img/timer.png" />
+							<div id="vote_endtimer"></div>
+						</div>
+						<div class="vote-info-col">
+							<img src="img/vote.png" />
+							<div id="vote_type"></div>
+						</div>
+						<div class="vote-info-col">
+							<img src="img/user-profile.png" />
+							<div id="vote_user"></div>
+						</div>
+					</div>
+					<div id="vote_0" style="display: none;">
+						<div class="vote-list box"></div>
+						<button id="submitVoteBtn" class="vote-button">投票</button>
+						<button id="enableVoteBtn" class="vote-button"></button>
+					</div>
+					<div id="vote_1" style="display: none;">
+						<div class="pk-box box"></div>
+					</div>
+				</div>
+			</div>
+			<div class="comment-box">
+				<div style="margin-bottom:.3rem;font-size: .32rem;">
+					最新评论
+				</div>
+				<div id="commentList"></div>
+			</div>
+			<div class="menu-box">
+				<div class="input-box">
+					<input type="text" id="commentText" value="" />
+					<button id="submitCommentBtn" type="button">评论</button>
+				</div>
+				<div class="menu">
+					<button id="assistBtn" type="button">
+						<img src="img/assist.png" style="display: inline-block;" />
+						<div id="assistCount"></div>
+					</button>
+					<button id="favoriteBtn" type="button">
+						<img src="img/favorite.png" />
+					</button>
+					<button id="commentBtn" type="button">
+						<img src="img/comment.png" />
+					</button>
+                      <button id="sharebtn" type="button">
+						<img  src="img/news_share.png" />
+					</button>
+				</div>
+			</div>
+			<div class="tip-box">
+				<div class="tip"></div>
+			</div>
+		</div>
+		<script src="../../js/jquery-2.1.4.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/comm.js?1437017483980" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/data.js?1437017483980" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			(function(doc, win) {
+				var docEl = doc.documentElement,
+					resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+					recalc = function() {
+						var clientWidth = docEl.clientWidth < 640 ? docEl.clientWidth : 640;
+						if (!clientWidth) return;
+						docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+					};
+				if (!doc.addEventListener) return;
+				win.addEventListener(resizeEvt, recalc, false);
+				doc.addEventListener('DOMContentLoaded', recalc, false);
+			})(document, window);
+			var auth = null;
+			var mpno = null;
+			var headface = null;
+			var nickname = ToolUtils.getURLParam("nickname");
+			var cid = ToolUtils.getURLParam("cid");
+			var mid = ToolUtils.getURLParam("mid");
+			var commentList = new Array();
+			var curPage = 0;
+			var curIndex = -1;
+			var pageSize = 10;
+			var vid = null;
+			var rid = new Array();
+			var checkType = 0;
+			ToolUtils.addHandler(window, "message", function(e) {
+				var data = e.data;
+				console.log(data);
+				if (Boolean(data)) {
+					var result = data.result;
+					switch (data.event) {
+						case "get_detail":
+							if (Boolean(result) && result.code == 1) initDetail(result);
+							break;
+						case "get_comments":
+							if (Boolean(result) && result.code == 1) initComments(result);
+							break;
+						case "set_comments":
+							if (result.code == 1) {
+								if (commentList[curPage].length == pageSize) curPage++;
+								CMSUtils.get_comments(mid, mpno, curPage, pageSize);
+							}
+							break;
+						case "set_posts_assist":
+							if (result.code == 1) {
+								$("#assistBtn img").attr("src", "img/assist_focus.png");
+								$("#assistCount").text(parseInt($("#assistCount").text(), 10) + 1);
+								$("#assistBtn").unbind("click");
+							}
+							break;
+						case "set_favorites":
+							if (result.code == 1) {
+								$("#favoriteBtn img").attr("src", "img/favorite_focus.png");
+								$("#favoriteBtn").unbind("click");
+							}
+							break;
+						case "get_votes":
+							if (Boolean(result) && result.code == 1) initVotes(result);
+							break;
+						case "set_votes":
+							if (result.code == 1) {
+								$(".tip").text("您已投票成功，感谢您的参与");
+								$(".tip-box").show();
+								window.setTimeout(function() {
+									window.location.reload();
+								}, 3000);
+							}
+	                        break;
+	                    case "get_user_info":
+	                        if (result.result) {
+	                            //			                    nickname = result.nickname;
+	                            //			                    mpno = result.mpno;
+	                            if (result.img !== null && result.img != "")
+	                                headface = config.domain + result.img;
+	                            else
+	                                headface = "img/user.jpg"; //如果用户还未设置头像，直接用默认的所有人的头像
+	                        } else {
+	                            window.location.href = "loginActivity.html";
+	                        }
+	                        break;
+					}
+				}
+			});
+			$(function() {
+				auth = ToolUtils.getCookie("AUTH");
+				mpno = Boolean(auth) ? auth.split("&")[0].split("=")[1] : null;
+			});
+            function onYFLoad() {
+                //onYFLoadFlag = 1;
+                //YFUtils.get_user_info(auth);
+            };
+			function onCMSLoad() {
+				CMSUtils.get_detail(cid, mid, mpno);
+			}
+
+			function getCookies(__nickname) {
+				auth = ToolUtils.getCookie("AUTH");
+				mpno = Boolean(auth) ? auth.split("&")[0].split("=")[1] : null;
+				nickname = __nickname;
+				window.location.reload();
+			}
+
+			function initDetail(result) {
+				var data = result.data;
+				if (Boolean(data)) {
+				    $(".video").html('<video width="100%"  preload="auto" controls="controls" poster="' + data.pics + '" ><source src="' + data.video + '"></video>');
+//					$(".video").html('<video width="100%" height="' + ($(".main").width() / 2) + '" preload="auto" controls="controls" poster="' + data.pics + '" ><source src="' + data.video + '"></video>');
+					$(".title").text(data.title);
+					if (Boolean(data.source)) {
+						$(".source").html(data.source + "&nbsp;&nbsp;" + ToolUtils.utc2String(data.createtime * 1000, "yyyy/MM/dd"));
+					} else {
+						$(".source").html(ToolUtils.utc2String(data.createtime * 1000, "yyyy/MM/dd"));
+					}
+					$(".content").html(data.content);
+					if (Boolean(data.votes)) {
+						vid = data.votes;
+						CMSUtils.get_votes(mpno, vid);
+		            }
+
+					if (data.assisted == 1) {
+						$("#assistBtn img").attr("src", "img/assist_focus.png");
+					} else {
+						$("#assistBtn").click(function() {
+							if (Boolean(mpno)) {
+								CMSUtils.set_posts_assist(auth, mid, mpno);
+							} else {
+								window.location.href = "loginActivity.html";
+							}
+						});
+					}
+					$("#assistCount").text(data.assistcount);
+					if (data.favoritesed == 1) {
+						$("#favoriteBtn img").attr("src", "img/favorite_focus.png");
+					} else {
+						$("#favoriteBtn").click(function() {
+							if (Boolean(mpno)) {
+								CMSUtils.set_favorites(auth, mid, mpno);
+							} else {
+								window.location.href = "loginActivity.html";
+							}
+						});
+                    }
+                    if (data.commentstatus == "0") {
+                        //$("#commentText").val("该资源不允许评论");
+                        $("#submitCommentBtn").hide();
+                    }
+                    $("#sharebtn").click(function () {
+                        window.location.href = "sharetoapp.html?share_detailurl=" + encodeURIComponent(window.location.href.replace("video_detail.html", "video_share.html")) + "&productName=" + data.title + "&productDesc=" + data.title + "&productImg=" + data.pics;
+                    });
+					//if (data.commentstatus == 0) {
+					    $("#commentBtn").click(function () {
+					        YFUtils.get_user_info(auth);
+							if (Boolean(mpno)) {
+								if ($(".input-box").css("display") == "none") {
+									$(".input-box").show();
+									if (data.commentstatus == "1") {
+									    $("#commentText").val("").focus();
+									} else
+									{ $("#commentText").val("该资源不允许评论"); }
+								}
+							}
+						});
+						$("#submitCommentBtn").click(function() {
+							$(".input-box").hide();
+							CMSUtils.set_comments(auth, mid, 0, nickname, mpno, $("#commentText").val(), headface);
+						});
+					//}
+					$(window).scroll(function() {
+						var scrollHeight = 0;
+						var bodyScrollHeight = 0;
+						var documentScrollHeight = 0;
+						if (document.body) {
+							bodyScrollHeight = document.body.scrollHeight;
+						}
+						if (document.documentElement) {
+							documentScrollHeight = document.documentElement.scrollHeight;
+						}
+						scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+						if ($(window).height() + $(window).scrollTop() == scrollHeight) {
+							if (Boolean(commentList[curPage]) && commentList[curPage].length == pageSize) {
+								curPage++;
+								curIndex = -1;
+							}
+							CMSUtils.get_comments(mid, mpno, curPage, pageSize);
+						}
+					});
+					CMSUtils.get_comments(mid, mpno, curPage, pageSize);
+				}
+			}
+
+			function initVotes(result) {
+				var data = result.data;
+				if (Boolean(data)) {
+					$(".vote-box").show();
+					$(".vote-title").text(data.title);
+					checkType = data.type;
+					var time = data.endtime * 1000 - new Date().getTime();
+					if (time <= 0) {
+						$("#vote_endtimer").text("已结束");
+					} else {
+						var day = Math.floor(time / 86400000);
+						var hour = Math.floor((time - day * 86400000) / 3600000);
+						var minute = Math.floor((time - day * 86400000 - hour * 3600000) / 60000);
+						$("#vote_endtimer").text("离结束:" + day + "天" + hour + "时" + minute + "分");
+					}
+					if (checkType == 0) {
+						$("#vote_type").text("投票方式:单选");
+					} else if (checkType == 1) {
+						$("#vote_type").text("投票方式:多选");
+					} else if (checkType == 2) {
+						$("#vote_type").text("投票方式:PK");
+					}
+					$("#vote_user").text("已参与:" + data.count + "人");
+					if (checkType == 0 || checkType == 1) {
+						if (data.votesed == 0 && time > 0) {
+							var html = "";
+							$.each(data.list, function(i) {
+								html += '<div class="vote-list-item"><div style="padding-right:.35rem;">' + this.title + "</div>";
+								if (checkType == 0) {
+									html += '<input type="radio" name="vote" value="' + this._id + '"/></div>'
+								} else {
+									html += '<input type="checkbox" name="vote" value="' + this._id + '"/></div>';
+								}
+							});
+							$("#vote_0 div.vote-list").append(html);
+							$("#submitVoteBtn").show().click(function() {
+								if (Boolean(mpno)) {
+									rid.length = 0;
+									if (checkType == 0) {
+										rid.push($("input[name='vote']:checked").val());
+									} else {
+										$("input[name='vote']:checked").each(function() {
+											rid.push($(this).val());
+										});
+									}
+									if (rid.length == 0) {
+										$(".tip").text("至少选择一项");
+										$(".tip-box").show();
+										window.setTimeout(function() {
+											$(".tip-box").hide();
+										}, 3000);
+									} else {
+										CMSUtils.set_votes(auth, mpno, vid, rid.join(","));
+									}
+								} else {
+									window.location.href = "loginActivity.html";
+								}
+							});
+						} else {
+							$.each(data.list, function() {
+								$("#vote_0 div.vote-list").append('<div class="vote-list-item-2"><div>' + this.title + '</div><div class="progress-box"><div class="progress-bg"><div class="progress" style="width:' + this.percent + ';"></div></div><div class="progress-text">' + this.count + '票 (' + this.percent + ')</div></div></div>');
+							});
+							if (data.votesed == 1) {
+								$("#enableVoteBtn").show().text("您已投票");
+							} else {
+								$("#enableVoteBtn").show().text("投票已结束");
+							}
+						}
+						$("#vote_0").show();
+					} else if (checkType == 2) {
+						var votesed = 1;
+						if (data.votesed == 0 && time > 0) votesed = 0;
+						var leftObj = data.list[0];
+						var rightObj = data.list[1];
+						var html = '<div class="pk-' + votesed + '">';
+						if (Boolean(leftObj.pics)) {
+							html += '<img src="' + leftObj.pics + '" value="' + leftObj._id + '" />'
+						} else {
+							html += '<img src="img/zan_red_unpressed.png" value="' + leftObj._id + '" />'
+						}
+						html += '<br/>' + leftObj.title + '</div>';
+						if (votesed == 1) {
+							html += '<div class="pk-progress-box"><div class="pk-progress-bg">&nbsp;</div>';
+							html += '<div class="pk-progress" style="width:' + leftObj.percent + '">&nbsp;</div><div style="margin-top: .15rem;">';
+							html += '<div style="float: left;">' + leftObj.count + ' (' + leftObj.percent + ')</div><div style="float: right;">' + rightObj.count + ' (' + rightObj.percent + ')</div></div></div>';
+						}
+						html += '<div class="pk-' + votesed + '" style="float:right">';
+						if (Boolean(rightObj.pics)) {
+							html += '<img src="' + rightObj.pics + '" value="' + rightObj._id + '" />'
+						} else {
+							html += '<img src="img/zan_blue_unpressed.png" value="' + rightObj._id + '" />'
+						}
+						html += '<br/>' + rightObj.title + '</div>';
+						$("#vote_1 div.pk-box").append(html);
+						if (votesed == 0) {
+							$(".pk-0 img").click(function() {
+								if (Boolean(mpno)) {
+									rid.length = 0;
+									rid.push($(this).attr("value"));
+									CMSUtils.set_votes(auth, mpno, vid, rid.join(","));
+								} else {
+									window.location.href = "loginActivity.html";
+								}
+							});
+						}
+						$("#vote_1").show();
+					}
+				}
+			}
+
+			function initComments(result) {
+				commentList[curPage] = new Array();
+				var list = result.list;
+				if (Boolean(list) && list.length > 0) {
+					commentList[curPage] = list;
+					for (var i = curIndex + 1; i < list.length; i++) {
+						curIndex = i;
+						var commentObj = list[i];
+						var tempNickName = Boolean(commentObj.nickname) ? commentObj.nickname : "匿名";
+						var html = '';
+						if (commentObj.head != "") {
+						    html += '<div class="comment"><div class="comment-pics"><img src=' + commentObj.head + ' /></div>';
+						} else {
+						    html += '<div class="comment"><div class="comment-pics"><img src="img/user.jpg" /></div>';
+						}
+						html += '<div class="comment-contents"><div class="comment-user">' + tempNickName + '&nbsp;&nbsp;&nbsp;&nbsp;' + ToolUtils.utc2String(commentObj.createtime * 1000, "yyyy.MM.dd") + '</div>';
+						html += '<div class="comment-content">' + commentObj.content + "</div></div></div>";
+						$("#commentList").append(html);
+					}
+				} else if (curPage > 0) {
+					curPage--;
+					curIndex = pageSize - 1;
+				}
+			}
+		</script>
+	</body>
+
+</html>

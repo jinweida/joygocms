@@ -1,0 +1,188 @@
+﻿<% include ../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group">
+					<div class="pull-left">
+						<ul class="list-inline">
+							<li><a href="/admin/lives/columns/list_add"><span class="glyphicon glyphicon-plus"></span> 创建栏目</a></li>
+							<li><a href="#" id="delall"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+							<li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+							</li>
+						</ul>
+					</div>
+					<div class="pull-right">
+						<form name="article_search" id="article_search" action="/admin/lives/columns/list" method="get" class="form-inline">
+							<div class="form-group">
+								<div class="input-group">
+									<input type="text" name="name" id="name" placeholder="栏目名称" value="<%=name %>" class="form-control input-sm">
+									<span class="input-group-btn">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-search"></span>
+									</button>
+									</span>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div id="success" class="alert alert-success fade in" style="display:none;">删除成功！</div>
+				<div id="error" class="alert alert-danger fade in" style="display:none;">参数非法！</div>
+				<div class="form-group">
+					<table class="table table-striped table-condensed" id="columnTable">
+						<thead>
+							<tr>
+								<th style="width:30px;">
+									<input type="checkbox" name="chkall">
+								</th>
+								<th style="width:30px">#</th>
+								<th>栏目名称</th>
+								<th style="width:180px">创建时间</th>
+								<th style="width:180px">栏目类型</th>
+								<th style="width:80px">排序</th>
+								<th style="width:100px">设置状态</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% columns.forEach(function(item){ %>
+								<tr>
+									<td>
+										<input type="checkbox" value="<%=item._id%>" name="chk" />
+									</td>
+									<td><%=item.index%></td>
+									<td><%=item.name%></td>
+									<td><%=item.createtime%></td>
+									<td>
+										<% if (item.type==0) { %>系统栏目<% } else { %>自定义栏目<% } %>
+									</td>
+									<td><%=item.order%></td>
+									<td>
+										<% if (item.attr==0) { %><button class="btn btn-success btn-xs setAttr" data-attr='1' data-id=<%=item._id%>>隐藏</button><% } else { %><button class="btn btn-danger btn-xs setAttr" data-attr='0' data-id=<%=item._id%>>显示</button><% } %>
+									</td>
+								</tr>
+							<% }) %>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="7">
+									<div id="page"></div>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script id="post_comm_tpl" type="text/x-jquery-tmpl">
+		<tr>
+			<td>
+				<input type="checkbox" value="${_id}" name="chk" />
+			</td>
+			<td>${index}</td>
+			<td>${name}</td>
+			<td>${createtime}</td>
+			<td>
+				{{if type==0}} 系统栏目 {{else}} 自定义栏目 {{/if}}
+			</td>
+			<td>${order}</td>
+			<td>
+				{{if attr==0}}<button class="btn btn-success btn-xs setAttr" data-attr='1' data-id='${_id}'>隐藏</button>
+				{{else}}<button class="btn btn-danger btn-xs setAttr" data-attr='0' data-id="${_id}">显示</button>
+				{{/if}}
+			</td>
+		</tr>
+	</script>
+	<script>
+		$(function() {
+			var alertObj = new Alert({
+				checkTable: "#columnTable"
+			});
+			var ajax = new Ajax();
+			var pagecount = "<%=pagecount %>";
+			var currentPage = 1;
+			if (pagecount != 0) {
+				//分页功能
+				var options = {
+					currentPage: 1,
+					totalPages: pagecount,
+					numberOfPages: "<%=pagesize%>",
+					bootstrapMajorVersion: 1,
+					alignment: "center",
+					onPageClicked: function(e, originalEvent, type, page) {
+						var data = {
+							page: page,
+							title: $("#title").val()
+						};
+						ajax.get('/admin/lives/columns/ajax_list', data, function(result) {
+							if (result.code == 0) {
+								$("table tbody tr").html('');
+								console.log(result.message);
+								$("#post_comm_tpl")
+									.tmpl(result.message)
+									.appendTo("table tbody");
+							}
+						});
+					}
+				}
+				$('#page').bootstrapPaginator(options);
+			}
+			$(".del").click(function() {
+				$(this).parents("tr").find("input[type='checkbox']").prop("checked", true);
+				alertObj.check({
+					needConfirm: true,
+					confirmAction: delAction
+				});
+			});
+			$("#delall").click(function() {
+				alertObj.check({
+					needConfirm: true,
+					confirmAction: delAction
+				});
+			});
+			$(document).on('click', '.setAttr', function() {
+				var attr=$(this).attr('data-attr');
+				var id=$(this).attr('data-id');
+				$.post('/admin/lives/columns/update', {attr:attr,id:id}, function(result) {
+					if (result.code == 0) {
+						$("#success").show();
+						setTimeout(function() {
+							location.reload();
+							$("#success").hide()
+						}, 500);
+					} else {
+						$("#error").show();
+						setTimeout(function() {
+							$("#error").hide()
+						}, 2000);
+					}
+				});
+			});
+			function delAction($checkBoxs) {
+				var param = "";
+				$.each($checkBoxs, function(i) {
+					var id = $(this).val();
+					param += "&ids[" + i + "]=" + id;
+				});
+				ajax.post('/admin/lives/columns/delete', param, function(result) {
+					if (result.code == 0) {
+						$("#success").show();
+						setTimeout(function() {
+							location.reload();
+							$("#success").hide()
+						}, 500);
+					} else {
+						$("#error").show();
+						setTimeout(function() {
+							$("#error").hide()
+						}, 2000);
+					}
+				});
+			}
+		});
+	</script>
+	<% include ../inc/footer.html%>

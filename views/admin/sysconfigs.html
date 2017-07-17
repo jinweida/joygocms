@@ -1,0 +1,267 @@
+﻿<% include inc/head.html%>
+
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <ul class="list-inline">
+                <li>
+                    <a href="#" target="_blank">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                        帮助
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div>
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">奖励规则</a></li>
+            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">微直播参数</a></li>
+            <li role="presentation"><a href="#init" aria-controls="init" role="tab" data-toggle="tab">APP参数</a></li>
+            <li role="presentation"><a href="#filterWord" aria-controls="filterWord" role="tab" data-toggle="tab">关键词过滤</a></li>
+            <li role="presentation"><a href="#blacklist" aria-controls="blacklist" role="tab" data-toggle="tab">设置黑名单</a></li>
+          </ul>
+          <div id="success" class="alert alert-success fade in" style="display:none;maring-top:0px;position:fixed;z-index:9999;margin-left:35%">操作成功！</div>
+          <!-- Tab panes -->
+          <div class="tab-content" style="margin-top:15px;">
+            <div role="tabpanel" class="tab-pane active" id="home">
+              <table class="table table-hover table-striped table-condensed">
+              <thead><tr><th style="width:130px;">名称</th><th style="width:160px;">key值</th><th style="width:260px;">val值</th><th>描述</th></tr></thead>
+              <%models.forEach(function(item,index){
+                  if(item.type==='coin'){%>
+              <tr>
+              <td><p class="help-block"><%=item.name%></p></td>
+              <td><p class="help-block"><%=item.key%></p></td>
+              <td><div class="input-group"><input type="text" class="form-control input-sm" name="val" id="val_<%=index%>" placeholder="val" value="<%=item.val%>"><span class="input-group-btn"><button class="btn btn-danger btn-sm save" type="button" data-key="<%=item.key%>" data-index="<%=index%>">保存</button>
+              </span></div></td>
+              <td><p class="help-block"><%=item.desc%></p></td></tr>
+              <%}})%>
+              </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profile">
+                <table class="table table-hover table-striped table-condensed">
+                <tbody>
+                <%models.forEach(function(item,index){
+                    if(item.type==='live'){%>
+                    <%if(item.key==='live_switch'){%>
+                    <tr>
+                      <td style="width: 150px;"><p class="help-block"><%=item.name%></p></td>
+                      <td style="width:180px;">
+                        <div class="btn-group btn-toggle" data-name="live_switch">
+                          <button class="btn btn-sm btn-default <%if(item.val==0){%>btn-danger<%}%>" data-val="0">关</button>
+                          <button class="btn btn-sm btn-default <%if(item.val==1){%>btn-danger<%}%>" data-val="1">开</button>
+                          <input type="hidden" name="live_switch" value="<%=item.val%>"/>
+                        </div>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <%}else if(item.key==='live_default_status'){%>
+                    <tr>
+                      <td><p class="help-block"><%=item.name%></p></td>
+                      <td>
+                        <select name="live_default_status" id="live_default_status" class="form-control input-sm">
+                          <option value="0" <%if(item.val==0){%>selected<%}%>>待审核</option>
+                          <option value="1" <%if(item.val==1){%>selected<%}%>>审核通过</option>
+                        </select>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <%}else if(item.key==='live_concurrent_number'){%>
+                    <tr>
+                      <td><p class="help-block"><%=item.name%></p></td>
+                      <td>
+                        <select name="live_concurrent_number" id="live_concurrent_number" class="form-control input-sm">
+                          <option value="0" <%if(item.val==0){%>selected<%}%>>无限制</option>
+                          <option value="4" <%if(item.val==4){%>selected<%}%>>4路</option>
+                          <option value="8" <%if(item.val==8){%>selected<%}%>>8路</option>
+                          <option value="12" <%if(item.val==12){%>selected<%}%>>12路</option>
+                          <option value="16" <%if(item.val==16){%>selected<%}%>>16路</option>
+                        </select>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <%}else if(item.key==='live_delay_time'){%>
+                    <tr>
+                      <td><p class="help-block"><%=item.name%></p></td>
+                      <td>
+                        <input type="text" name="live_delay_time" class="form-control input-sm" value="<%=item.val%>"/>
+                      </td>
+                      <td><p class="help-block"><%=item.desc%></p></td>
+                    </tr>
+                    <%}%>
+                    <%}})%>
+                </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="init">
+              <button class="btn btn-danger btn-sm " type="button" id="creat">创建</button>
+              <form name="nextProfile_form" id="nextProfile_form" method="post">
+                <table class="table table-hover table-striped table-condensed" id="creatAllocation">
+                  <thead>
+                    <tr><th style="width:130px;">名称</th><th style="width:160px;">key值</th><th>val值</th><th style="width:360px;">参数描述</th><tr>
+                  </thead>
+                  <tbody>
+                    <%models.forEach(function(item,index){
+                    if(item.type==='init'){%>
+                    <tr>
+                    <td><p class="help-block"><%=item.name%></p></td>
+                    <td><p class="help-block"><%=item.key%></p></td>
+                    <td><div class="input-group"><input type="text" class="form-control input-sm" name="val" data-key="<%=item.key%>" placeholder="val" value="<%=item.val%>"><span class="input-group-btn"><button class="btn btn-danger btn-sm changeItin" type="button">保存</button>
+                    </span></div></td>
+                    <td><p class="help-block"><%=item.desc%></p></td></tr>
+                    <%}})%>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="filterWord">
+              <div class="rom">
+                <div class="col-xs-12">
+                  <div class="form-group">
+                    <label class="control-label text-danger">说明:关键词之间用逗号隔开</label>
+                    <%models.forEach(function(item,index){
+                    if(item.type==='comments'){%>
+                    <textarea type="text" name="filterWord" class="form-control" placeholder="请输出过滤关键词" rows="5"><%if(item.key==='filter'){%><%=item.val.trim()%><%}%></textarea>
+                    <%}})%>
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <button type="button" class="btn btn-sm btn-danger changeFilter">保存</button>
+                </div>
+              </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="blacklist">
+              <div class="rom">
+                <div class="col-xs-12">
+                  <div class="form-group">
+                    <label class="control-label text-danger">说明:黑名单之间用逗号隔开</label>
+                    <%models.forEach(function(item,index){
+                    if(item.type==='blacklist'){%>
+                    <textarea type="text" name="blacklist" class="form-control" placeholder="请输出过滤关键词" rows="5"><%if(item.key==='blacklist'){%><%=item.val.trim()%><%}%></textarea>
+                    <%}})%>
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <button type="button" class="btn btn-sm btn-danger blacklist">保存</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<script>
+$(function(){
+  $(".save").on("click",function(){
+    var data=$(this).data();
+    set_sysconfigs({
+        key:data.key,val:$('#val_'+data.index).val()
+    })
+    return false;
+  })
+  $('select').on('change',function(){
+    set_sysconfigs({
+        key:$(this).attr("name"),val:$(this).val()
+    })
+    return false;
+  })
+  $('[name="live_delay_time"').on('input',function(){
+    set_sysconfigs({
+        key:$(this).attr("name"),val:$(this).val()
+    })
+    return false;
+  })
+  function set_sysconfigs(options){
+    var ajax = new Ajax();
+    ajax.put('/admin/sysconfigs/save', options, function (result) {
+      if (result.code == 0) {
+        $("#success").show();
+        window.setTimeout(function () { $("#success").hide() }, 2000);
+      }
+    });
+  }
+  $(".btn-toggle").click(function(){
+    if($(this).find('.btn-danger').length>0){
+      $(this).find('.btn').toggleClass('btn-danger')
+      set_sysconfigs({
+          key:$(this).attr('data-name'),val:$(this).find('.btn-danger').attr('data-val')
+      })
+    }
+  });
+  $(document).on("click","#creat",function(){
+    var btn=$(this);
+    btn.hide();
+    var html='<tr id="allocation">\
+        <input type="hidden" class="form-control input-sm" name="type"  value="init">\
+        <td><input type="text" class="form-control input-sm" name="name"  placeholder="名称" ></td>\
+        <td><input type="text" class="form-control input-sm" name="key"  placeholder="key值" ></td>\
+        <td><input type="text" class="form-control input-sm" name="val"  placeholder="val值"></td>\
+        <td><div class="input-group"><input type="text" class="form-control input-sm" name="desc"  placeholder="参数描述" ><span class="input-group-btn"><button class="btn btn-danger btn-sm" type="button" id="save">保存</button><button class="btn btn-default btn-sm" type="button" id="cancel">取消</button></span></div></td>\
+    </tr>';
+    $('#creatAllocation').find('tbody').prepend(html);
+    $("#save").on("click", function () {
+      var ajax = new Ajax();
+      var dataArry = $("#nextProfile_form").serializeArray();
+      ajax.post('/admin/sysconfigs/create', {
+        type:dataArry[0].value,
+        name:dataArry[1].value,
+        key:dataArry[2].value,
+        val:dataArry[3].value,
+        desc:dataArry[4].value
+      }, function (result) {
+        if (result.code == 1) {
+          $('#creat').removeClass('hidden').addClass('show');
+          writeParameter(dataArry);
+          $('#allocation').remove();
+          $("#success").show();
+          window.setTimeout(function () { $("#success").hide() }, 2000);
+        }
+      });
+      return false;
+    });
+    $("#cancel").on("click",function(){
+      $('#allocation').remove();
+      btn.show();
+    })
+  })
+  function writeParameter(data){
+    var html='<tr>'
+    $.each(data,function(i,v){
+      if(i==0){
+        html+=''
+      }else if(i==3){
+        html+='<td><div class="input-group"><input type="text" class="form-control input-sm" name="desc" data-key="'+data[i-1].value+'" placeholder="'+ v.value+'"><span class="input-group-btn"><button class="btn btn-danger btn-sm changeItin" type="button">保存</button></span></div></td>'
+      }else if(i<=4){
+        html +='<td ><p class="help-block">' + v.value + '</p></td>'
+      }
+    });
+    html+='</tr>';
+    $('#creatAllocation').find('tbody').append(html);
+  };
+  $(document).on('click','.changeItin',function(){
+    var input=$(this).parent().prev();
+    set_sysconfigs({
+      key:input.attr('data-key'),val:input.val()
+    })
+    return false;
+  });
+  $('.changeFilter').click(function(){
+     set_sysconfigs({
+      key:'filter',val:$('textarea[name="filterWord"]').val()
+    })
+    return false;
+  })
+  $('.blacklist').click(function(){
+     set_sysconfigs({
+      key:'blacklist',val:$('textarea[name="blacklist"]').val()
+    })
+    return false;
+  })
+})
+</script>
+<% include inc/footer.html%>

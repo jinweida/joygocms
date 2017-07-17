@@ -1,0 +1,246 @@
+﻿<% include ../inc/head.html%>
+<div class="container-fluid">
+  <div class="row">
+    <div class="sidebar">
+      <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+      <div class="form-group">
+        <ul class="list-inline">
+          <li>
+            <a href="javascript:history.go(-1)"><span class="glyphicon glyphicon-chevron-left"></span>返回</a>
+          </li>
+          <li>
+            <a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span>帮助</a>
+          </li>
+        </ul>
+      </div>
+      <input type="hidden" id="being_upload">
+      <form name="article_form" id="article_form" method="post">
+        <input type="hidden" value="<%=model._id%>" id="post_id" name="post_id" />
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#mainInfo" aria-controls="mainInfo" data-toggle="tab">基础信息</a></li>
+            <li><a href="#minorInfo" aria-controls="minorInfo" data-toggle="tab">选填信息</a></li>
+        </ul>
+        
+        <div class="tab-content" style="margin-top:15px;">
+            <div class="tab-pane active" id="mainInfo">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="well">
+                      <% include ../inc/form_left_edit.html%>
+                      <div class="form-group">
+                          <label for="post_activitytype">活动类型</label>&nbsp;&nbsp;&nbsp;
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activitytype" value="0"  <%if(model.activitytype===0){%>checked<%}%>> 视频
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activitytype" value="1" <%if(model.activitytype===1){%>checked<%}%>> 图片
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activitytype" value="2" <%if(model.activitytype===2){%>checked<%}%>> 普通
+                          </label>
+                      </div>
+                      <div class="form-group">
+                          <label for="post_activitytype">线上参与</label><br>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activityonline" value="1" <%if(model.activityonline===1){%>checked<%}%>> 是
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activityonline" value="0" <%if(model.activityonline===0){%>checked<%}%>> 否
+                          </label>
+                      </div>
+                      <div class="form-group">
+                          <label for="post_activitytype">显示参与人数</label><br>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activityparticipate" value="1" <%if(model.activityparticipate===1){%>checked<%}%>> 是
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activityparticipate" value="0" <%if(model.activityparticipate===0){%>checked<%}%>> 否
+                          </label>
+                      </div>
+                      <div class="form-group">
+                          <label for="post_activitynotice">短信通知</label><br>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activitynotice" value="1" <%if(model.activitynotice===1){%>checked<%}%>> 是
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_activitynotice" value="0" <%if(model.activitynotice===0){%>checked<%}%>> 否
+                          </label>
+                      </div>
+                      <div class="form-group">
+                          <label for="post_onlinepayment">费用支付</label><br>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_onlinepayment" value="1" <%if(model.onlinepayment===1){%>checked<%}%>> 线上支付
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="post_onlinepayment" value="0" <%if(model.onlinepayment===0){%>checked<%}%>> 线下支付
+                          </label>
+                      </div>
+                      <div class="form-group">
+                        <label for="post_activitywelfare">报名福利设置</label><br>
+                        <label class="radio-inline">
+                          <input type="radio" name="post_activitywelfare" value="0" <%if(model.activitywelfare===0){%>checked<%}%>> 无
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="post_activitywelfare" value="1" <%if(model.activitywelfare===1){%>checked<%}%>> 积分
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="post_activitywelfare" value="2" <%if(model.activitywelfare===2){%>checked<%}%>> 商城代金券
+                        </label>
+                      </div>
+                      <div class="form-group <%if(model.activitywelfare==0 || model.activitywelfare==1){%>hide<%}%>" id="activitvouchers">
+                          <select id="post_activitvouchers" name="post_activitvouchers" class="form-control">
+                              <option value="">---请选择代金券---</option>
+                              <%envelopelist.forEach(function(item){%>
+                              <option value="<%=item.tvdiscountruleid%>" <%if(item.tvdiscountruleid==model.activitvouchers){%>selected<%}%>><%=item.defaultname%></option>
+                              <%})%>
+                          </select>
+                      </div>
+                      <div class="form-group <%if(model.activitywelfare==0 || model.activitywelfare==2){%>hide<%}%>" id="activitintegral">
+                          <div id="group_activitintegral">
+                             <input type="text" name="post_activitintegral" id="post_activitintegral" placeholder="积分数量" class="form-control" value="<%=model.activitintegral%>">
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-9">
+                  <div class="panel panel-danger">
+                    <div class="panel-body">
+                      <% include ../inc/form_top_edit.html%>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="form-group form-group-sm">
+                                <div id="group_post_author">
+                                  <label for="post_author">活动开始时间
+                                    <span id="msg_post_activitystime">*</span>
+                                  </label>
+                                  <input type="text" name="post_activitystime" id="post_activitystime" value="<%=model.activitystime%>" placeholder="必填" class="validate form-control input_date">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">  
+                              <div class="form-group form-group-sm">
+                                <label for="post_date">活动结束时间
+                                  <span id="msg_post_activityetime">*</span>
+                                </label>
+                                <div id="post_date_input" class="form-group" style="display: block;">
+                                  <input type="text" name="post_activityetime" id="post_activityetime" value="<%=model.activityetime%>" placeholder="必填" class="validate form-control input_date">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">                          
+                              <div class="form-group form-group-sm">
+                                <label for="post_price">费用</label>
+                                <div class="form-group" style="display: block;">
+                                  <input type="text" name="post_price" id="post_price" value="<%=model.price%>" placeholder="费用" class="form-control">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-8">                          
+                              <div class="form-group form-group-sm">
+                                <label for="activityaddress">活动地址</label>
+                                <div class="form-group" style="display: block;">
+                                  <input type="text" name="post_activityaddress" id="post_activityaddress" value="<%=model.activityaddress%>" placeholder="请输入活动地址" class="form-control">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">                          
+                              <div class="form-group form-group-sm">
+                                <label for="post_activityceiling">报名人数上限</label>
+                                <div class="form-group" style="display: block;">
+                                  <input type="text" name="post_activityceiling" id="post_activityceiling" value="<%=model.activityceiling%>" placeholder="人数上限" class="form-control">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12">                          
+                              <div class="form-group form-group-sm">
+                                <label for="post_activityprotocol">活动协议</label>
+                                <div class="form-group" style="display: block;">
+                                  <input type="text" name="post_activityprotocol" id="post_activityprotocol" value="" placeholder="协议" class="form-control">
+                                </div>
+                              </div>
+                            </div>    
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div id="group_editor">
+                            <label for="editor" class="control-label">内容<span id="msg_post_content">*</span></label>
+                            <textarea id="post_content" name="post_content" style="width:100%;height:660px;"><%=model.content%></textarea>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <button type="button" class="go_submit btn btn-danger">保存</button>
+                          <p class="text-left">
+                            <small class="red" id="error"></small>
+                          </p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="minorInfo">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-danger">
+                    <div class="panel-body">
+                      <% include ../inc/form_topor_edit.html%>
+
+                      <% include ../inc/form_bottom_edit.html%>
+                      <div class="col-md-12">
+                        <div class="form-group form-group-sm">
+                          <button type="button" class="go_submit btn btn-danger">保存</button>
+                          <p class="text-danger"><small class="red" id="error"></small></p>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    $('input[name="post_activitywelfare"]').on('change',function(event) {
+      event.preventDefault();
+      var key=$(this).val()
+      var activitvouchers=$('#activitvouchers')
+      var activitintegral=$('#activitintegral')
+      switch (key) {
+        case '0':
+          activitintegral.addClass('hide')
+          activitvouchers.addClass('hide')
+          activitintegral.removeClass('show')
+          activitvouchers.removeClass('show')
+          break;
+        case '1':
+          activitintegral.addClass('show')
+          activitintegral.removeClass('hide')
+          activitvouchers.addClass('hide')
+          activitvouchers.removeClass('show')
+          break;
+        case '2':
+          activitvouchers.addClass('show')
+          activitvouchers.removeClass('hide')
+          activitintegral.addClass('hide')
+          activitintegral.removeClass('show')
+          break;
+      }
+    });
+  })
+</script>
+<script charset="utf-8" src="/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="/kindeditor/lang/zh_CN.js"></script>
+<script charset="utf-8" src="/kindeditor/index.js"></script>
+<% include ../inc/editor_mode.html%>
+<% include ../inc/footer.html%>
+

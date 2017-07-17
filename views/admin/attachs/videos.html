@@ -1,0 +1,249 @@
+﻿<% include ../inc/head.html%>
+<script type="text/javascript">
+    $(function () {
+        var ajax = new Ajax();
+        function upload_msg(_upload_name, _upload_msg) {
+            _str_msg = "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">" +
+                "<span aria-hidden=\"true\">&times;</span>" +
+                "<span class=\"sr-only\">Close</span>" +
+            "</button>" +
+            "<div class=\"alert_overflow\" style=\"overflow:hidden\">" + _upload_name + "</div>" +
+            "<div>" + _upload_msg + "</div>";
+
+            return _str_msg;
+        }
+        $('#fileupload').fileupload({
+            url: '/upload',
+            dataType: 'json',
+            maxNumberOfFiles:10,
+            add: function (e, data) {
+                var goUpload = true;
+                var file = data.files[0];
+                if (file.size > 1024*1024*700) {
+                    goUpload = false;
+                    _str_msg = upload_msg(file.name, "上传文件不能超过 700 MB");
+                    data.context = $("<div/>").html(_str_msg).appendTo("#files");
+                    data.context.attr("class", "alert alert-danger alert-dismissible");
+                } else {
+                    _str_msg = upload_msg(file.name, "正在上传");
+                    data.context = $("<div/>").html(_str_msg).appendTo("#files");
+                    data.context.attr("class", "alert alert-info alert-dismissible");
+                }
+                if (goUpload) {
+                    data.submit();
+                }
+            },
+            submit:function(e,data){
+                data.formData = {columnid:$("#columnid").val()};
+            },
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $("#columns_pic").val(file.path);
+                    _str_msg = upload_msg(file.name, "上传成功");
+                    $("#preview").attr("src", file.path);
+                    data.context.html(_str_msg);
+                    data.context.attr("class", "alert alert-success  alert-dismissible");
+                    window.setTimeout(function () { data.context.hide()}, 2000);
+                });
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .progress-bar').css(
+                    'width',
+                    progress + '%'
+                ).html(progress + '%');
+                if(progress===100){
+                    $(window).off('beforeunload')
+                    window.setTimeout(function () { window.location.reload() }, 3000)
+                }else{
+                    $(window).on('beforeunload',function(){
+                        return '离开上传将中断，确定离开此吗？';
+                    }); 
+                }
+
+            }
+        }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        //分页功能
+        var options = {
+            currentPage: 1,
+            totalPages: "<%=pagecount%>",
+            numberOfPages: "<%=pagesize%>",
+            bootstrapMajorVersion: 1,
+            onPageClicked: function (e, originalEvent, type, page) {
+                ajax.get('/admin/videos_ajax_get_list', {page:page}, function (result) {
+                    if (result.code == 0) {
+                        $("table tbody").empty();
+                        console.log(result.message);
+                        console.log(result);
+                        $("#attachs_tpl")
+                                .tmpl(result.message)
+                                .appendTo("table tbody");
+                        $("[data-toggle='tooltip']").tooltip();
+                    }
+                });
+            }
+        }
+        $('#page1').bootstrapPaginator(options);
+
+        $(document).on("click","#del", function () {
+            var _ids="";
+            $("input[name='chk']").each(function () {
+                if ($(this).is(":checked")) {
+                    if (_ids != "") _ids += ",";
+                    _ids += $(this).val();
+                }
+            })
+            if (_ids == "") {
+                $("#error").show();
+                window.setTimeout(function () { $("#error").hide() }, 2000);
+                return;
+            }
+            if (confirm("确认删除附件吗？")) {
+                $.post('/admin/attachs_delete', {_id:_ids}, function (result) {
+                    if (result.code == 0) {
+                        $("#success").show();
+                        setTimeout("$('.attachs').hide();location.reload();", 2000);
+                    }
+                    else {
+                        $("#error").show();
+                        window.setTimeout(function () { $("#error").hide() }, 2000);
+                    }
+                });
+            }
+        })
+    })
+</script>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+            <div class="pull-left">
+                <ul class="list-inline"><ul class="list-inline">
+                    <li><a href="#" id="del"><span class="glyphicon glyphicon-trash"></span> 批量删除</a></li>
+                    <li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="well">
+    				<div class="form-group">
+                        <label for="columnid">所属栏目分类</label>
+                        <select id="columnid" name="columnid" class="form-control" size="20" style="font-size: 12px">
+                            <%columns.forEach(function(item){
+                            var tree="";
+                            if(item.level>1)tree="| --";
+                            %>
+                            <option value="<%=item._id%>"><%=tree%><%=item.name%></option>
+                            <%})%>
+                        </select>
+                    </div>
+                    <!-- The global progress bar -->
+                    <div id="progress" class="progress">
+                        <div class="progress-bar progress-bar-success"></div>
+                    </div>
+                    <!-- The container for the uploaded files -->
+                    <div id="files" class="files"></div>
+                    <span class="btn btn-danger fileinput-button">
+                        <span>上传视频</span>
+                        <!-- The file input field used as target for the file upload widget -->
+                        <input id="fileupload" type="file" name="files[]" multiple>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div id="success" class="alert alert-success fade in attachs" style="display:none;">删除成功！</div>
+                 <div id="transcoding" class="alert alert-danger fade in attachs" style="display:none;">转码中！</div>
+                <div id="error" class="alert alert-danger fade in attachs" style="display:none;">参数非法！</div>
+                <table class="table table-striped table-condensed">
+                    <thead><tr><th style="width:25px;"><input type="checkbox" value="" name="chkall" /></th><th style="width:40px;">#</th><th>详细信息</th><th style="width:125px;">栏目</th><th style="width:85px;">作者</th><th style="width:75px;">文件大小</th><th style="width:165px;">日期</th></tr></thead>
+                    <tbody>
+                        <% var i=1;
+                        models.forEach(function(item){%>
+                        <tr><td><input type="checkbox" value="<%=item._id%>" name="chk" /></td><td><%=i++%></td>
+                            <td><span class="label <%=item.statusstyle%>"><%=item.statusname%></span><a href="#" class="review" data-title="<%=item.name%>" data-mpno="<%=item.mpno%>" data-originalvideo="<%=item.originalvideo%>" data-video="<%=item.video%>"> <%=item.name%></a></td>
+                            <td><%=item.columnname%></td>
+                            <td><%=item.author%></td>
+                            <td><%=item.big%></td>
+                            <td><%=item.createtime%></td>
+                            </tr>
+                        <%})%>
+                    </tbody>
+                </table>
+                <div id="page1"></div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<script id="attachs_tpl" type="text/x-jquery-tmpl">
+    <tr>
+        <td><input type="checkbox" value="${_id}" name="chk"/></td>
+        <td>${index}</td>
+        <td><span class="label ${statusstyle}">${statusname}</span>
+        <a href="#" class="review" data-mpno="${mpno}" data-originalvideo="${originalvideo}" data-video="${video}" data-title="${name}">${name}</a></td>
+        <td>${columnname}</td>
+        <td>${author}</td>
+        <td>${big}</td>
+        <td>${createtime}</td>
+    </tr>
+</script>
+<div class="modal fade" id="modal_review" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal_title"></h4>
+        </div>
+        <div class="modal-body" style="overflow-y:auto">
+            <div id="msg_attachs" style="width:568px">
+                <div id="video"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<script src="/javascripts/ckplayer/ckplayer.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function(){
+        var flashvars = {
+            f: '/javascripts/ckplayer/m3u8.swf',
+            a: '',
+            c: 0,
+            b: 1,
+            p: 1,
+            s: 4,
+            lv: 0,
+            my_url: encodeURIComponent(window.location.href)
+          };
+          var params = {
+            bgcolor: '#FFF',
+            allowFullScreen: true,
+            allowScriptAccess: 'always',
+            wmode: 'transparent'
+        };
+        $(document).on("click",".review",function(){
+            var videoUrl=$(this).attr("data-video");
+            var videoW=$('#msg_attachs').width();
+            if(videoUrl==''){
+                $("#transcoding").show();
+                setTimeout("$('.attachs').hide();", 2000);
+            }else{
+                $("#modal_review").modal("show");
+                $("#modal_title").html($(this).attr("data-title"));
+                flashvars.a = encodeURIComponent(videoUrl);
+                CKobject.embedSWF('/javascripts/ckplayer/ckplayer.swf', 'video', 'ckplayer_video', '100%',videoW* 9 / 16, flashvars, params);
+                }
+            })
+         $('#modal_review').on('hidden.bs.modal', function (e) {
+            $("#msg_attachs").html('<div id="video"></div>');
+        })
+    })
+</script>
+<% include ../inc/footer.html%>

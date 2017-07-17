@@ -1,0 +1,281 @@
+<% include ../inc/head.html%>
+<div class="container-fluid">
+   <div class="row">
+    <div class="sidebar">
+        <% include ../inc/left.html%>
+    </div>
+    <div class="main">
+        <div class="form-group">
+		    <ul class="list-inline">
+			    <li>
+				    <a href="/admin/lives/vod">
+					    <span class="glyphicon glyphicon-chevron-left"></span>
+					    返回
+				    </a>
+			    </li>
+			    <li>
+				    <a href="#" target="_blank">
+					    <span class="glyphicon glyphicon-question-sign"></span>
+					    帮助
+				    </a>
+			    </li>
+		    </ul>
+	    </div>
+	    <div id="success" class="alert alert-success fade in" style="display:none;">创建成功！</div>
+        <div id="error" class="alert alert-danger fade in" style="display:none;">创建失败！</div>
+        <br/>
+        <form name="auth_form" id="auth_form">
+            <div class="row">
+			    <form name="auth_form" id="auth_form">
+				<div class="col-md-3">
+					<div class="well">
+						<div class="form-group form-group-sm">
+						    <label for="post_date">缩略图</label>
+						    <div class="input-group input-group-sm">
+						    <span class="input-group-btn">
+						    <span class="btn btn-danger fileinput-button">
+						            <span>上传</span>
+						            <!-- The file input field used as target for the file upload widget -->
+						            <input id="fileupload" type="file"  data-value="post_pics" name="files[]" multiple>
+						        </span>
+						    </span>
+							<input type="text" name="pics" id="post_pics" class="form-control" value="" placeholder="640*480图片">
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-danger select_pic" data-value="post_pics" id="select_pics">选择</button>
+						        </span>
+						    </div>
+						    <p class="help-block" id="files"></p>
+						</div>
+						<div class=" form-group">
+							<label class="control-label">状态</label>
+  								<select class="form-control" name="status">
+									<option value="1">已审核</option>
+									<option value="0">待审核</option>
+									<option value="-1">关闭</option>
+								</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div  class="panel panel-danger">
+						<div class="panel-body">
+							<div class="row">
+							<input type="hidden" name="type" value="3">
+								<div class="col-md-6 form-group">
+									<label class="control-label">栏目<span class="text-danger">*</span></label>
+									<select class="form-control" name="column">
+										<%columns.forEach(function(item) {%>
+										<option value="<%=item.type%>,<%=item.name%>">
+											<%=item.name%>
+										</option>
+										<%});%>
+									</select>
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="control-label">主题<span>*</span></label>
+									<input type="text" name="title" placeholder="请输入主题" class="form-control">
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="control-label">上传人</label>
+									<input type="text" name="mpno" placeholder="请输入上传人" class="form-control">
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="control-label">上传人姓名</label>
+									<input type="text" name="nickname" placeholder="请输入上传人姓名" class="form-control">
+								</div>
+								<div class="col-md-6 form-group">
+										<label class="control-label">是否加入聊天室</label>
+		  								<select class="form-control" name="isjoin">
+											<option value="true">是</option>
+											<option value="false">否</option>
+										</select>
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="control-label">聊天室名称</label>
+		  								<input type="text" class="form-control" name="chatroomname" placeholder="请输入聊天室名称">
+								</div>
+								<div class="col-md-12 form-group">
+									<label class="control-label">视频地址</label>
+									<div class="input-group input-group-sm">
+										<input type="text" class="form-control" id="url" name="url" placeholder="请选择视频地址">
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-danger " id="btn_post_video">本地视频</button>
+									    </span>
+									</div>
+								</div>
+								<div class="col-md-12 form-group">
+									<label class="control-label">简介</label>
+									<textarea type="text" rows="7" name="desc" class="form-control"></textarea>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<a class="btn btn-danger btn-sm" id="addGuestBtn">
+											<span class="glyphicon glyphicon-plus"></span>添加嘉宾
+										</a>
+									</div>
+								</div>
+								<div class="form-group" id="guestList">
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<a type="button" class="go_submit btn btn-danger">提交</a>
+										<p class="text-danger"><small class="red" id="errorText">&nbsp;&nbsp;</small></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</form>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modal_post_video" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">选择视频</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-inline" style="margin-bottom:15px;">
+            <div class="form-group form-group-sm">
+                <select id="post_video_columnid_find" name="post_video_columnid_find" class="form-control input-sm">
+                    <option value="-1">栏目分类</option>
+                    <%columns.forEach(function(item){
+                    var tree="";
+                    if(item.level>1)tree="| --";
+                    %>
+                    <option value="<%=item._id%>"><%=tree%><%=item.name%></option>
+                    <%})%>
+                </select>
+                <div class="input-group input-group-sm">
+                <input type="text" name="post_video_title_find" id="post_video_title_find" class="form-control input-sm" placeholder="标题">
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-danger" id="post_video_find">查询</button>
+                </div>
+            </div>
+            </form>
+            <div id="modalbody_post_video" class="row">
+                正在加载...
+            </div>
+            <div id="page_video"></div>
+        </div>
+    </div>
+    </div>
+</div>	
+<script id="guest-tmpl" type="text/x-jquery-tmpl">
+	<div id="row_${id}">
+		<div class="form-group col-md-6 form-group-sm">
+			<div class="input-group input-group-sm">
+				<span class="input-group-btn ">
+				<button class="btn btn-danger deleteItem" id="${id}">删除选项</button>
+				</span>
+				<input class="form-control" type="text" placeholder="用户ID" name="userid">
+			</div>
+		</div>
+		<div class=" form-group col-md-6 form-group-sm">
+			<input class="form-control" type="text" placeholder="名称" name="guestname">
+		</div>
+	</div>
+</script>
+<script id="post_video_tpl" type="text/x-jquery-tmpl">
+    <div class="col-xs-6 col-md-3 item" style="max-height:195px;">
+        <div class="thumbnail">
+        <img src="${pics}" data-video="${video}" title="${name}" data-title="${title}" data-tag="${tag}" data-desc="${desc}" data-pics="${pics}" data-from="${from}" class="select" alt="${title}" style="display: block;height:120px;width:100%;"/>
+
+        <div title="${name}" class="caption">${videoname}</div>
+        </div>
+    </div>
+</script>
+<script>
+    $(function () {
+    	var ajax = new Ajax();
+        $(".input_date").datetimepicker({
+            step:1,
+            lang:'ch',
+        });
+		//添加嘉宾
+	    $('#addGuestBtn').click(function() {
+				var rowId = new Date().getTime();
+				var data={'id':rowId};
+				$("#guest-tmpl").tmpl(data).appendTo("#guestList");
+			});
+		$('#guestList').on('click','.deleteItem', function() {
+				$('#row_' + $(this).attr('id')).remove();
+			});
+		//提交表单
+		$('.go_submit').click(function() {
+			var data=$("#auth_form").serializeArray();
+			$.post('/admin/lives/vod/save',data,function(result) {
+				if (result.code == 1) {
+					$("#success").show();
+					setTimeout(function() {
+						$("#success").hide()
+						window.location.href = "/admin/lives/vod"
+					}, 2000);
+				} else {
+					$('#errorText').text(result.message);
+					$("#error").show();
+					setTimeout(function() {
+						$("#error").hide()
+					}, 2000);
+				}
+			});
+		});
+		//本地视频调用
+		$("#btn_post_video").on("click", function () {
+		    $("#modal_post_video").modal('show');
+		    var data = { title: $("#post_video_title_find").val() ,columnid:$("#post_video_columnid_find").val()};
+		    get_videos_count(data);
+		    get_videos_list(data);
+
+		});
+		$("#post_video_find").on("click", function () {
+		    $("#modalbody_post_video").html("<tr><td colspan='2'>正在加载...</td></tr>");
+		    var data = { title: $("#post_video_title_find").val(),columnid:$("#post_video_columnid_find").val() };
+		    get_videos_count(data);
+		    get_videos_list(data);
+		})
+		$(document).on("click",".select", function () {
+		    var url = $(this).attr("data-video");
+		    $("#url").val(url);
+		    $('#modal_post_video').modal("hide");
+		})
+    });
+//本地视频上传
+function get_videos_count(data) {
+    $.get('/admin/videos_ajax_get_addcount', data, function (result) {
+        //分页功能
+        var options = {
+            currentPage: 1,
+            totalPages: result.message.pagecount,
+            numberOfPages: result.message.pagesize,
+            bootstrapMajorVersion: 1,
+            onPageClicked: function (e, originalEvent, type, page) {
+                data.page=page;
+                get_videos_list(data);
+            }
+        }
+        if(options.totalPages > 0){
+            $('#page_video').show().bootstrapPaginator(options);
+        }else{
+            $('#page_video').hide();
+        }
+    });
+}
+function get_videos_list(data) {
+    $.get('/admin/videos_ajax_get_addlist', data, function (result) {
+        if (result.code == 0) {
+            $("#modalbody_post_video").html('');
+            $("#post_video_tpl")
+                    .tmpl(result.message)
+                    .appendTo("#modalbody_post_video");
+        }
+    });
+}
+</script>
+<% include ../inc/thumbnail.html%>
+<% include ../inc/footer.html%>

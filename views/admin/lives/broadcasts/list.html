@@ -1,0 +1,52 @@
+<% include ../../inc/head.html%>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="sidebar">
+				<% include ../../inc/left.html%>
+			</div>
+			<div class="main">
+				<div class="form-group">
+					<div class="pull-left">
+						<ul class="list-inline">
+							<li><a href="/admin/lives/broadcasts/add"><span class="glyphicon glyphicon-plus-sign"></span> 创建</a></li>
+							<li><a href="#" target="_blank"><span class="glyphicon glyphicon-question-sign"></span> 帮助 </a>
+							</li>
+						</ul>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="row">
+				<%  models.forEach(function(item,index){
+					var i=index%3;%>
+		    		<div class="col-md-3">
+		    			<div class="panel panel-info">
+		    				<div class="panel-heading">
+						    	<div class="btn-group btn-group-justified">
+						    	<a class="btn btn-primary editor" href="/admin/lives/broadcasts/edit?_id=<%=item._id%>">编辑</a><a href="/admin/lives/broadcasts/programs?broadid=<%=item._id%>&title=<%=item.title%>" class="btn btn-success">节目单</a><a data-id="<%=item._id%>" class="btn btn-danger del">删除</a>
+							  	</div>
+						  	</div>
+							<div class="panel-body" style="background:url(/images/broadcasts/broadcasts-<%=i%>.png) repeat-x 0 65px">
+							    <div class="page-header" style="margin-top:20px">
+								  <h3 style="text-align:center;"><%=item.title%></h3>
+								  <p style="text-align:center"><%=item.subtitle%></p>
+								</div>
+							</div>
+						</div>
+		    		</div>
+		    	<%}) %>
+		    	</div>
+			</div>
+		</div>
+	</div>
+<script>
+	$('.del').on('click', function(event) {
+		var _id=$(this).attr('data-id');
+		if(confirm("确定删除广播及其节目单吗？")){
+			$.post('/admin/lives/broadcasts/delete', {_id:_id}, function() {
+				window.location.reload()
+			});
+		}
+
+	});
+</script>
+<% include ../../inc/footer.html%>

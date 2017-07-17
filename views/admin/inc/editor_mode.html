@@ -1,0 +1,72 @@
+
+<!-- 图片 -->
+<div class="modal fade" id="modal_pics_editor" tabindex="-1" role="dialog" aria-labelledby="deitorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">选择图片</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-danger fileinput-button">
+                        <span>上传</span>
+                        <input id="editor_pics_upload" type="file" name="files[]" multiple="multiple">
+                    </span>
+                </span>
+                <input type="text" name="post_pics_find_title" id="post_pics_find_title" class="form-control" placeholder="文件名">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="pics_deitor_find">查询</button></span>
+                </div>
+            </div>
+            <div class="row" id="modalbody_pics_editor"></div>
+            <div id="page_pics_deitor"></div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- 视频 -->
+<div class="modal fade" id="modal_video_editor" tabindex="-1" role="dialog" aria-labelledby="deitorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">选择视频</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-danger fileinput-button">
+                        <span>上传</span>
+                        <input id="editor_video_upload" type="file" name="files[]" multiple="multiple">
+                    </span>
+                </span>
+                <input type="text" name="video_deitor_find_title" id="video_deitor_find_title" class="form-control" placeholder="文件名">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary" id="video_deitor_find">查询</button></span>
+                </div>
+            </div>
+            <div class="row" id="modalbody_video_editor"></div>
+            <div id="page_video_deitor"></div>
+        </div>
+    </div>
+    </div>
+</div>
+<script id="post_editor_pics_tpl" type="text/x-jquery-tmpl">
+    <div class="col-xs-6 col-md-3 item">
+        <div class="thumbnail">
+            <img src="${pics}" alt="${name}" class="editor_pics" style="height:120px;width:100%;" data-toggle="tooltip" data-placement="left" title="${name}"/>
+        </div>
+    </div>
+</script>
+<script id="post_editor_video_tpl" type="text/x-jquery-tmpl">
+    <div class="col-xs-6 col-md-3 item" style="max-height:195px;">
+        <div class="thumbnail">
+        <img src="${pics}" data-video="${video}" title="${name}" data-title="${title}" data-tag="${tag}" data-desc="${desc}" data-pics="${pics}" data-from="${from}" class="editor_video" alt="${title}" style="display: block;height:120px;width:100%;"/>
+        <div title="${name}" class="caption">${videoname}</div>
+        </div>
+    </div>
+</script>
